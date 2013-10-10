@@ -15,10 +15,12 @@ using namespace std;
 
 class Proprietario {
 	string nome;
+	Proprietario(string);
 };
 
 class Morador : public Proprietario {
-	string moradation;
+	string address;
+	Morador(string);
 };
 
 #endif /* PROPRIETARIO_H_ */

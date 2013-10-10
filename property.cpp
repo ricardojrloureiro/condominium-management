@@ -11,6 +11,5 @@ Property::Property(string address) {
 	this->address = address;
 }
 
-Apartment::Apartment(string morada) : Property(morada) {
-
+Apartment::Apartment(string address) : Property(address) {
 }
