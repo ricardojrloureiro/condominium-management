@@ -19,8 +19,9 @@ class Condominium {
 	string name;
 	vector <Property> properties;
 public:
-	Condominium(string name);
-	void addProperty(Property property);
+	Condominium(string);
+	void addProperty(Property);
+	void remProperty(Property);
 };
 
 

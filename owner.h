@@ -13,14 +13,15 @@
 #include <iostream>
 using namespace std;
 
-class Proprietario {
-	string nome;
-	Proprietario(string);
+class Owner {
+	string name;
+	Owner(string);
 };
 
-class Morador : public Proprietario {
+// Ver bem se estas classes estao bem definidas porque nao sei se faz mt sentido isto
+class Dweller : public Owner {
 	string address;
-	Morador(string);
+	Dweller(string);
 };
 
 #endif /* PROPRIETARIO_H_ */

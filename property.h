@@ -21,16 +21,27 @@ public:
 };
 
 class Apartment : public Property {
+	int cost;
 public:
-	Apartment(string address);
+	Apartment(int, string);
+	void setCost(int);
+	int getCost();
 };
 
 class Office : public Property {
-
+	int cost;
+public:
+	Office(int, string);
+	void setCost(int);
+	int getCost();
 };
 
 class Store : public Property {
-
+	int cost;
+public:
+	Store(int, string);
+	void setCost(int);
+	int getCost();
 };
 
 #endif /* PROPRIEDADE_H_ */

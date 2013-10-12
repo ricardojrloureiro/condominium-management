@@ -1,10 +1,14 @@
 #include "condominium.h"
 #include "property.h"
-c
+#include "corporation.h"
+#include "owner.h"
+#include "worker.h"
+
+using namespace std;
+
 int main(){
-	Condominium teste("And");
-	Apartment mansaomelaca("rua do melo");
-	teste.addProperty(mansaomelaca);
-	 // penis fofinho
+
+	cout << "WELCOME TO MELACO ENTERPRISE, THE ONLY COMPANY THAT MAKES $";
+
     return 0;
 }

@@ -1,9 +1,7 @@
 #include "owner.h"
 
-Proprietario::Proprietario(string nome){
-	this->nome = nome;
-}
+// constructor
 
-Morador::Morador(string address){
-	this->address = address;
+Owner::Owner(string nome){
+	this->name = nome;
 }
