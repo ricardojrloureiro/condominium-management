@@ -21,7 +21,7 @@ class Condominium {
 public:
 	Condominium(string);
 	void addProperty(Property);
-	void remProperty(Property);
+	void removeProperty(Property);
 };
 
 

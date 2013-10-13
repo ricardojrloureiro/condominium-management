@@ -17,7 +17,7 @@ Painter::Painter(int wage, string name): Worker(name){
 	this->wage = wage;
 }
 
-Electricist::Electricist(int wage, string name): Worker(name){
+Electrician::Electrician(int wage, string name): Worker(name){
 	this->wage = wage;
 }
 
@@ -36,10 +36,10 @@ int Painter::getWage(){
 	return wage;
 }
 
-void Electricist::setWage(int wage){
+void Electrician::setWage(int wage){
 	this->wage = wage;
 }
 
-int Electricist::getWage(){
+int Electrician::getWage(){
 	return this->wage;
 }

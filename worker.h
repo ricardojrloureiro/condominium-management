@@ -28,12 +28,12 @@ public:
 	Painter(int,string);
 };
 
-class Electricist: public Worker{
+class Electrician: public Worker{
 	int wage;
 public:
 	int getWage();
 	void setWage(int);
-	Electricist(int,string);
+	Electrician(int,string);
 };
 
 

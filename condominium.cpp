@@ -19,7 +19,7 @@ void Condominium::addProperty(Property property) {
 	properties.push_back(property);
 }
 
-void Condominium::remProperty(Property property){
+void Condominium::removeProperty(Property property){
 	for (unsigned int i = 0; i < properties.size(); i++)
 	{
 			// proceder à remoção
