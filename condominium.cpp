@@ -22,6 +22,6 @@ void Condominium::addProperty(Property property) {
 void Condominium::remProperty(Property property){
 	for (unsigned int i = 0; i < properties.size(); i++)
 	{
-			// remover
+			// proceder à remoção
 	}
 }
