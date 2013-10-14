@@ -18,30 +18,40 @@ class Property {
 	string address;
 public:
 	Property(string address);
+	virtual void showInfo() const;
 };
 
 class Apartment : public Property {
-	int cost;
+	int cost, area;
 public:
 	Apartment(int, string);
 	void setCost(int);
 	int getCost();
+	int getArea();
+	void setArea(int);
+	void showInfo()const ;
 };
 
 class Office : public Property {
-	int cost;
+	int cost, area;
 public:
 	Office(int, string);
 	void setCost(int);
 	int getCost();
+	int getArea();
+	void setArea(int);
+	void showInfo()const;
 };
 
 class Store : public Property {
-	int cost;
+	int cost, area;
 public:
 	Store(int, string);
 	void setCost(int);
 	int getCost();
+	int getArea();
+	void setArea(int);
+	void showInfo()const;
 };
 
 #endif /* PROPRIEDADE_H_ */

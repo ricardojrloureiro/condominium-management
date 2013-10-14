@@ -10,15 +10,20 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
+#include <limits>
+
+typedef int (*FunctionPointer)();
 
 using namespace std;
 
 class Menu {
 	string title;
 	vector <string> items;
+	vector <FunctionPointer> functions;
 public:
 	Menu(string title);
-	void addMenuItem(string option);
+	void addMenuItem(string,FunctionPointer);
 	int showMenu();
 };
 

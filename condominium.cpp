@@ -15,11 +15,11 @@ Condominium::Condominium(string name) {
 
 // add/remove functions
 
-void Condominium::addProperty(Property property) {
+void Condominium::addProperty(Property *property) {
 	properties.push_back(property);
 }
 
-void Condominium::removeProperty(Property property){
+void Condominium::removeProperty(Property *property){
 	for (unsigned int i = 0; i < properties.size(); i++)
 	{
 			// proceder à remoção

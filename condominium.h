@@ -17,11 +17,11 @@ using namespace std;
 
 class Condominium {
 	string name;
-	vector <Property> properties;
+	vector <Property*> properties;
 public:
 	Condominium(string);
-	void addProperty(Property);
-	void removeProperty(Property);
+	void addProperty(Property*);
+	void removeProperty(Property*);
 };
 
 
