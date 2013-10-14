@@ -3,12 +3,10 @@
 #include "corporation.h"
 #include "owner.h"
 #include "worker.h"
+#include "menu.h"
 
 using namespace std;
 
 int main(){
 
-	cout << "WELCOME TO MELACO ENTERPRISE, THE ONLY COMPANY THAT MAKES $";
-
-    return 0;
 }
