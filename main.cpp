@@ -10,9 +10,7 @@
 
 using namespace std;
 
-void setMenus() {
-
-}
+Corporation corporation;
 
 int main() {
 	Menu mainMenu("Main Menu");
@@ -30,6 +28,7 @@ int main() {
 			while(1) {
 				switch(condominiumsMenu.showMenu()) {
 				case 1:
+
 					break;
 				case 2:
 					break;

@@ -10,6 +10,9 @@
 
 #include <vector>
 #include <string>
+#include <fstream>
+#include <sstream>
+#include <stdlib.h>
 
 #include "condominium.h"
 #include "worker.h"
@@ -17,20 +20,19 @@
 using namespace std;
 
 class Corporation{
-	string name;
-	vector <Condominium> condominiuns;
+	vector <Condominium> condominiums;
 	vector <Worker> workers;
 
 public:
-	// vamos usar aqui uma template para so definirmos uma vez para remover/add
-	Corporation(string);
-	void remCond(Condominium);
-	void addCond(Condominium);
-	string getName();
-	void setName(string);
+	Corporation();
+	void loadCondominiums(string);
+	void loadProperties(int);
+	int searchCondominiumId(int);
+	void removeCondominium(Condominium);
+	void addCondominium(Condominium);
+	void removeWorker(Worker);
+	void addWorker(Worker);
 };
-
-
 
 
 #endif /* CORPORATION_H_ */

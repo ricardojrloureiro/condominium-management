@@ -16,12 +16,17 @@
 using namespace std;
 
 class Condominium {
+	long id;
 	string name;
 	vector <Property*> properties;
+	static long numMusic;
+
 public:
 	Condominium(string);
+	Condominium(long, string);
 	void addProperty(Property*);
 	void removeProperty(Property*);
+	int getId();
 };
 
 

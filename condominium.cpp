@@ -7,9 +7,18 @@
 
 #include "condominium.h"
 
+long Condominium::numMusic = 0;
+
 // constructor
 
 Condominium::Condominium(string name) {
+	numMusic++;
+	id = numMusic;
+	this->name = name;
+}
+
+Condominium::Condominium(long id, string name) {
+	this->id = id;
 	this->name = name;
 }
 
@@ -24,4 +33,8 @@ void Condominium::removeProperty(Property *property){
 	{
 			// proceder à remoção
 	}
+}
+
+int Condominium::getId() {
+	return id;
 }
