@@ -10,7 +10,7 @@
 // constructor
 
 Corporation::Corporation(){
-
+	loadCondominiums("condominiums.csv");
 }
 
 // remove/add functions
@@ -54,6 +54,31 @@ void Corporation::loadProperties(int condominiumid) {
 	ssfilename << "condominium" << condominiumid << ".csv";
 	string filename = ssfilename.str();
 	ifstream file(filename.c_str());
+	string line;
+	vector <string> propertyInfo;
+	int lineNumber = 0;
+	while (file.good())
+	{
+		getline(file,line);
+		if (lineNumber > 0) {
+			istringstream iss(line);
+			do
+			{
+				string sub;
+				getline(iss, sub , ',');
+				propertyInfo.push_back(sub);
+			} while (iss);
+
+			Property property(propertyInfo[0]);
+
+			Property *p = 0;
+			*p = property;
+
+			condominiums[searchCondominiumId(condominiumid)].addProperty(p);
+			propertyInfo.clear();
+		}
+		lineNumber++;
+	}
 }
 
 int Corporation::searchCondominiumId(int condominiumdid) {

@@ -95,3 +95,5 @@ void Store::showInfo()const {
 void Property::showInfo()const{
 	cout << "address: " << address;
 }
+
+

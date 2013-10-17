@@ -16,6 +16,7 @@
 
 #include "condominium.h"
 #include "worker.h"
+#include "property.h"
 
 using namespace std;
 
