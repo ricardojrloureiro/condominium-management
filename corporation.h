@@ -26,13 +26,18 @@ class Corporation{
 
 public:
 	Corporation();
+
 	void loadCondominiums(string);
 	void loadProperties(int);
+	void saveProperties();
+	void saveCondominiums();
 	int searchCondominiumId(int);
 	void removeCondominium(Condominium);
 	void addCondominium(Condominium);
+
 	void removeWorker(Worker);
 	void addWorker(Worker);
+	void loadWorker(string);
 };
 
 
