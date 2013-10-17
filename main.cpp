@@ -10,14 +10,35 @@
 
 using namespace std;
 
-int quit() {
-	cout << "QUIT";
-	return 0;
+void setMenus() {
+
 }
 
 int main() {
 	Menu mainMenu("Main Menu");
-	mainMenu.addMenuItem("Condominiums", *quit);
-	mainMenu.addMenuItem("Quit", *quit);
-	mainMenu.showMenu();
+	mainMenu.addMenuItem("Condominiums");
+	mainMenu.addMenuItem("Quit");
+
+	Menu condominiumsMenu("Condominiums");
+	condominiumsMenu.addMenuItem("List all condominiums");
+	condominiumsMenu.addMenuItem("Add new condominium");
+	condominiumsMenu.addMenuItem("Manage existing condomium");
+
+	while(1) {
+		switch(mainMenu.showMenu()) {
+		case 1:
+			while(1) {
+				switch(condominiumsMenu.showMenu()) {
+				case 1:
+					break;
+				case 2:
+					break;
+				}
+			}
+			break;
+		case 2:
+			return 0;
+			break;
+		}
+	}
 }

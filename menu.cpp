@@ -11,22 +11,57 @@ Menu::Menu(string title) {
 	this->title = title;
 }
 
-void Menu::addMenuItem(string item, FunctionPointer pointer) {
+void Menu::addMenuItem(string item) {
 	items.push_back(item);
-	functions.push_back(pointer);
+}
+
+void Menu::clearScreen() {
+	cout << string( 100, '\n' );
+}
+
+int Menu::promptInt(string message) {
+	string tempinput;
+	int outputvalue;
+	bool validInput;
+	do
+	{
+		cout << message;
+		getline(cin,tempinput);
+		validInput = true;
+		if (cin.fail())
+		{
+			validInput = false;
+			cin.clear();
+			cin.ignore(10000, '\n');
+		}
+		if(!tempinput.empty()) {
+			for (unsigned int i = 0; i < tempinput.length(); i++)
+			{
+				if (!isdigit(tempinput[i])) {
+					validInput=false;
+					break;
+				}
+			}
+		} else {
+			validInput = false;
+		}
+		if (validInput==true) {
+			outputvalue=atoi(tempinput.c_str());
+		}
+		if(!validInput) {
+			cout << endl << "This input is not valid. Please try and follow the indicated instructions." << endl << endl;
+		}
+	} while (!validInput);
+	return outputvalue;
 }
 
 int Menu::showMenu() {
+	clearScreen();
 	unsigned int option;
 	cout << title << endl;
-	cout << "1 - Access Admin control panel" << endl;
-	cout << "2 - Access as User." << endl;
-	cout << "Choose an option: " << endl << endl;
-	while(!(cin >> option) || option < 1 || option > items.size()){
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "This input is not valid. Please try again: ";
+	for(unsigned int i = 0; i<items.size(); i++) {
+		cout << i + 1 << " - " << items[i] << endl;
 	}
-	functions[option-1]();
-	return 0;
+	option = promptInt("Choose an option: ");
+	return option;
 }
