@@ -5,8 +5,8 @@
  *      Author: rui
  */
 
-#ifndef PROPRIETARIO_H_
-#define PROPRIETARIO_H_
+#ifndef OWNER_H_
+#define OWNER_H_
 
 #include <string>
 #include <vector>
@@ -24,4 +24,4 @@ class Dweller : public Owner {
 	Dweller(string);
 };
 
-#endif /* PROPRIETARIO_H_ */
+#endif /* OWNER_H_ */

@@ -13,19 +13,20 @@ Property::Property(string address) {
 	this->address = address;
 }
 
+int Property::getCost() {
+	return cost;
+}
+
 Apartment::Apartment(int area,string address) : Property(address) {
 	this->area = area;
-	this->cost = 30*area;
 }
 
 Office::Office(int area,string address) : Property(address) {
 	this->area = area;
-	this->cost = 50*area;
 }
 
 Store::Store(int area,string address) : Property(address) {
 	this->area = area;
-	this->cost = 40*area;
 }
 
 // get & sets
@@ -46,48 +47,24 @@ int Store::returnType() const {
 	return 3;
 }
 
-int Store::getCost(){
-	return cost;
-}
-
 int Store::getArea(){
 	return area;
-}
-
-int Office::getCost(){
-	return cost;
 }
 
 int Office::getArea(){
 	return area;
 }
 
-int Apartment::getCost(){
-	return cost;
-}
-
 int Apartment::getArea(){
 	return area;
-}
-
-void Store::setCost(int cost){
-	this->cost = cost;
 }
 
 void Store::setArea(int area){
 	this->area = area;
 }
 
-void Office::setCost(int cost){
-	this->cost = cost;
-}
-
 void Office::setArea(int area){
 	this->area = area;
-}
-
-void Apartment::setCost(int cost){
-	this->cost = cost;
 }
 
 void Apartment::setArea(int area){
@@ -111,5 +88,3 @@ void Store::showInfo()const {
 void Property::showInfo()const{
 	cout << "address: " << address;
 }
-
-

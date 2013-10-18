@@ -43,6 +43,13 @@ string Condominium::getName() {
 	return name;
 }
 
+int Condominium::getProfit() {
+	int income;
+	for(int i=0; i<properties.size(); i++) {
+		income += properties[i].getCost();
+	}
+}
+
 void Condominium::showCondominium() {
 	cout << "Condominium ID: " << id << endl;
 	cout << "Condominium Name: " << name << endl;

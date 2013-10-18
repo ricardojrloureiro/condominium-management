@@ -5,8 +5,8 @@
  *      Author: rui
  */
 
-#ifndef PROPRIEDADE_H_
-#define PROPRIEDADE_H_
+#ifndef PROPERTY_H_
+#define PROPERTY_H_
 
 #include <string>
 #include <vector>
@@ -15,19 +15,21 @@
 using namespace std;
 
 class Property {
+protected:
 	string address;
+	int cost;
 public:
 	Property(string address);
+	int getCost();
 	virtual void showInfo() const;
 	virtual int returnType() const;
 };
 
 class Apartment : public Property {
-	int cost, area;
+	int area;
 public:
 	Apartment(int, string);
 	void setCost(int);
-	int getCost();
 	int getArea();
 	void setArea(int);
 	void showInfo() const;
@@ -36,11 +38,10 @@ public:
 };
 
 class Office : public Property {
-	int cost, area;
+	int area;
 public:
 	Office(int, string);
 	void setCost(int);
-	int getCost();
 	int getArea();
 	void setArea(int);
 	void showInfo() const;
@@ -48,15 +49,14 @@ public:
 };
 
 class Store : public Property {
-	int cost, area;
+	int area;
 public:
 	Store(int, string);
 	void setCost(int);
-	int getCost();
 	int getArea();
 	void setArea(int);
 	void showInfo() const;
 	int returnType() const;
 };
 
-#endif /* PROPRIEDADE_H_ */
+#endif /* PROPERTY_H_ */

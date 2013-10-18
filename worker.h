@@ -5,8 +5,8 @@
  *      Author: ricardo
  */
 
-#ifndef WORKERS_H_
-#define WORKERS_H_
+#ifndef WORKER_H_
+#define WORKER_H_
 
 #include <iostream>
 #include <string>
@@ -37,4 +37,4 @@ public:
 };
 
 
-#endif /* WORKERS_H_ */
+#endif /* WORKER_H_ */

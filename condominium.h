@@ -5,8 +5,8 @@
  *      Author: rui
  */
 
-#ifndef CONDOMINIO_H_
-#define CONDOMINIO_H_
+#ifndef CONDOMINIUM_H_
+#define CONDOMINIUM_H_
 
 #include <vector>
 #include <string>
@@ -29,7 +29,8 @@ public:
 	void showCondominium();
 	string getName();
 	int getId();
+	int getProfit();
 };
 
 
-#endif /* CONDOMINIO_H_ */
+#endif /* CONDOMINIUM_H_ */
