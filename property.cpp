@@ -29,6 +29,14 @@ Store::Store(string address, int cost) : Property(address,cost) {
 
 // get & sets
 
+int Property::getCost() {
+	return cost;
+}
+
+string Property::getAddress() {
+	return address;
+}
+
 int Property::returnType() const {
 	return 0;
 }

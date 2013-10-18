@@ -29,7 +29,6 @@ public:
 
 	void loadCondominiums(string);
 	void loadProperties(int);
-	void saveProperties();
 	void saveCondominiums();
 	int searchCondominiumId(int);
 	void removeCondominium(Condominium);
