@@ -56,7 +56,7 @@ int Menu::promptInt(string message) {
 }
 
 int Menu::showMenu() {
-	clearScreen();
+	//clearScreen();
 	unsigned int option;
 	cout << title << endl;
 	for(unsigned int i = 0; i<items.size(); i++) {

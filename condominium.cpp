@@ -38,3 +38,7 @@ void Condominium::removeProperty(Property *property){
 int Condominium::getId() {
 	return id;
 }
+
+string Condominium::getName() {
+	return name;
+}

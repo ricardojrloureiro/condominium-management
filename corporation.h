@@ -38,6 +38,9 @@ public:
 	void removeWorker(Worker);
 	void addWorker(Worker);
 	void loadWorker(string);
+
+	void showCondominium(int);
+	void showAllCondominiums();
 };
 
 

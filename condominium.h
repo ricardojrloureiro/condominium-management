@@ -26,6 +26,7 @@ public:
 	Condominium(long, string);
 	void addProperty(Property*);
 	void removeProperty(Property*);
+	string getName();
 	int getId();
 };
 
