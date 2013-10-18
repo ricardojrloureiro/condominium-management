@@ -9,14 +9,23 @@
 
 Menu::Menu(string title) {
 	this->title = title;
+	active = true;
 }
 
 void Menu::addMenuItem(string item) {
 	items.push_back(item);
 }
 
-void Menu::clearScreen() {
-	cout << string( 100, '\n' );
+void Menu::toggleMenu() {
+	active = !active;
+}
+
+bool Menu::isActive() {
+	return active;
+}
+
+void Menu::activateMenu() {
+	active = true;
 }
 
 int Menu::promptInt(string message) {
@@ -56,12 +65,12 @@ int Menu::promptInt(string message) {
 }
 
 int Menu::showMenu() {
-	//clearScreen();
 	unsigned int option;
 	cout << title << endl;
 	for(unsigned int i = 0; i<items.size(); i++) {
 		cout << i + 1 << " - " << items[i] << endl;
 	}
 	option = promptInt("Choose an option: ");
+	cout << endl;
 	return option;
 }

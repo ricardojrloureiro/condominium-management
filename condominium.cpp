@@ -7,13 +7,13 @@
 
 #include "condominium.h"
 
-long Condominium::numMusic = 0;
+long Condominium::condominiumId = 0;
 
 // constructor
 
 Condominium::Condominium(string name) {
-	numMusic++;
-	id = numMusic;
+	condominiumId++;
+	id = condominiumId;
 	this->name = name;
 }
 
@@ -24,11 +24,11 @@ Condominium::Condominium(long id, string name) {
 
 // add/remove functions
 
-void Condominium::addProperty(Property *property) {
+void Condominium::addProperty(Property property) {
 	properties.push_back(property);
 }
 
-void Condominium::removeProperty(Property *property){
+void Condominium::removeProperty(Property property){
 	for (unsigned int i = 0; i < properties.size(); i++)
 	{
 			// proceder à remoção
@@ -41,4 +41,10 @@ int Condominium::getId() {
 
 string Condominium::getName() {
 	return name;
+}
+
+void Condominium::showCondominium() {
+	cout << "Condominium ID: " << id << endl;
+	cout << "Condominium Name: " << name << endl;
+	cout << "Properties #: " << properties.size() << endl;
 }

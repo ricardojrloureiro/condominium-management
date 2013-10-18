@@ -19,6 +19,7 @@ class Property {
 public:
 	Property(string address);
 	virtual void showInfo() const;
+	virtual int returnType() const;
 };
 
 class Apartment : public Property {
@@ -29,7 +30,9 @@ public:
 	int getCost();
 	int getArea();
 	void setArea(int);
-	void showInfo()const ;
+	void showInfo() const;
+	int returnType() const;
+
 };
 
 class Office : public Property {
@@ -40,7 +43,8 @@ public:
 	int getCost();
 	int getArea();
 	void setArea(int);
-	void showInfo()const;
+	void showInfo() const;
+	int returnType() const;
 };
 
 class Store : public Property {
@@ -51,7 +55,8 @@ public:
 	int getCost();
 	int getArea();
 	void setArea(int);
-	void showInfo()const;
+	void showInfo() const;
+	int returnType() const;
 };
 
 #endif /* PROPRIEDADE_H_ */

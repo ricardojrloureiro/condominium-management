@@ -20,23 +20,30 @@ int main() {
 	Menu condominiumsMenu("Condominiums");
 	condominiumsMenu.addMenuItem("List all condominiums");
 	condominiumsMenu.addMenuItem("Add new condominium");
-	condominiumsMenu.addMenuItem("Manage existing condomium");
+	condominiumsMenu.addMenuItem("Manage existing condominium");
+	condominiumsMenu.addMenuItem("Return to Main Menu");
 
-	while(1) {
+	while(mainMenu.isActive()) {
 		switch(mainMenu.showMenu()) {
 		case 1:
-			while(1) {
+			condominiumsMenu.activateMenu();
+			while(condominiumsMenu.isActive()) {
 				switch(condominiumsMenu.showMenu()) {
 				case 1:
 					corporation.showAllCondominiums();
 					break;
 				case 2:
 					break;
+				case 3:
+					break;
+				case 4:
+					condominiumsMenu.toggleMenu();
+					break;
 				}
 			}
 			break;
 		case 2:
-			return 0;
+			mainMenu.toggleMenu();
 			break;
 		}
 	}

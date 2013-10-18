@@ -30,6 +30,22 @@ Store::Store(int area,string address) : Property(address) {
 
 // get & sets
 
+int Property::returnType() const {
+	return 0;
+}
+
+int Apartment::returnType() const {
+	return 1;
+}
+
+int Office::returnType() const {
+	return 2;
+}
+
+int Store::returnType() const {
+	return 3;
+}
+
 int Store::getCost(){
 	return cost;
 }

@@ -32,7 +32,6 @@ void Corporation::loadCondominiums(string filename) {
 	int lineNumber = 0;
 	while (file.good())
 	{
-		cout << endl << "here";
 		getline(file,line);
 		if (lineNumber > 0) {
 			istringstream iss(line);
@@ -47,6 +46,7 @@ void Corporation::loadCondominiums(string filename) {
 			if(id>0) {
 				Condominium condominium(id, condominiumInfo[1]);
 				condominiums.push_back(condominium);
+				loadProperties(id);
 			}
 			condominiumInfo.clear();
 		}
@@ -57,10 +57,11 @@ void Corporation::loadCondominiums(string filename) {
 
 void Corporation::loadProperties(int condominiumid) {
 	stringstream ssfilename;
-	ssfilename << "database/condominium" << condominiumid << ".csv";
+	ssfilename << "condominium" << condominiumid << ".csv";
 	string filename = ssfilename.str();
 	ifstream file(filename.c_str());
 	string line;
+	int type;
 	vector <string> propertyInfo;
 	int lineNumber = 0;
 	while (file.good())
@@ -75,12 +76,19 @@ void Corporation::loadProperties(int condominiumid) {
 				propertyInfo.push_back(sub);
 			} while (iss);
 
-			Property property(propertyInfo[0]);
+			type = atol(propertyInfo[0].c_str());
 
-			Property *p = 0;
-			*p = property;
+			if (type==1) {
+				Apartment property(atoi(propertyInfo[1].c_str()), propertyInfo[2]);
+				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
+			} else if (type==2) {
+				Office property(atoi(propertyInfo[1].c_str()), propertyInfo[2]);
+				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
+			} else if (type==3) {
+				Store property(atoi(propertyInfo[1].c_str()), propertyInfo[2]);
+				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
+			}
 
-			condominiums[searchCondominiumId(condominiumid)].addProperty(p);
 			propertyInfo.clear();
 		}
 		lineNumber++;
@@ -93,16 +101,16 @@ int Corporation::searchCondominiumId(int condominiumdid) {
 			return i;
 		}
 	}
+
 	return 0;
 }
 
-void Corporation::showCondominium(int id) {
-	cout << "Condominium ID: " << condominiums[id].getId() << endl;
-	cout << "Condominium Name: " << condominiums[id].getName() << endl;
-}
-
 void Corporation::showAllCondominiums() {
+	cout << endl << "Condominiums list:";
 	for(unsigned int i=0; i<condominiums.size(); i++) {
-		showCondominium(i);
+		condominiums[i].showCondominium();
+		cout << endl;
 	}
+	cout << "Press ENTER to exit.";
+	getchar();
 }

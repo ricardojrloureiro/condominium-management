@@ -18,14 +18,15 @@ using namespace std;
 class Condominium {
 	long id;
 	string name;
-	vector <Property*> properties;
-	static long numMusic;
+	vector <Property> properties;
+	static long condominiumId;
 
 public:
 	Condominium(string);
 	Condominium(long, string);
-	void addProperty(Property*);
-	void removeProperty(Property*);
+	void addProperty(Property);
+	void removeProperty(Property);
+	void showCondominium();
 	string getName();
 	int getId();
 };

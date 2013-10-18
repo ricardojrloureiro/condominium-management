@@ -16,13 +16,16 @@
 using namespace std;
 
 class Menu {
+	bool active;
 	string title;
 	vector <string> items;
 public:
 	Menu(string title);
 	void addMenuItem(string);
-	void clearScreen();
 	int promptInt(string);
+	void activateMenu();
+	void toggleMenu();
+	bool isActive();
 	int showMenu();
 
 };
