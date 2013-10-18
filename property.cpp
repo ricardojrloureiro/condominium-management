@@ -9,7 +9,8 @@
 
  // constructors
 
-Property::Property(string address) {
+Property::Property(string address, int cost) {
+	this->cost = cost;
 	this->address = address;
 }
 
@@ -17,16 +18,13 @@ int Property::getCost() {
 	return cost;
 }
 
-Apartment::Apartment(int area,string address) : Property(address) {
-	this->area = area;
+Apartment::Apartment(string address, int cost) : Property(address,cost) {
 }
 
-Office::Office(int area,string address) : Property(address) {
-	this->area = area;
+Office::Office(string address, int cost) : Property(address,cost) {
 }
 
-Store::Store(int area,string address) : Property(address) {
-	this->area = area;
+Store::Store(string address, int cost) : Property(address,cost) {
 }
 
 // get & sets
@@ -47,42 +45,18 @@ int Store::returnType() const {
 	return 3;
 }
 
-int Store::getArea(){
-	return area;
-}
-
-int Office::getArea(){
-	return area;
-}
-
-int Apartment::getArea(){
-	return area;
-}
-
-void Store::setArea(int area){
-	this->area = area;
-}
-
-void Office::setArea(int area){
-	this->area = area;
-}
-
-void Apartment::setArea(int area){
-	this->area = area;
-}
-
 // other functions
 
 void Apartment::showInfo() const{
-	Property::showInfo(); cout <<" cost: " << cost << " area: " << area << endl;
+	Property::showInfo(); cout <<" cost: " << cost << " area: " << endl;
 }
 
 void Office::showInfo() const{
-	Property::showInfo(); cout <<" cost: " << cost << " area: " << area << endl;
+	Property::showInfo(); cout <<" cost: " << cost << " area: " << endl;
 }
 
 void Store::showInfo()const {
-	Property::showInfo(); cout <<" cost: " << cost << " area: " << area << endl;
+	Property::showInfo(); cout <<" cost: " << cost << " area: " << endl;
 }
 
 void Property::showInfo()const{

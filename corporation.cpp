@@ -58,10 +58,10 @@ void Corporation::loadCondominiums(string filename) {
 void Corporation::loadProperties(int condominiumid) {
 	stringstream ssfilename;
 	ssfilename << "condominium" << condominiumid << ".csv";
-	string filename = ssfilename.str();
+	string filename = ssfilename.str(), address;
 	ifstream file(filename.c_str());
 	string line;
-	int type;
+	int type, cost;
 	vector <string> propertyInfo;
 	int lineNumber = 0;
 	while (file.good())
@@ -77,15 +77,17 @@ void Corporation::loadProperties(int condominiumid) {
 			} while (iss);
 
 			type = atol(propertyInfo[0].c_str());
+			address = propertyInfo[1];
+			cost = atoi(propertyInfo[2].c_str());
 
 			if (type==1) {
-				Apartment property(atoi(propertyInfo[1].c_str()), propertyInfo[2]);
+				Apartment property(address, cost);
 				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
 			} else if (type==2) {
-				Office property(atoi(propertyInfo[1].c_str()), propertyInfo[2]);
+				Office property(address, cost);
 				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
 			} else if (type==3) {
-				Store property(atoi(propertyInfo[1].c_str()), propertyInfo[2]);
+				Store property(address, cost);
 				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
 			}
 
