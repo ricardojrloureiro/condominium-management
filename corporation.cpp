@@ -114,3 +114,18 @@ void Corporation::showAllCondominiums() {
 	cout << "Press ENTER to exit.";
 	getchar();
 }
+
+void Corporation::saveCondominiums(){
+	ofstream file("condominiums.csv");
+	file << "id,name";
+	for(unsigned int i = 0; i < condominiums.size(); i++)
+	{
+		file << condominiums[i].getId() << "," << condominiums[i].getName();
+		if (i < (condominiums.size() -1))
+			file << endl;
+		condominiums[i].saveProperties();
+	}
+	file.close();
+}
+
+

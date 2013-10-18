@@ -16,10 +16,13 @@ using namespace std;
 
 class Property {
 	string address;
+	int cost;
 public:
 	Property(string address);
 	virtual void showInfo() const;
 	virtual int returnType() const;
+	string getAddress();
+	int getCost();
 };
 
 class Apartment : public Property {

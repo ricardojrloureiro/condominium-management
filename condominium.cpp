@@ -48,3 +48,17 @@ void Condominium::showCondominium() {
 	cout << "Condominium Name: " << name << endl;
 	cout << "Properties #: " << properties.size() << endl;
 }
+
+void Condominium::saveProperties(){
+	stringstream ssfilename;
+	ssfilename << "condominium" << id << ".csv";
+	string filename = ssfilename.str();
+	ofstream file(filename.c_str());
+	for(unsigned int i = 0; i < properties.size(); i++)
+	{
+		file << properties[i].returnType() << "," << properties[i].getAddress() << "," << properties[i].getCost();
+		if(i < (properties.size() -1))
+			file << endl;
+	}
+	file.close();
+}
