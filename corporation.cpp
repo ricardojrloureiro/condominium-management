@@ -135,10 +135,14 @@ void Corporation::showAllCondominiums() {
 			cout << "Press ENTER to exit.";
 			getchar();
 		}
-		else if (digitinput == 2 && i == (condominiums.size() -1))
-			i = 0; // first
-		else if(digitinput == 3 && i == 0)
-			i = (condominiums.size() -1); // last
+		else if (digitinput == 2)
+			if (i == (condominiums.size() -1))
+				i = 0;
+			else i++;// first
+		else if(digitinput == 3)
+			if(i == 0)
+			i = (condominiums.size() -1);
+			else i--;// last
 		else break;
 	}
 }
