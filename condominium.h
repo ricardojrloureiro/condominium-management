@@ -29,6 +29,7 @@ public:
 	void addProperty(Property);
 	void removeProperty(Property);
 	void showCondominium();
+	int getId();
 	string getName();
 	void saveProperties();
 	int getProfit();

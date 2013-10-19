@@ -45,7 +45,7 @@ string Condominium::getName() {
 
 int Condominium::getProfit() {
 	int income;
-	for(int i=0; i<properties.size(); i++) {
+	for(unsigned int i=0; i<properties.size(); i++) {
 		income += properties[i].getCost();
 	}
 }
