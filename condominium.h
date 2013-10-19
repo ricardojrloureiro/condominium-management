@@ -12,6 +12,7 @@
 #include <string>
 
 #include "property.h"
+#include <stdlib.h>
 
 using namespace std;
 
@@ -27,6 +28,7 @@ public:
 	void addProperty(Property);
 	void removeProperty(Property);
 	void showCondominium();
+	void showProperties();
 	string getName();
 	int getId();
 	int getProfit();

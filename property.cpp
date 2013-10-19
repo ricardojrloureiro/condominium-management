@@ -14,6 +14,10 @@ Property::Property(string address, int cost) {
 	this->address = address;
 }
 
+string Property::getAddress() {
+	return address;
+}
+
 int Property::getCost() {
 	return cost;
 }

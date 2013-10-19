@@ -45,13 +45,23 @@ string Condominium::getName() {
 
 int Condominium::getProfit() {
 	int income;
-	for(int i=0; i<properties.size(); i++) {
+	for(unsigned int i=0; i<properties.size(); i++) {
 		income += properties[i].getCost();
 	}
+	return income;
 }
 
 void Condominium::showCondominium() {
 	cout << "Condominium ID: " << id << endl;
 	cout << "Condominium Name: " << name << endl;
-	cout << "Properties #: " << properties.size() << endl;
+	cout << "Properties #: " << properties.size() << endl << endl;
+}
+
+void Condominium::showProperties() {
+	for(unsigned int i = 0; i < properties.size(); i++)
+	{
+		cout << endl;
+		cout << "Address: " << properties[i].getAddress() << endl;
+		cout << "Cost: " << properties[i].getCost() << endl;
+	}
 }

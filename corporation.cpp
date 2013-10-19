@@ -109,10 +109,36 @@ int Corporation::searchCondominiumId(int condominiumdid) {
 
 void Corporation::showAllCondominiums() {
 	cout << endl << "Condominiums list:";
-	for(unsigned int i=0; i<condominiums.size(); i++) {
+	int i= 0;
+	while(i < condominiums.size()){
 		condominiums[i].showCondominium();
 		cout << endl;
+		string input = "";
+		int error=0; // checks the input
+		do {
+			cout << "1- See ALL properties information" << endl <<
+					"2- Go to the NEXT condominium" << endl <<
+					"3- Go to the PAST condominium" << endl <<
+					"4- Go back to MAIN menu" << endl;
+
+			if (error != 0)
+				cout << "\nPlease enter a digit between 1 and 4\n";
+			cout <<	"Type here how you want to proceed: ";
+			cin >> input;
+
+			error++; // if the user fails an input it gives a message error defined before
+		} while (input != "1" || input != "2" || input != "3" || input != "4");
+
+		int digitinput = atoi(input.c_str());
+		if (digitinput == 1){
+			condominiums[i].showProperties();
+			cout << "Press ENTER to exit.";
+			getchar();
+		}
+		else if (digitinput == 2 && i == (condominiums.size() -1))
+			i = 0; // first
+		else if(digitinput == 3 && i == 0)
+			i = (condominiums.size() -1); // last
+		else break;
 	}
-	cout << "Press ENTER to exit.";
-	getchar();
 }
