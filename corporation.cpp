@@ -110,7 +110,8 @@ int Corporation::searchCondominiumId(int condominiumdid) {
 void Corporation::showAllCondominiums() {
 	cout << endl << "Condominiums list:";
 	int i= 0;
-	while(i < condominiums.size()){
+	bool valid = true;
+	while(valid){
 		condominiums[i].showCondominium();
 		cout << endl;
 		string input = "";
@@ -143,6 +144,6 @@ void Corporation::showAllCondominiums() {
 			if(i == 0)
 			i = (condominiums.size() -1);
 			else i--;// last
-		else break;
+		else valid = false;
 	}
 }
