@@ -130,17 +130,17 @@ void Corporation::showAllCondominiums() {
 			error++; // if the user fails an input it gives a message error defined before
 		} while (input != "1" || input != "2" || input != "3" || input != "4");
 
-		int digitinput = atoi(input.c_str());
-		if (digitinput == 1){
+		if (input == "1"){
 			condominiums[i].showProperties();
 			cout << "Press ENTER to exit.";
 			getchar();
 		}
-		else if (digitinput == 2)
+		else if (input == "2")
 			if (i == (condominiums.size() -1))
 				i = 0;
 			else i++;// first
-		else if(digitinput == 3)
+
+		else if(input == "3")
 			if(i == 0)
 			i = (condominiums.size() -1);
 			else i--;// last
