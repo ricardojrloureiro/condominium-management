@@ -25,6 +25,7 @@ public:
 	string getAddress();
 	virtual void showInfo() const;
 	virtual int returnType() const;
+	string getAddress();
 };
 
 class Apartment : public Property {

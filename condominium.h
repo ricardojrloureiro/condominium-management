@@ -10,6 +10,8 @@
 
 #include <vector>
 #include <string>
+#include <sstream>
+#include <fstream>
 
 #include "property.h"
 #include <stdlib.h>
@@ -29,8 +31,9 @@ public:
 	void removeProperty(Property);
 	void showCondominium();
 	void showProperties();
-	string getName();
 	int getId();
+	string getName();
+	void saveProperties();
 	int getProfit();
 };
 
