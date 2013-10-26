@@ -11,7 +11,7 @@
 using namespace std;
 
 Corporation corporation;
-//penis comment
+
 int main() {
 	Menu mainMenu("Main Menu");
 	mainMenu.addMenuItem("Condominiums");
@@ -33,6 +33,7 @@ int main() {
 					corporation.showAllCondominiums();
 					break;
 				case 2:
+					corporation.createCondominium();
 					break;
 				case 3:
 					break;

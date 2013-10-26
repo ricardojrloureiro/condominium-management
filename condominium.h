@@ -14,6 +14,7 @@
 #include <fstream>
 
 #include "property.h"
+#include "menu.h"
 #include <stdlib.h>
 
 using namespace std;

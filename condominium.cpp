@@ -1,5 +1,5 @@
 /*
- * condominio.c
+ * condominio.cpp
  *
  *  Created on: Oct 10, 2013
  *      Author: rui
@@ -18,6 +18,7 @@ Condominium::Condominium(string name) {
 }
 
 Condominium::Condominium(long id, string name) {
+	condominiumId = id;
 	this->id = id;
 	this->name = name;
 }
@@ -60,7 +61,6 @@ void Condominium::showCondominium() {
 void Condominium::showProperties() {
 	for(unsigned int i = 0; i < properties.size(); i++)
 	{
-		cout << endl;
 		cout << "Address: " << properties[i].getAddress() << endl;
 		cout << "Cost: " << properties[i].getCost() << endl;
 	}

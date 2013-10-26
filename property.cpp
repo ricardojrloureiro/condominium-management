@@ -14,10 +14,6 @@ Property::Property(string address, int cost) {
 	this->address = address;
 }
 
-string Property::getAddress() {
-	return address;
-}
-
 Apartment::Apartment(string address, int cost) : Property(address,cost) {
 }
 

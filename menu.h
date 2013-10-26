@@ -22,7 +22,8 @@ class Menu {
 public:
 	Menu(string title);
 	void addMenuItem(string);
-	int promptInt(string);
+	static int promptInt(string);
+	static string promptString(string);
 	void activateMenu();
 	void toggleMenu();
 	bool isActive();

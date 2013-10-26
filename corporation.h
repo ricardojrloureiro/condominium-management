@@ -29,17 +29,19 @@ public:
 
 	void loadCondominiums(string);
 	void loadProperties(int);
-	void saveCondominiums();
+	void saveCondominiums(string);
 	int searchCondominiumId(int);
 	void removeCondominium(Condominium);
 	void addCondominium(Condominium);
 
+	void createCondominium();
 	void removeWorker(Worker);
 	void addWorker(Worker);
 	void loadWorker(string);
 
 	void showCondominium(int);
 	void showAllCondominiums();
+	int showAllCondominiums2();
 };
 
 

@@ -66,13 +66,52 @@ int Menu::promptInt(string message) {
 
 int Menu::showMenu() {
 	unsigned int option;
+	bool valid = false;
 	cout << title << endl;
 
 	for(unsigned int i = 0; i<items.size(); i++) {
 		cout << i + 1 << " - " << items[i] << endl;
 	}
 
-	option = promptInt("Choose an option: ");
+	while(!valid) {
+		option = promptInt("Choose an option: ");
+		valid = false;
+		for (unsigned int i = 0; i<items.size(); i++) {
+			if(i+1 == option) {
+				valid = true;
+			}
+		}
+
+		if(!valid) {
+			cout << endl << "This input is not valid. Please try and follow the indicated instructions." << endl << endl;
+		}
+	}
 	cout << endl;
 	return option;
+}
+
+string Menu::promptString(string message) {
+	string tempinput;
+	string outputvalue;
+	bool validInput;
+	do
+	{
+		cout << message;
+		getline(cin,tempinput);
+		validInput = true;
+		if (cin.fail())
+		{
+			validInput = false;
+			cin.clear();
+			cin.ignore(10000, '\n');
+		}
+		if (tempinput.empty()) {
+			validInput = false;
+		}
+		if(!validInput) {
+			cout << endl << "This input is not valid. Please try and follow the indicated instructions." << endl << endl;
+		}
+	} while (!validInput);
+	outputvalue = tempinput;
+	return outputvalue;
 }

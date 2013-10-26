@@ -22,7 +22,6 @@ public:
 	Property(string,int);
 	void setCost(int);
 	int getCost();
-	string getAddress();
 	virtual void showInfo() const;
 	virtual int returnType() const;
 	string getAddress();

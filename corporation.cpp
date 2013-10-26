@@ -107,50 +107,49 @@ int Corporation::searchCondominiumId(int condominiumdid) {
 	return 0;
 }
 
+void Corporation::createCondominium() {
+	string name;
+	name = Menu::promptString("Name: ");
+	Condominium condominium(name);
+	addCondominium(condominium);
+	saveCondominiums("condominiums.csv");
+}
+
 void Corporation::showAllCondominiums() {
 	cout << endl << "Condominiums list:";
 	int i= 0;
-	bool valid = true;
-	while(valid){
+
+	cout << endl;
+	int error=0; // checks the input
+	Menu showMenu("Condominiums List");
+	showMenu.addMenuItem("List all properties information");
+	showMenu.addMenuItem("Go to the NEXT condominium");
+	showMenu.addMenuItem("Go to the PREVIOUS condominium");
+	showMenu.addMenuItem("Go BACK to the Main Menu");
+
+	while(showMenu.isActive()) {
+		cout << "i: " << i << endl;
 		condominiums[i].showCondominium();
-		cout << endl;
-		string input = "";
-		int error=0; // checks the input
-		do {
-			cout << "1- See ALL properties information" << endl <<
-					"2- Go to the NEXT condominium" << endl <<
-					"3- Go to the PAST condominium" << endl <<
-					"4- Go back to MAIN menu" << endl;
-
-			if (error != 0)
-				cout << "\nPlease enter a digit between 1 and 4\n";
-			cout <<	"Type here how you want to proceed: ";
-			cin >> input;
-
-			error++; // if the user fails an input it gives a message error defined before
-		} while (input != "1" || input != "2" || input != "3" || input != "4");
-
-		if (input == "1"){
+		switch(showMenu.showMenu()) {
+		case 1:
 			condominiums[i].showProperties();
-			cout << "Press ENTER to exit.";
-			getchar();
+			break;
+		case 2:
+			i = (i+1) % condominiums.size();
+			break;
+		case 3:
+			i = (i-1) % condominiums.size();
+			break;
+		default:
+			showMenu.toggleMenu();
+			break;
 		}
-		else if (input == "2")
-			if (i == (condominiums.size() -1))
-				i = 0;
-			else i++;// first
-
-		else if(input == "3")
-			if(i == 0)
-			i = (condominiums.size() -1);
-			else i--;// last
-		else valid = false;
 	}
 }
 
-void Corporation::saveCondominiums(){
-	ofstream file("condominiums.csv");
-	file << "id,name";
+void Corporation::saveCondominiums(string filename){
+	ofstream file(filename.c_str());
+	file << "id,name" << endl;
 	for(unsigned int i = 0; i < condominiums.size(); i++)
 	{
 		file << condominiums[i].getId() << "," << condominiums[i].getName();
