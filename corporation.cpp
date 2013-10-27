@@ -82,13 +82,13 @@ void Corporation::loadProperties(int condominiumid) {
 
 			if (type==1) {
 				Apartment property(address, cost);
-				condominiums[condominiumid].addProperty(property);
+				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
 			} else if (type==2) {
 				Office property(address, cost);
-				condominiums[condominiumid].addProperty(property);
+				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
 			} else if (type==3) {
 				Store property(address, cost);
-				condominiums[condominiumid].addProperty(property);
+				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
 			}
 
 			propertyInfo.clear();
