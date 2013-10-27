@@ -26,7 +26,7 @@ class Corporation{
 
 public:
 	Corporation();
-
+	void manageCondominium();
 	void loadCondominiums(string);
 	void loadProperties(int);
 	void saveCondominiums(string);

@@ -36,6 +36,7 @@ int main() {
 					corporation.createCondominium();
 					break;
 				case 3:
+					corporation.manageCondominium();
 					break;
 				case 4:
 					condominiumsMenu.toggleMenu();

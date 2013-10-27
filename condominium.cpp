@@ -32,7 +32,7 @@ void Condominium::addProperty(Property property) {
 void Condominium::removeProperty(Property property){
 	for (unsigned int i = 0; i < properties.size(); i++)
 	{
-			// proceder à remoção
+		// proceder à remoção
 	}
 }
 
@@ -78,4 +78,77 @@ void Condominium::saveProperties(){
 			file << endl;
 	}
 	file.close();
+}
+
+void Condominium::manageCond() {
+	stringstream topic;
+	topic << "Managing cond n�: " << getId() << ", " << getName();
+	string topic2 = topic.str();
+	Menu showMenu(topic2.c_str());
+	showMenu.addMenuItem("Add a new property");
+	showMenu.addMenuItem("Remove property");
+	showMenu.addMenuItem("Manage the existing properties");
+	showMenu.addMenuItem("Go BACK to the previous Menu");
+
+	while(showMenu.isActive()) {
+		switch(showMenu.showMenu()) {
+		case 1:
+			addProptoCond();
+			saveProperties();
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		default:
+			showMenu.toggleMenu();
+			break;
+		}
+	}
+}
+
+void Condominium::addProptoCond() {
+	string address;
+	Property property;
+
+	Menu Menu("Which type of property would you like to build\b");
+	Menu.addMenuItem("Store");
+	Menu.addMenuItem("Office");
+	Menu.addMenuItem("Apartment");
+	Menu.addMenuItem("Go BACK to the PREVIOUS menu");
+	Store store;
+	Office office;
+	Apartment apartment;
+	while(Menu.isActive()) {
+		switch(Menu.showMenu()) {
+		case 1:
+			property = store;
+			cout << "Which is the address you want to build in\n";
+			cin >> address;
+			property.setAddress(address);
+			this->addProperty(property);
+			Menu.toggleMenu();
+			break;
+		case 2:
+			property = office;
+			cout << "Which is the address you want to build in\n";
+			cin >> address;
+			property.setAddress(address);
+			this->addProperty(property);
+			Menu.toggleMenu();
+			break;
+		case 3:
+			property = apartment;
+			cout << "Which is the address you want to build in\n";
+			cin >> address;
+			property.setAddress(address);
+			this->addProperty(property);
+			Menu.toggleMenu();
+			break;
+		default:
+			Menu.toggleMenu();
+			break;
+		}
+
+	}
 }

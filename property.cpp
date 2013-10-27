@@ -7,7 +7,7 @@
 
 #include "property.h"
 
- // constructors
+// constructors
 
 Property::Property(string address, int cost) {
 	this->cost = cost;
@@ -29,12 +29,12 @@ int Property::getCost() {
 	return cost;
 }
 
-string Property::getAddress() {
-	return address;
-}
-
 int Property::returnType() const {
 	return 0;
+}
+
+string Property::getAddress() {
+	return address;
 }
 
 int Apartment::returnType() const {
@@ -65,4 +65,28 @@ void Store::showInfo()const {
 
 void Property::showInfo()const{
 	cout << "address: " << address;
+}
+
+Property::Property() {
+	address = "";
+	cost = 0;
+}
+
+Apartment::Apartment(){
+	address = "";
+	cost = 30;
+}
+
+Office::Office(){
+	address = "";
+	cost = 40;
+}
+
+Store::Store(){
+	address = "";
+	cost = 50;
+}
+
+void Property::setAddress(string name) {
+	address = name;
 }

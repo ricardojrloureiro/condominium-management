@@ -82,13 +82,13 @@ void Corporation::loadProperties(int condominiumid) {
 
 			if (type==1) {
 				Apartment property(address, cost);
-				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
+				condominiums[condominiumid].addProperty(property);
 			} else if (type==2) {
 				Office property(address, cost);
-				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
+				condominiums[condominiumid].addProperty(property);
 			} else if (type==3) {
 				Store property(address, cost);
-				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
+				condominiums[condominiumid].addProperty(property);
 			}
 
 			propertyInfo.clear();
@@ -120,12 +120,11 @@ void Corporation::showAllCondominiums() {
 	int i= 0;
 
 	cout << endl;
-	int error=0; // checks the input
 	Menu showMenu("Condominiums List");
 	showMenu.addMenuItem("List all properties information");
 	showMenu.addMenuItem("Go to the NEXT condominium");
 	showMenu.addMenuItem("Go to the PREVIOUS condominium");
-	showMenu.addMenuItem("Go BACK to the Main Menu");
+	showMenu.addMenuItem("Go BACK to the PREVIOUS menu");
 
 	while(showMenu.isActive()) {
 		cout << "i: " << i << endl;
@@ -160,4 +159,29 @@ void Corporation::saveCondominiums(string filename){
 	file.close();
 }
 
+void Corporation::manageCondominium() {
+	int i= 0;
+	Menu showMenu("Condominium management");
+	showMenu.addMenuItem("Choose this condominium to manage");
+	showMenu.addMenuItem("Go to the NEXT condominium");
+	showMenu.addMenuItem("Go to the PREVIOUS condominium");
+	showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
 
+	while(showMenu.isActive()) {
+			condominiums[i].showCondominium();
+			switch(showMenu.showMenu()) {
+			case 1:
+				condominiums[i].manageCond();
+				break;
+			case 2:
+				i = (i+1) % condominiums.size();
+				break;
+			case 3:
+				i = (i-1) % condominiums.size();
+				break;
+			default:
+				showMenu.toggleMenu();
+				break;
+			}
+		}
+}

@@ -30,12 +30,14 @@ public:
 	Condominium(long, string);
 	void addProperty(Property);
 	void removeProperty(Property);
+	void addProptoCond();
 	void showCondominium();
 	void showProperties();
 	int getId();
 	string getName();
 	void saveProperties();
 	int getProfit();
+	void manageCond();
 };
 
 

@@ -19,16 +19,19 @@ protected:
 	string address;
 	int cost;
 public:
+	Property();
+	void setAddress(string);
 	Property(string,int);
 	void setCost(int);
 	int getCost();
+	string getAddress();
 	virtual void showInfo() const;
 	virtual int returnType() const;
-	string getAddress();
 };
 
 class Apartment : public Property {
 public:
+	Apartment();
 	Apartment(string,int);
 	void showInfo() const;
 	int returnType() const;
@@ -37,6 +40,7 @@ public:
 
 class Office : public Property {
 public:
+	Office();
 	Office(string,int);
 	void showInfo() const;
 	int returnType() const;
@@ -44,6 +48,7 @@ public:
 
 class Store : public Property {
 public:
+	Store();
 	Store(string,int);
 	void showInfo() const;
 	int returnType() const;
