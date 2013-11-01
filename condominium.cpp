@@ -25,12 +25,6 @@ Condominium::Condominium(long id, string name) {
 
 // add/remove functions
 
-void Condominium::addProperty(Property property) {
-	cout << "before push: " << property.returnType();
-	properties.push_back(property);
-	cout << "after push: " << property.returnType();
-}
-
 void Condominium::removeProperty(Property property){
 	for (unsigned int i = 0; i < properties.size(); i++)
 	{
@@ -130,8 +124,6 @@ void Condominium::manageCond() {
 
 void Condominium::addProptoCond() {
 	string address;
-	Property property;
-
 	Menu Menu("Which type of property would you like to build?\n");
 	Menu.addMenuItem("Store");
 	Menu.addMenuItem("Office");
@@ -144,28 +136,27 @@ void Condominium::addProptoCond() {
 		switch(Menu.showMenu()) {
 		case 1:
 			cout << "Which is the address you want to build in\n";
-			cin >> address;
-			property.setAddress(address);
+			getline(cin,address);
+			store.setAddress(address);
 			this->addStore(store);
-			Menu.toggleMenu();
 			break;
 		case 2:
 			cout << "Which is the address you want to build in\n";
-			cin >> address;
-			property.setAddress(address);
+			getline(cin,address);
+			office.setAddress(address);
 			this->addOffice(office);
 			Menu.toggleMenu();
 			break;
 		case 3:
 			cout << "Which is the address you want to build in\n";
-			cin >> address;
-			property.setAddress(address);
+			getline(cin,address);
+			apartment.setAddress(address);
 			this->addApartment(apartment);
-			Menu.toggleMenu();
 			break;
 		default:
 			Menu.toggleMenu();
 			break;
 		}
+		Menu.toggleMenu();
 	}
 }
