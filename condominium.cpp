@@ -26,13 +26,14 @@ Condominium::Condominium(long id, string name) {
 // add/remove functions
 
 void Condominium::addProperty(Property property) {
+	cout << "before push: " << property.returnType();
 	properties.push_back(property);
+	cout << "after push: " << property.returnType();
 }
 
 void Condominium::removeProperty(Property property){
 	for (unsigned int i = 0; i < properties.size(); i++)
 	{
-		// proceder à remoção
 	}
 }
 
@@ -43,6 +44,25 @@ int Condominium::getId() {
 string Condominium::getName() {
 	return name;
 }
+
+void Condominium::addStore(Store s1){
+	cout << "before push: " << s1.returnType() << endl;
+	properties.push_back(s1);
+	cout << "after push: " << s1.returnType() << endl;
+}
+
+void Condominium::addOffice(Office s1){
+	cout << "before push: " << s1.returnType() << endl;
+	properties.push_back(s1);
+	cout << "after push: " << s1.returnType() << endl;
+}
+
+void Condominium::addApartment(Apartment s1){
+	cout << "before push: " << s1.returnType() << endl;
+	properties.push_back(s1);
+	cout << "after push: " << s1.returnType() << endl;
+}
+
 
 int Condominium::getProfit() {
 	int income;
@@ -59,8 +79,8 @@ void Condominium::showCondominium() {
 }
 
 void Condominium::showProperties() {
-	for(unsigned int i = 0; i < properties.size(); i++)
-	{
+	for(unsigned int i = 0; i < properties.size(); i++)	{
+		cout << "Type of property: " << properties[i].returnType() << endl;
 		cout << "Address: " << properties[i].getAddress() << endl;
 		cout << "Cost: " << properties[i].getCost() << endl;
 	}
@@ -71,6 +91,7 @@ void Condominium::saveProperties(){
 	ssfilename << "condominium" << id << ".csv";
 	string filename = ssfilename.str();
 	ofstream file(filename.c_str());
+	file << "type" << "," << "address" << "," << "cost" << endl;
 	for(unsigned int i = 0; i < properties.size(); i++)
 	{
 		file << properties[i].returnType() << "," << properties[i].getAddress() << "," << properties[i].getCost();
@@ -111,7 +132,7 @@ void Condominium::addProptoCond() {
 	string address;
 	Property property;
 
-	Menu Menu("Which type of property would you like to build\b");
+	Menu Menu("Which type of property would you like to build?\n");
 	Menu.addMenuItem("Store");
 	Menu.addMenuItem("Office");
 	Menu.addMenuItem("Apartment");
@@ -122,33 +143,29 @@ void Condominium::addProptoCond() {
 	while(Menu.isActive()) {
 		switch(Menu.showMenu()) {
 		case 1:
-			property = store;
 			cout << "Which is the address you want to build in\n";
 			cin >> address;
 			property.setAddress(address);
-			this->addProperty(property);
+			this->addStore(store);
 			Menu.toggleMenu();
 			break;
 		case 2:
-			property = office;
 			cout << "Which is the address you want to build in\n";
 			cin >> address;
 			property.setAddress(address);
-			this->addProperty(property);
+			this->addOffice(office);
 			Menu.toggleMenu();
 			break;
 		case 3:
-			property = apartment;
 			cout << "Which is the address you want to build in\n";
 			cin >> address;
 			property.setAddress(address);
-			this->addProperty(property);
+			this->addApartment(apartment);
 			Menu.toggleMenu();
 			break;
 		default:
 			Menu.toggleMenu();
 			break;
 		}
-
 	}
 }

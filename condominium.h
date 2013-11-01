@@ -29,6 +29,9 @@ public:
 	Condominium(string);
 	Condominium(long, string);
 	void addProperty(Property);
+	void addStore(Store);
+	void addApartment(Apartment);
+	void addOffice(Office);
 	void removeProperty(Property);
 	void addProptoCond();
 	void showCondominium();

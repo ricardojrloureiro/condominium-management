@@ -79,16 +79,15 @@ void Corporation::loadProperties(int condominiumid) {
 			type = atol(propertyInfo[0].c_str());
 			address = propertyInfo[1];
 			cost = atoi(propertyInfo[2].c_str());
-
 			if (type==1) {
-				Apartment property(address, cost);
-				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
+				Apartment apartment(address, cost);
+				condominiums[searchCondominiumId(condominiumid)].addApartment(apartment);
 			} else if (type==2) {
-				Office property(address, cost);
-				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
+				Office office(address, cost);
+				condominiums[searchCondominiumId(condominiumid)].addOffice(office);
 			} else if (type==3) {
-				Store property(address, cost);
-				condominiums[searchCondominiumId(condominiumid)].addProperty(property);
+				Store store(address, cost);
+				condominiums[searchCondominiumId(condominiumid)].addStore(store);
 			}
 
 			propertyInfo.clear();
@@ -103,7 +102,6 @@ int Corporation::searchCondominiumId(int condominiumdid) {
 			return i;
 		}
 	}
-
 	return 0;
 }
 
@@ -116,7 +114,6 @@ void Corporation::createCondominium() {
 }
 
 void Corporation::showAllCondominiums() {
-	cout << endl << "Condominiums list:";
 	int i= 0;
 
 	cout << endl;
@@ -127,7 +124,6 @@ void Corporation::showAllCondominiums() {
 	showMenu.addMenuItem("Go BACK to the PREVIOUS menu");
 
 	while(showMenu.isActive()) {
-		cout << "i: " << i << endl;
 		condominiums[i].showCondominium();
 		switch(showMenu.showMenu()) {
 		case 1:

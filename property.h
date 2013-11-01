@@ -26,10 +26,11 @@ public:
 	int getCost();
 	string getAddress();
 	virtual void showInfo() const;
-	virtual int returnType() const;
+	virtual int returnType()const;
 };
 
 class Apartment : public Property {
+	int type;
 public:
 	Apartment();
 	Apartment(string,int);
@@ -39,6 +40,7 @@ public:
 };
 
 class Office : public Property {
+	int type;
 public:
 	Office();
 	Office(string,int);
@@ -47,6 +49,7 @@ public:
 };
 
 class Store : public Property {
+	const int type;
 public:
 	Store();
 	Store(string,int);

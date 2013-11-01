@@ -14,13 +14,13 @@ Property::Property(string address, int cost) {
 	this->address = address;
 }
 
-Apartment::Apartment(string address, int cost) : Property(address,cost) {
+Apartment::Apartment(string address, int cost) : Property(address,cost), type(1) {
 }
 
-Office::Office(string address, int cost) : Property(address,cost) {
+Office::Office(string address, int cost) : Property(address,cost), type(2){
 }
 
-Store::Store(string address, int cost) : Property(address,cost) {
+Store::Store(string address, int cost) : Property(address,cost), type(3) {
 }
 
 // get & sets
@@ -38,15 +38,15 @@ string Property::getAddress() {
 }
 
 int Apartment::returnType() const {
-	return 1;
+	return type;
 }
 
 int Office::returnType() const {
-	return 2;
+	return type;
 }
 
 int Store::returnType() const {
-	return 3;
+	return type;
 }
 
 // other functions
@@ -72,17 +72,17 @@ Property::Property() {
 	cost = 0;
 }
 
-Apartment::Apartment(){
+Apartment::Apartment():type(1){
 	address = "";
 	cost = 30;
 }
 
-Office::Office(){
+Office::Office():type(2){
 	address = "";
 	cost = 40;
 }
 
-Store::Store(){
+Store::Store():type(3){
 	address = "";
 	cost = 50;
 }
