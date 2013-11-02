@@ -39,22 +39,20 @@ string Condominium::getName() {
 	return name;
 }
 
+void Condominium::addProperty(Property p1){
+	properties.push_back(p1);
+}
+
 void Condominium::addStore(Store s1){
-	cout << "before push: " << s1.returnType() << endl;
 	properties.push_back(s1);
-	cout << "after push: " << s1.returnType() << endl;
 }
 
 void Condominium::addOffice(Office s1){
-	cout << "before push: " << s1.returnType() << endl;
 	properties.push_back(s1);
-	cout << "after push: " << s1.returnType() << endl;
 }
 
 void Condominium::addApartment(Apartment s1){
-	cout << "before push: " << s1.returnType() << endl;
 	properties.push_back(s1);
-	cout << "after push: " << s1.returnType() << endl;
 }
 
 

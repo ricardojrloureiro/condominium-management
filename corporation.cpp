@@ -76,18 +76,27 @@ void Corporation::loadProperties(int condominiumid) {
 				propertyInfo.push_back(sub);
 			} while (iss);
 
-			type = atol(propertyInfo[0].c_str());
-			address = propertyInfo[1];
-			cost = atoi(propertyInfo[2].c_str());
+			if(propertyInfo.size() == 4){
+				type = atol(propertyInfo[0].c_str());
+				address = propertyInfo[1];
+				cost = atoi(propertyInfo[2].c_str());
+			}
+
+			//REMOVER ESTA MERDA PORQUE ISTO É DO TIPO 0 YOYOYO TIPO 0 NO ES WORKING
+			if(type==0){
+				Apartment apartment(address, cost);
+				condominiums[searchCondominiumId(condominiumid)].addProperty(apartment);
+			}
+			//COMEÇA APARTIR DAQUI OH FILHOTE MANINHO YOYOYOYO
 			if (type==1) {
 				Apartment apartment(address, cost);
-				condominiums[searchCondominiumId(condominiumid)].addApartment(apartment);
+				condominiums[searchCondominiumId(condominiumid)].addProperty(apartment);
 			} else if (type==2) {
 				Office office(address, cost);
-				condominiums[searchCondominiumId(condominiumid)].addOffice(office);
+				condominiums[searchCondominiumId(condominiumid)].addProperty(office);
 			} else if (type==3) {
 				Store store(address, cost);
-				condominiums[searchCondominiumId(condominiumid)].addStore(store);
+				condominiums[searchCondominiumId(condominiumid)].addProperty(store);
 			}
 
 			propertyInfo.clear();
@@ -164,20 +173,20 @@ void Corporation::manageCondominium() {
 	showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
 
 	while(showMenu.isActive()) {
-			condominiums[i].showCondominium();
-			switch(showMenu.showMenu()) {
-			case 1:
-				condominiums[i].manageCond();
-				break;
-			case 2:
-				i = (i+1) % condominiums.size();
-				break;
-			case 3:
-				i = (i-1) % condominiums.size();
-				break;
-			default:
-				showMenu.toggleMenu();
-				break;
-			}
+		condominiums[i].showCondominium();
+		switch(showMenu.showMenu()) {
+		case 1:
+			condominiums[i].manageCond();
+			break;
+		case 2:
+			i = (i+1) % condominiums.size();
+			break;
+		case 3:
+			i = (i-1) % condominiums.size();
+			break;
+		default:
+			showMenu.toggleMenu();
+			break;
 		}
+	}
 }
