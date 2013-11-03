@@ -76,30 +76,19 @@ void Corporation::loadProperties(int condominiumid) {
 				propertyInfo.push_back(sub);
 			} while (iss);
 
-			if(propertyInfo.size() == 4){
+			if(propertyInfo.size() == 3){
 				type = atol(propertyInfo[0].c_str());
 				address = propertyInfo[1];
-				cost = atoi(propertyInfo[2].c_str());
-			}
 
-			//REMOVER ESTA MERDA PORQUE ISTO É DO TIPO 0 YOYOYO TIPO 0 NO ES WORKING
-			if(type==0){
-				Apartment apartment(address, cost);
-				condominiums[searchCondominiumId(condominiumid)].addProperty(apartment);
+				if (type==1) {
+					condominiums[searchCondominiumId(condominiumid)].addProperty(new Apartment(address));
+				} else if (type==2) {
+					condominiums[searchCondominiumId(condominiumid)].addProperty(new Office(address));
+				} else if (type==3) {
+					condominiums[searchCondominiumId(condominiumid)].addProperty(new Store(address));
+				}
+				propertyInfo.clear();
 			}
-			//COMEÇA APARTIR DAQUI OH FILHOTE MANINHO YOYOYOYO
-			if (type==1) {
-				Apartment apartment(address, cost);
-				condominiums[searchCondominiumId(condominiumid)].addProperty(apartment);
-			} else if (type==2) {
-				Office office(address, cost);
-				condominiums[searchCondominiumId(condominiumid)].addProperty(office);
-			} else if (type==3) {
-				Store store(address, cost);
-				condominiums[searchCondominiumId(condominiumid)].addProperty(store);
-			}
-
-			propertyInfo.clear();
 		}
 		lineNumber++;
 	}

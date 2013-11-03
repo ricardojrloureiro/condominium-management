@@ -17,44 +17,42 @@ using namespace std;
 class Property {
 protected:
 	string address;
-	int cost;
 public:
 	Property();
 	void setAddress(string);
-	Property(string,int);
+	Property(string);
 	void setCost(int);
 	int getCost();
 	string getAddress();
-	virtual void showInfo() const;
-	virtual int returnType()const;
+	virtual int returnType() const = 0;
+	virtual string printType() const = 0;
 };
 
 class Apartment : public Property {
-	int type;
 public:
 	Apartment();
-	Apartment(string,int);
+	Apartment(string);
 	void showInfo() const;
 	int returnType() const;
-
+	string printType() const;
 };
 
 class Office : public Property {
-	int type;
 public:
 	Office();
-	Office(string,int);
+	Office(string);
 	void showInfo() const;
 	int returnType() const;
+	string printType() const;
 };
 
 class Store : public Property {
-	const int type;
 public:
 	Store();
-	Store(string,int);
+	Store(string);
 	void showInfo() const;
 	int returnType() const;
+	string printType() const;
 };
 
 #endif /* PROPERTY_H_ */

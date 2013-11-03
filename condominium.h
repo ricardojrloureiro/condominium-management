@@ -22,17 +22,17 @@ using namespace std;
 class Condominium {
 	long id;
 	string name;
-	vector <Property> properties;
+	vector <Property*> properties;
 	static long condominiumId;
 
 public:
 	Condominium(string);
 	Condominium(long, string);
-	void addProperty(Property);
+	void addProperty(Property*);
 	void addStore(Store);
 	void addApartment(Apartment);
 	void addOffice(Office);
-	void removeProperty(Property);
+	void removeProperty(Property*);
 	void addProptoCond();
 	void showCondominium();
 	void showProperties();
