@@ -76,7 +76,7 @@ void Corporation::loadProperties(int condominiumid) {
 				propertyInfo.push_back(sub);
 			} while (iss);
 
-			if(propertyInfo.size() == 3){
+			if(propertyInfo.size() == 4){ // isto tem de ser 4 nao 3 loil
 				type = atol(propertyInfo[0].c_str());
 				address = propertyInfo[1];
 
@@ -149,6 +149,7 @@ void Corporation::saveCondominiums(string filename){
 		if (i < (condominiums.size() -1))
 			file << endl;
 		condominiums[i].saveProperties();
+
 	}
 	file.close();
 }

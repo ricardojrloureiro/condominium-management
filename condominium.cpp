@@ -25,10 +25,16 @@ Condominium::Condominium(long id, string name) {
 
 // add/remove functions
 
-void Condominium::removeProperty(Property* property){
+bool Condominium::removeProperty(Property* property){
+	string propertyAdd = property->getAddress();
 	for (unsigned int i = 0; i < properties.size(); i++)
 	{
+		if(propertyAdd == properties[i]->getAddress()){
+			properties.erase(properties.begin()+ i);
+			return true; // if it has been erased
+		}
 	}
+	return false; // if the property to erase doesn't exist
 }
 
 int Condominium::getId() {
@@ -94,11 +100,16 @@ void Condominium::manageCond() {
 	while(showMenu.isActive()) {
 		switch(showMenu.showMenu()) {
 		case 1:
+			//add
 			addProptoCond();
 			break;
 		case 2:
+			//remove
+
 			break;
 		case 3:
+			//manage properties
+
 			break;
 		default:
 			showMenu.toggleMenu();
@@ -126,12 +137,13 @@ void Condominium::addProptoCond() {
 			cout << "Office Address: ";
 			getline(cin,address);
 			this->addProperty(new Office(address));
-			Menu.toggleMenu();
+
 			break;
 		case 3:
 			cout << "Store Address: ";
 			getline(cin,address);
 			this->addProperty(new Store(address));
+
 			break;
 		default:
 			Menu.toggleMenu();
@@ -139,4 +151,6 @@ void Condominium::addProptoCond() {
 		}
 		Menu.toggleMenu();
 	}
+	//save the properties
+	saveProperties();
 }
