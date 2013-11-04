@@ -10,13 +10,40 @@
 // constructor
 
 Corporation::Corporation(){
+	date = 201310;
 	loadCondominiums("condominiums.csv");
+}
+
+Corporation::Corporation(int date) {
+	this->date = date;
+	loadCondominiums("condominiums.csv");
+}
+
+void Corporation::incDate() {
+	if(date%100 == 12){
+		date = ((date / 100) + 1) * 100;
+	} else {
+		date++;
+	}
+}
+
+int Corporation::getAno() {
+	return date/100;
+}
+
+int Corporation::getMes() {
+	return date%100;
 }
 
 // remove/add functions
 
 void Corporation::removeCondominium(Condominium cond){
-	// procurar o metodo que procura no vetor e associa à possição seguinte passado a dele
+	int id = cond.getId();
+	for(unsigned int i=0;i<condominiums.size();i++){
+		if(condominiums[i].getId() == id){
+			condominiums.erase(condominiums.begin()+i);
+		}
+	}
 }
 
 void Corporation::addCondominium(Condominium cond){
@@ -79,7 +106,7 @@ void Corporation::loadProperties(int condominiumid) {
 			if(propertyInfo.size() == 4){
 				type = atol(propertyInfo[0].c_str());
 				address = propertyInfo[1];
-
+				type = 1;
 				if (type==1) {
 					condominiums[searchCondominiumId(condominiumid)].addProperty(new Apartment(address));
 				} else if (type==2) {
@@ -178,5 +205,45 @@ void Corporation::manageCondominium() {
 			showMenu.toggleMenu();
 			break;
 		}
+	}
+}
+
+void Corporation::gettingReal() {
+	Menu showMenu("Welcome to the Real life bro");
+	showMenu.addMenuItem("Flying throught time");
+	showMenu.addMenuItem("Check condominium's reports");
+	showMenu.addMenuItem("Go to the MAIN menu");
+	while(showMenu.isActive()){
+		switch (showMenu.showMenu()) {
+		case 1:
+			//real stuff
+			timeGoing();
+			break;
+		case 2:
+			//checking files
+			break;
+		default: // going back
+			break;
+		}
+		showMenu.toggleMenu();
+	}
+}
+
+void Corporation::timeGoing() {
+	string monthsInput;
+	int monthsToPass;
+	cout << "How many months would you like to pass?\n";
+	// checking input & stuff
+
+	for(unsigned int i=0;i<monthsToPass;i++){
+		for(unsigned int j=0;j<condominiums.size();j++){
+			/*
+			 chamar funcao que vai propriedade a propriedade dentro de cada condominio:
+			 -Escrever relatorio mensal de cada propriedade; //por a escrever no fim do .txt//
+			 -Escrever relatorios de 3 em 3 meses;
+			 -Escrever relatorios anuais;
+			*/
+		}
+		incDate(); // passa para o mes seguinte
 	}
 }

@@ -16,19 +16,19 @@
 using namespace std;
 
 class Maintenance {
-	int daysLeft;
+	int monthsLeft;
 	int type;
 	string name;
 public:
 	Maintenance();
 	Maintenance(int,int,string);
-	void setDays(int);
-	int getDays();
+	void setMonth(int);
+	int getMonth();
 	void setType(int);
 	int getType();
 	void setName(string);
 	string getName();
-	void decDays();
-	bool payDay();
+	void decMonths();
+	bool payMonth();
 };
 #endif /* MAINTENANCE_H_ */

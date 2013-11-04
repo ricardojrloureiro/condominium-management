@@ -4,17 +4,19 @@
 #include "owner.h"
 #include "worker.h"
 #include "menu.h"
+#include "maintenance.h"
 #include <iostream>
 #include <ctime>
 #include <string>
 
 using namespace std;
-
-Corporation corporation;
+int date = 201310;
+Corporation corporation(date);
 
 int main() {
 	Menu mainMenu("Main Menu");
 	mainMenu.addMenuItem("Condominiums");
+	mainMenu.addMenuItem("Real life condominium stuff");
 	mainMenu.addMenuItem("Quit");
 
 	Menu condominiumsMenu("Condominiums");
@@ -45,6 +47,8 @@ int main() {
 			}
 			break;
 		case 2:
+			break;
+		case 3:
 			mainMenu.toggleMenu();
 			break;
 		}

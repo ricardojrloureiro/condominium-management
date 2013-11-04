@@ -4,23 +4,23 @@
 Maintenance::Maintenance() {
 	name = "";
 	type = 0;
-	daysLeft = 0;
+	monthsLeft = 0;
 }
 
-Maintenance::Maintenance(int days,int type, string name) {
+Maintenance::Maintenance(int months,int type, string name) {
 	this->name = name;
 	this->type = type;
-	daysLeft = days;
+	monthsLeft = months;
 }
 
 
 //set & get functions
-void Maintenance::setDays(int days) {
-	daysLeft = days;
+void Maintenance::setMonth(int months) {
+	monthsLeft = months;
 }
 
-int Maintenance::getDays() {
-	return daysLeft;
+int Maintenance::getMonth() {
+	return monthsLeft;
 }
 
 void Maintenance::setType(int type) {
@@ -40,12 +40,12 @@ string Maintenance::getName() {
 }
 
 bool Maintenance::payDay() {
-	if(daysLeft == 0){
+	if(monthsLeft == 0){
 		return true;
 	}
 	return false;
 }
 
-void Maintenance::decDays() {
-	daysLeft--;
+void Maintenance::decMonths() {
+	monthsLeft--;
 }

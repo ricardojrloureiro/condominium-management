@@ -23,9 +23,10 @@ using namespace std;
 class Corporation{
 	vector <Condominium> condominiums;
 	vector <Worker> workers;
-
+	int date; // mm-aaaa
 public:
 	Corporation();
+	Corporation(int);
 	void manageCondominium();
 	void loadCondominiums(string);
 	void loadProperties(int);
@@ -42,6 +43,12 @@ public:
 	void showCondominium(int);
 	void showAllCondominiums();
 	int showAllCondominiums2();
+
+	void gettingReal(); // the real badass function
+	void incDate();
+	int getMes();
+	int getAno();
+	void timeGoing();
 };
 
 

@@ -11,13 +11,6 @@
 
 Property::Property(string address) {
 	this->address = address;
-	Maintenance *m1;
-	for(unsigned int i=0;i<3;i++){
-		m1->setDays(0);
-		m1->setName("");
-		m1->setType(0);
-		maintenances.push_back(m1);
-	}
 }
 
 Apartment::Apartment(string address) : Property(address) {
