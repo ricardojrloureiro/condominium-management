@@ -30,6 +30,7 @@ public:
 	Condominium(long, string);
 	void addProperty(Property*);
 	bool removeProperty(Property*);
+	void removePropertyFromCond();
 	void addProptoCond();
 	void showCondominium();
 	void showProperties();
@@ -38,6 +39,7 @@ public:
 	void saveProperties();
 	int getProfit();
 	void manageCond();
+	void managePropertyFromCond();
 };
 
 

@@ -11,11 +11,15 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <sstream>
+#include "menu.h"
+#include "maintenance.h"
 
 using namespace std;
 
 class Property {
 protected:
+	vector<Maintenance *> maintenances;
 	string address;
 public:
 	Property();
@@ -26,6 +30,8 @@ public:
 	string getAddress();
 	virtual int returnType() const = 0;
 	virtual string printType() const = 0;
+	void addMaintenance(Maintenance *);
+	void removeMaintenance();
 };
 
 class Apartment : public Property {

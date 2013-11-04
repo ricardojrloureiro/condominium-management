@@ -61,7 +61,7 @@ void Corporation::loadProperties(int condominiumid) {
 	string filename = ssfilename.str(), address;
 	ifstream file(filename.c_str());
 	string line;
-	int type, cost;
+	int type;
 	vector <string> propertyInfo;
 	int lineNumber = 0;
 	while (file.good())
@@ -76,7 +76,7 @@ void Corporation::loadProperties(int condominiumid) {
 				propertyInfo.push_back(sub);
 			} while (iss);
 
-			if(propertyInfo.size() == 4){ // isto tem de ser 4 nao 3 loil
+			if(propertyInfo.size() == 4){
 				type = atol(propertyInfo[0].c_str());
 				address = propertyInfo[1];
 

@@ -105,11 +105,11 @@ void Condominium::manageCond() {
 			break;
 		case 2:
 			//remove
-
+			removePropertyFromCond();
 			break;
 		case 3:
 			//manage properties
-
+			managePropertyFromCond();
 			break;
 		default:
 			showMenu.toggleMenu();
@@ -131,26 +131,69 @@ void Condominium::addProptoCond() {
 			cout << "Apartment Address: ";
 			getline(cin,address);
 			this->addProperty(new Apartment(address));
-
 			break;
 		case 2:
 			cout << "Office Address: ";
 			getline(cin,address);
 			this->addProperty(new Office(address));
-
 			break;
 		case 3:
 			cout << "Store Address: ";
 			getline(cin,address);
 			this->addProperty(new Store(address));
-
 			break;
 		default:
-			Menu.toggleMenu();
 			break;
 		}
 		Menu.toggleMenu();
 	}
 	//save the properties
 	saveProperties();
+}
+
+void Condominium::removePropertyFromCond() {
+	stringstream name;
+	int id;
+	Menu menu("Choose one of the id's");
+	for(unsigned int i=0;i<properties.size();i++) {
+		name << "Address: " << properties[i]->getAddress();
+		menu.addMenuItem(name.str());
+		name.clear();
+		name.str("");
+	}
+	menu.addMenuItem("Go back to the PREVIOUS menu");
+	id = menu.showMenu();
+	properties.erase(properties.begin() + (id - 1));
+	saveProperties();
+}
+
+void Condominium::managePropertyFromCond() {
+	stringstream name;
+	int id,option;
+	string newAddress;
+	Menu menu("Choose one of the id's");
+	for(unsigned int i=0;i<properties.size();i++) {
+		name << "Address: " << properties[i]->getAddress();
+		menu.addMenuItem(name.str());
+		name.clear();
+		name.str("");
+	}
+	menu.addMenuItem("Go back to the PREVIOUS menu");
+	id = menu.showMenu();
+	Menu manage("Managing");
+	manage.addMenuItem("Edit address");
+	manage.addMenuItem("Go to the PREVIOUS menu");
+	while(manage.isActive()){
+		switch (manage.showMenu()) {
+			case 1:
+				cout << "New Address: ";
+				getline(cin,newAddress);
+				properties[id-1]->setAddress(newAddress);
+				break;
+			default:
+				break;
+		}
+		manage.toggleMenu();
+	}
+ 	saveProperties();
 }

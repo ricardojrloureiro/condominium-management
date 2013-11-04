@@ -11,6 +11,13 @@
 
 Property::Property(string address) {
 	this->address = address;
+	Maintenance *m1;
+	for(unsigned int i=0;i<3;i++){
+		m1->setDays(0);
+		m1->setName("");
+		m1->setType(0);
+		maintenances.push_back(m1);
+	}
 }
 
 Apartment::Apartment(string address) : Property(address) {
@@ -74,4 +81,23 @@ Store::Store(){
 
 void Property::setAddress(string name) {
 	address = name;
+}
+
+void Property::addMaintenance(Maintenance *p1) {
+	maintenances.push_back(p1);
+}
+
+void Property::removeMaintenance() {
+	stringstream name;
+	int id;
+	Menu menu("Choose one of the id's");
+	for(unsigned int i=0;i<maintenances.size();i++) {
+		name << "Name: " << maintenances[i]->getName() << ", tipo: " << maintenances[i]->getType();
+		menu.addMenuItem(name.str());
+		name.clear();
+		name.str("");
+	}
+	menu.addMenuItem("Go back to the PREVIOUS menu");
+	id = menu.showMenu();
+	maintenances.erase(maintenances.begin() + (id - 1));
 }
