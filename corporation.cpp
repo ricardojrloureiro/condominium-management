@@ -314,3 +314,30 @@ bool Corporation::isEmpty() {
 		return true;
 	}
 }
+
+void Corporation::addWorker() {
+	string name = "";
+	int wage=0;
+	Menu showMenu("Workers");
+	showMenu.addMenuItem("Add a new worker");
+	showMenu.addMenuItem("Go back to the MAIN menu");
+
+	while(showMenu.isActive()){
+		switch(showMenu.showMenu()){
+			case 1:{
+			name = Menu::promptString("Insert Worker's name: ");
+			wage = Menu::promptInt("Insert Worker's wage: ");
+			Worker worker(name,wage);
+			addWorker(worker);
+			break;}
+			case 2:{
+			showMenu.toggleMenu();
+			break;}
+		}
+	}
+
+}
+
+void Corporation::addWorker(Worker w1) {
+	workers.push_back(w1);
+}

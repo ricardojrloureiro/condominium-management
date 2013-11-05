@@ -22,14 +22,6 @@ Worker::Worker(long id, string name) {
 	this->name = name;
 }
 
-Painter::Painter(int wage, string name): Worker(name){
-	this->wage = wage;
-}
-
-Electrician::Electrician(int wage, string name): Worker(name){
-	this->wage = wage;
-}
-
 // sets & gets
 
 long Worker::getId() {
@@ -40,18 +32,17 @@ string Worker::getName(){
 	return name;
 }
 
-void Painter::setWage(int wage){
-	this->wage = wage;
-}
-
-int Painter::getWage(){
+int Worker::getWage() {
 	return wage;
 }
 
-void Electrician::setWage(int wage){
-	this->wage = wage;
+void Worker::setWage(int wage) {
+	this->wage=wage;
 }
 
-int Electrician::getWage(){
-	return this->wage;
+Worker::Worker(string name, int wage) {
+	workerId++;
+	id = workerId;
+	this->name = name;
+	this->wage = wage;
 }

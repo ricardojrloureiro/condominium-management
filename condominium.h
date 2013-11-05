@@ -49,7 +49,7 @@ public:
 	void saveProperties();
 	int getProfit();
 	void manageCond(vector<Worker*>);
-	void managePropertyFromCond(vector<Worker*>);
+	void managePropertyFromCond();
 	void addMaintenanceToCondominium(vector<Worker*>);
 	bool isEmpty();
 	void setAreaMultiplier(float);

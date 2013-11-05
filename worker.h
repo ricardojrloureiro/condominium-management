@@ -16,29 +16,18 @@ using namespace std;
 class Worker{
 	long id;
 	string name;
+	int wage;
 	static long workerId;
 public:
 	string getName();
+	void setName(string);
+	int getWage();
+	void setWage(int);
+
 	Worker(string);
 	Worker(long,string);
+	Worker(string,int);
+
 	long getId();
 };
-
-class Painter: public Worker{
-	int wage;
-public:
-	int getWage();
-	void setWage(int);
-	Painter(int,string);
-};
-
-class Electrician: public Worker{
-	int wage;
-public:
-	int getWage();
-	void setWage(int);
-	Electrician(int,string);
-};
-
-
 #endif /* WORKER_H_ */

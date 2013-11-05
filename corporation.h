@@ -36,6 +36,7 @@ public:
 	void removeCondominium(Condominium);
 	void addCondominium(Condominium);
 
+	void addWorker();
 	void createCondominium();
 	void removeWorker(Worker);
 	void addWorker(Worker);

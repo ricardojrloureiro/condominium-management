@@ -17,6 +17,7 @@ int main() {
 	Menu mainMenu("Main Menu");
 	mainMenu.addMenuItem("Condominiums");
 	mainMenu.addMenuItem("Finance Reports");
+	mainMenu.addMenuItem("Add workers to the Corporation");
 	mainMenu.addMenuItem("Quit");
 
 	Menu condominiumsMenu("Condominiums");
@@ -58,8 +59,11 @@ int main() {
 				corporation.gettingReal();
 			break;
 			case 3:
-			mainMenu.toggleMenu();
+				corporation.addWorker();
+			// add workers
 			break;
+			case 4:
+			mainMenu.toggleMenu();
 		}
 	}
 }
