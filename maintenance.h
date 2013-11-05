@@ -31,5 +31,8 @@ public:
 	string getName();
 	void decMonths();
 	bool payMonth();
+	int getType();
+	void setType(int);
+	int getWorkerId();
 };
 #endif /* MAINTENANCE_H_ */

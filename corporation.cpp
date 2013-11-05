@@ -12,11 +12,13 @@
 Corporation::Corporation(){
 	date = 201310;
 	loadCondominiums("condominiums.csv");
+	loadWorker("workers.csv");
 }
 
 Corporation::Corporation(int date) {
 	this->date = date;
 	loadCondominiums("condominiums.csv");
+	loadWorker("workers.csv");
 }
 
 void Corporation::incDate() {
@@ -50,12 +52,45 @@ void Corporation::addCondominium(Condominium cond){
 	condominiums.push_back(cond);
 }
 
+void Corporation::loadWorker(string filename){
+	ifstream file;
+	string line;
+	int id, wage;
+	string name;
+	vector <string> workersInfo;
+	file.open(filename);
+	int lineNumber = 0;
+	while (file.good())
+	{
+		getline(file,line);
+		if (lineNumber > 0) {
+			istringstream iss(line);
+			do
+			{
+				string sub;
+				getline(iss, sub , ',');
+				workersInfo.push_back(sub);
+			} while (iss);
+
+			id = atol(workersInfo[0].c_str());
+			name = workersInfo[1];
+			wage = atol(workersInfo[2].c_str());
+			Worker wtemp(id,wage,name);
+			workers.push_back(wtemp);
+
+			workersInfo.clear();
+		}
+		lineNumber++;
+	}
+	file.close();
+}
+
 void Corporation::loadCondominiums(string filename) {
 	ifstream file;
 	string line;
 	int id;
 	vector <string> condominiumInfo;
-	file.open("condominiums.csv");
+	file.open(filename);
 	int lineNumber = 0;
 	while (file.good())
 	{
@@ -230,6 +265,18 @@ void Corporation::saveCondominiums(string filename){
 	file.close();
 }
 
+void Corporation::saveWorkers() {
+	ofstream file("workers.csv");
+	file << "id,name,wage" << endl;
+	for(unsigned int i = 0; i < workers.size(); i++)
+	{
+		file << workers[i].getId() << "," << workers[i].getName() << "," << workers[i].getWage();
+		if (i < (workers.size() -1))
+			file << endl;
+	}
+	file.close();
+}
+
 void Corporation::manageCondominium() {
 	int i= 0;
 	Menu showMenu("Condominium management");
@@ -291,7 +338,7 @@ void Corporation::timeGoing() {
 			 -Escrever relatorio mensal de cada propriedade; //por a escrever no fim do .txt//
 			 -Escrever relatorios de 3 em 3 meses;
 			 -Escrever relatorios anuais;
-			*/
+			 */
 		}
 		incDate(); // passa para o mes seguinte
 	}
@@ -324,20 +371,21 @@ void Corporation::addWorker() {
 
 	while(showMenu.isActive()){
 		switch(showMenu.showMenu()){
-			case 1:{
+		case 1:{
 			name = Menu::promptString("Insert Worker's name: ");
 			wage = Menu::promptInt("Insert Worker's wage: ");
 			Worker worker(name,wage);
 			addWorker(worker);
 			break;}
-			case 2:{
+		case 2:{
 			showMenu.toggleMenu();
 			break;}
 		}
 	}
-
+	saveWorkers();
 }
 
 void Corporation::addWorker(Worker w1) {
 	workers.push_back(w1);
 }
+

@@ -14,11 +14,13 @@
 Worker::Worker(string name) {
 	workerId++;
 	id = workerId;
+	wage = 0;
 	this->name = name;
 }
 
-Worker::Worker(long id, string name) {
+Worker::Worker(long id,int wage, string name) {
 	workerId = id;
+	this->wage = wage;
 	this->name = name;
 }
 

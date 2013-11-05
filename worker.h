@@ -25,7 +25,7 @@ public:
 	void setWage(int);
 
 	Worker(string);
-	Worker(long,string);
+	Worker(long,int,string);
 	Worker(string,int);
 
 	long getId();

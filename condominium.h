@@ -63,6 +63,7 @@ public:
 	void setBaseStoreCost(float);
 	float getBaseStoreCost();
 	Worker* getWorkerFromList(vector<Worker*>);
+	void saveMaintenances();
 };
 
 

@@ -51,6 +51,14 @@ string Maintenance::getName() {
 	return name;
 }
 
+int Maintenance::getType()  {
+	return type;
+}
+
+void Maintenance::setType(int type) {
+	this->type=type;
+}
+
 bool Maintenance::payMonth() {
 	if(monthsLeft == 0){
 		return true;
@@ -60,4 +68,8 @@ bool Maintenance::payMonth() {
 
 void Maintenance::decMonths() {
 	monthsLeft--;
+}
+
+int Maintenance::getWorkerId() {
+	return worker->getId();
 }

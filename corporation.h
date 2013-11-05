@@ -41,6 +41,7 @@ public:
 	void removeWorker(Worker);
 	void addWorker(Worker);
 	void loadWorker(string);
+	void saveWorkers();
 
 	void showCondominium(int);
 	void showAllCondominiums();
@@ -56,6 +57,8 @@ public:
 
 	Worker* getWorker(int id);
 	vector<Worker*> getWorkersList();
+
+
 };
 
 
