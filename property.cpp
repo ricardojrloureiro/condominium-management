@@ -85,7 +85,7 @@ void Property::removeMaintenance() {
 	int id;
 	Menu menu("Choose one of the id's");
 	for(unsigned int i=0;i<maintenances.size();i++) {
-		name << "Name: " << maintenances[i]->getName() << ", tipo: " << maintenances[i]->getType();
+		name << "Name: " << maintenances[i]->getName();
 		menu.addMenuItem(name.str());
 		name.clear();
 		name.str("");

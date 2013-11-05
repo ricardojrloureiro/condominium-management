@@ -7,9 +7,18 @@
 
 #include "worker.h"
 
+ long Worker::workerId = 0;
+
 // constructors
 
-Worker::Worker(string name){
+Worker::Worker(string name) {
+	workerId++;
+	id = workerId;
+	this->name = name;
+}
+
+Worker::Worker(long id, string name) {
+	workerId = id;
 	this->name = name;
 }
 
@@ -21,8 +30,11 @@ Electrician::Electrician(int wage, string name): Worker(name){
 	this->wage = wage;
 }
 
-
 // sets & gets
+
+long Worker::getId() {
+	return id;
+}
 
 string Worker::getName(){
 	return name;

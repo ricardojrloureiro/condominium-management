@@ -11,16 +11,26 @@ long Condominium::condominiumId = 0;
 
 // constructor
 
-Condominium::Condominium(string name) {
+Condominium::Condominium(string name, float areaMultiplier, float floorMultiplier, float baseApartmentCost, float baseOfficeCost, float baseStoreCost) {
 	condominiumId++;
 	id = condominiumId;
 	this->name = name;
+	this->areaMultiplier = areaMultiplier;
+	this->floorMultiplier = floorMultiplier;
+	this->baseApartmentCost = baseApartmentCost;
+	this->baseOfficeCost = baseOfficeCost;
+	this->baseStoreCost = baseStoreCost;
 }
 
-Condominium::Condominium(long id, string name) {
+Condominium::Condominium(long id, string name, float areaMultiplier, float floorMultiplier, float baseApartmentCost, float baseOfficeCost, float baseStoreCost) {
 	condominiumId = id;
 	this->id = id;
 	this->name = name;
+	this->areaMultiplier = areaMultiplier;
+	this->floorMultiplier = floorMultiplier;
+	this->baseApartmentCost = baseApartmentCost;
+	this->baseOfficeCost = baseOfficeCost;
+	this->baseStoreCost = baseStoreCost;
 }
 
 // add/remove functions
@@ -49,12 +59,64 @@ void Condominium::addProperty(Property* p1){
 	properties.push_back(p1);
 }
 
+void Condominium::addMaintenance(Maintenance* m1){
+	maintenance.push_back(m1);
+}
+
 int Condominium::getProfit() {
-	int income;
+	int income = 0;
 	for(unsigned int i=0; i<properties.size(); i++) {
 		income += properties[i]->getCost();
 	}
 	return income;
+}
+
+void Condominium::setAreaMultiplier(float areaMultiplier) {
+	this->areaMultiplier = areaMultiplier;
+}
+
+float Condominium::getAreaMultiplier() {
+	return areaMultiplier;
+}
+
+void Condominium::setFloorMultiplier(float floorMultiplier) {
+	this->floorMultiplier = floorMultiplier;
+}
+
+float Condominium::getFloorMultiplier() {
+	return floorMultiplier;
+}
+
+void Condominium::setBaseApartmentCost(float baseApartmentCost) {
+	this->baseApartmentCost = baseApartmentCost;
+}
+
+float Condominium::getBaseApartmentCost() {
+	return baseApartmentCost;
+}
+
+void Condominium::setBaseOfficeCost(float baseOfficeCost) {
+	this->baseOfficeCost = baseOfficeCost;
+}
+
+float Condominium::getBaseOfficeCost() {
+	return baseOfficeCost;
+}
+
+void Condominium::setBaseStoreCost(float baseStoreCost) {
+	this->baseStoreCost = baseStoreCost;
+}
+
+float Condominium::getBaseStoreCost() {
+	return baseStoreCost;
+}
+
+bool Condominium::isEmpty() {
+	if(properties.size() > 0) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 void Condominium::showCondominium() {
@@ -74,7 +136,7 @@ void Condominium::showProperties() {
 
 void Condominium::saveProperties(){
 	stringstream ssfilename;
-	ssfilename << "condominium" << id << ".csv";
+	ssfilename << "properties" << id << ".csv";
 	string filename = ssfilename.str();
 	ofstream file(filename.c_str());
 	file << "type" << "," << "address" << "," << "cost" << endl;
@@ -87,7 +149,7 @@ void Condominium::saveProperties(){
 	file.close();
 }
 
-void Condominium::manageCond() {
+void Condominium::manageCond(vector <Worker*> workers) {
 	stringstream topic;
 	topic << "Managing " << getName() << endl;
 	string topic2 = topic.str();
@@ -95,6 +157,8 @@ void Condominium::manageCond() {
 	showMenu.addMenuItem("Add a new property");
 	showMenu.addMenuItem("Remove property");
 	showMenu.addMenuItem("Manage the existing properties");
+	showMenu.addMenuItem("Add maintenance task");
+	showMenu.addMenuItem("Remove maintenance task");
 	showMenu.addMenuItem("Go BACK to the previous Menu");
 
 	while(showMenu.isActive()) {
@@ -105,11 +169,24 @@ void Condominium::manageCond() {
 			break;
 		case 2:
 			//remove
-			removePropertyFromCond();
+			if(this->isEmpty()) {
+				cout << "There are no properties yet. Please add one property first." << endl << endl;
+			} else {
+				removePropertyFromCond();
+			}
 			break;
 		case 3:
 			//manage properties
-			managePropertyFromCond();
+			if(this->isEmpty()) {
+				cout << "There are no properties yet. Please add one property first." << endl << endl;
+			} else {
+				managePropertyFromCond(workers);
+			}
+			break;
+		case 4:
+			addMaintenanceToCondominium();
+			break;
+		case 5:
 			break;
 		default:
 			showMenu.toggleMenu();
@@ -167,11 +244,11 @@ void Condominium::removePropertyFromCond() {
 	saveProperties();
 }
 
-void Condominium::managePropertyFromCond() {
+void Condominium::managePropertyFromCond(vector <Worker*> workers) {
 	stringstream name;
-	int id,option;
+	int id;
 	string newAddress;
-	Menu menu("Choose one of the id's");
+	Menu menu("Choose one of the IDs");
 	for(unsigned int i=0;i<properties.size();i++) {
 		name << "Address: " << properties[i]->getAddress();
 		menu.addMenuItem(name.str());
@@ -182,6 +259,7 @@ void Condominium::managePropertyFromCond() {
 	id = menu.showMenu();
 	Menu manage("Managing");
 	manage.addMenuItem("Edit address");
+	manage.addMenuItem("Add maintenance");
 	manage.addMenuItem("Go to the PREVIOUS menu");
 	while(manage.isActive()){
 		switch (manage.showMenu()) {
@@ -190,10 +268,34 @@ void Condominium::managePropertyFromCond() {
 				getline(cin,newAddress);
 				properties[id-1]->setAddress(newAddress);
 				break;
+			case 2:
+				break;
 			default:
+				manage.toggleMenu();
 				break;
 		}
-		manage.toggleMenu();
+		//manage.toggleMenu();
 	}
  	saveProperties();
+}
+
+Worker* Condominium::getWorkerFromList(vector <Worker*> workers) {
+
+	Menu workersMenu("Workers List");
+	for (unsigned int i=0; i<workers.size(); i++) {
+		workersMenu.addMenuItem(workers[i]->getName());
+	}
+	workersMenu.addMenuItem("Go back to the PREVIOUS menu");
+	return workers[workersMenu.showMenu()-1];
+}
+
+void Condominium::addMaintenanceToCondominium(vector <Worker*> workers) {
+	string name = Menu::promptString("Maintenance Name: ");
+	Menu typeMenu("Maintenance Schedule");
+	typeMenu.addMenuItem("Monthly");
+	typeMenu.addMenuItem("Trimestral");
+	typeMenu.addMenuItem("Annually");
+	int type = typeMenu.showMenu() - 1;
+	Worker* worker = getWorkerFromList(workers);
+	this->addMaintenance(new Maintenance(type, name, worker));
 }

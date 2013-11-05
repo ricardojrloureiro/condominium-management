@@ -3,14 +3,34 @@
 // Constructors
 Maintenance::Maintenance() {
 	name = "";
-	type = 0;
 	monthsLeft = 0;
 }
 
-Maintenance::Maintenance(int months,int type, string name) {
-	this->name = name;
+Maintenance::Maintenance(int type, string name, Worker* worker) {
 	this->type = type;
-	monthsLeft = months;
+	this->name = name;
+	this->worker = worker;
+	switch(type) {
+		case 0:
+			monthsLeft = 1;
+			break;
+		case 1:
+			monthsLeft = 3;
+			break;
+		case 2: 
+			monthsLeft = 12;
+			break;
+		default:
+			monthsLeft = 0;
+			break;
+	}
+}
+
+Maintenance::Maintenance(int monthsLeft, int type, string name, Worker* worker) {
+	this->monthsLeft = monthsLeft;
+	this->type = type;
+	this->name = name;
+	this->worker = worker;
 }
 
 
@@ -23,14 +43,6 @@ int Maintenance::getMonth() {
 	return monthsLeft;
 }
 
-void Maintenance::setType(int type) {
-	this->type = type;
-}
-
-int Maintenance::getType() {
-	return type;
-}
-
 void Maintenance::setName(string name) {
 	this->name=name;
 }
@@ -39,7 +51,7 @@ string Maintenance::getName() {
 	return name;
 }
 
-bool Maintenance::payDay() {
+bool Maintenance::payMonth() {
 	if(monthsLeft == 0){
 		return true;
 	}

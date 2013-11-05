@@ -24,6 +24,7 @@ public:
 	void addMenuItem(string);
 	static int promptInt(string);
 	static string promptString(string);
+	static float promptFloat(string);
 	void activateMenu();
 	void toggleMenu();
 	bool isActive();

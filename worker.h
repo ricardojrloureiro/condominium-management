@@ -14,10 +14,14 @@
 using namespace std;
 
 class Worker{
+	long id;
 	string name;
+	static long workerId;
 public:
 	string getName();
 	Worker(string);
+	Worker(long,string);
+	long getId();
 };
 
 class Painter: public Worker{

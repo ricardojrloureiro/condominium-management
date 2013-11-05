@@ -14,12 +14,16 @@
 #include <sstream>
 #include "menu.h"
 #include "maintenance.h"
+#include "owner.h"
 
 using namespace std;
 
 class Property {
 protected:
+	int area;
+	int floor;
 	vector<Maintenance *> maintenances;
+	Owner* owner;
 	string address;
 public:
 	Property();

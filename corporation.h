@@ -20,7 +20,7 @@
 
 using namespace std;
 
-class Corporation{
+class Corporation {
 	vector <Condominium> condominiums;
 	vector <Worker> workers;
 	int date; // mm-aaaa
@@ -30,6 +30,7 @@ public:
 	void manageCondominium();
 	void loadCondominiums(string);
 	void loadProperties(int);
+	void loadMaintenance(int);
 	void saveCondominiums(string);
 	int searchCondominiumId(int);
 	void removeCondominium(Condominium);
@@ -49,6 +50,11 @@ public:
 	int getMes();
 	int getAno();
 	void timeGoing();
+
+	bool isEmpty();
+
+	Worker* getWorker(int id);
+	vector<Worker*> getWorkersList();
 };
 
 

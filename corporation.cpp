@@ -71,9 +71,10 @@ void Corporation::loadCondominiums(string filename) {
 
 			id = atol(condominiumInfo[0].c_str());
 			if(id>0) {
-				Condominium condominium(id, condominiumInfo[1]);
+				Condominium condominium(id, condominiumInfo[1], atof(condominiumInfo[2].c_str()), atof(condominiumInfo[3].c_str()), atof(condominiumInfo[4].c_str()), atof(condominiumInfo[5].c_str()), atof(condominiumInfo[6].c_str()));
 				condominiums.push_back(condominium);
 				loadProperties(id);
+				loadMaintenance(id);
 			}
 			condominiumInfo.clear();
 		}
@@ -84,7 +85,7 @@ void Corporation::loadCondominiums(string filename) {
 
 void Corporation::loadProperties(int condominiumid) {
 	stringstream ssfilename;
-	ssfilename << "condominium" << condominiumid << ".csv";
+	ssfilename << "properties" << condominiumid << ".csv";
 	string filename = ssfilename.str(), address;
 	ifstream file(filename.c_str());
 	string line;
@@ -106,7 +107,6 @@ void Corporation::loadProperties(int condominiumid) {
 			if(propertyInfo.size() == 4){
 				type = atol(propertyInfo[0].c_str());
 				address = propertyInfo[1];
-				type = 1;
 				if (type==1) {
 					condominiums[searchCondominiumId(condominiumid)].addProperty(new Apartment(address));
 				} else if (type==2) {
@@ -121,6 +121,50 @@ void Corporation::loadProperties(int condominiumid) {
 	}
 }
 
+void Corporation::loadMaintenance(int condominiumid) {
+	stringstream ssfilename;
+	ssfilename << "maintenance" << condominiumid << ".csv";
+	string filename = ssfilename.str(), name;
+	ifstream file(filename.c_str());
+	string line;
+	int monthsLeft, type, workerid;
+	vector <string> maintenanceInfo;
+	int lineNumber = 0;
+	while (file.good())
+	{
+		getline(file,line);
+		if (lineNumber > 0) {
+			istringstream iss(line);
+			do
+			{
+				string sub;
+				getline(iss, sub , ',');
+				maintenanceInfo.push_back(sub);
+			} while (iss);
+
+			if(maintenanceInfo.size() == 6){
+				monthsLeft = atoi(maintenanceInfo[0].c_str());
+				type = atoi(maintenanceInfo[1].c_str());
+				name = maintenanceInfo[2];
+				workerid = atoi(maintenanceInfo[3].c_str());
+				condominiums[searchCondominiumId(condominiumid)].addMaintenance(new Maintenance(monthsLeft, type, name, getWorker(workerid)));
+				maintenanceInfo.clear();
+			}
+		}
+		lineNumber++;
+	}
+}
+
+Worker* Corporation::getWorker(int id) {
+	for(unsigned int i=0; i<workers.size(); i++) {
+		if(workers[i].getId() == id) {
+			return &workers[i];
+			break;
+		}
+	}
+	return 0;
+}
+
 int Corporation::searchCondominiumId(int condominiumdid) {
 	for(unsigned int i = 0; i<condominiums.size(); i++) {
 		if(condominiums[i].getId() == condominiumdid) {
@@ -133,7 +177,12 @@ int Corporation::searchCondominiumId(int condominiumdid) {
 void Corporation::createCondominium() {
 	string name;
 	name = Menu::promptString("Name: ");
-	Condominium condominium(name);
+	float areaMultiplier = Menu::promptFloat("Cost per Square Meter: ");
+	float floorMultiplier = Menu::promptFloat("Floor Multiplier: ");
+	float baseApartmentCost = Menu::promptFloat("Base Apartment Cost: ");
+	float baseOfficeCost = Menu::promptFloat("Base Office Cost: ");
+	float baseStoreCost = Menu::promptFloat("Base Store Cost: ");
+	Condominium condominium(name, areaMultiplier, floorMultiplier, baseApartmentCost, baseOfficeCost, baseStoreCost);
 	addCondominium(condominium);
 	saveCondominiums("condominiums.csv");
 }
@@ -172,7 +221,7 @@ void Corporation::saveCondominiums(string filename){
 	file << "id,name" << endl;
 	for(unsigned int i = 0; i < condominiums.size(); i++)
 	{
-		file << condominiums[i].getId() << "," << condominiums[i].getName();
+		file << condominiums[i].getId() << "," << condominiums[i].getName() << "," << condominiums[i].getAreaMultiplier() << "," << condominiums[i].getFloorMultiplier() << "," << condominiums[i].getBaseApartmentCost() << "," << condominiums[i].getBaseOfficeCost() << "," << condominiums[i].getBaseStoreCost();
 		if (i < (condominiums.size() -1))
 			file << endl;
 		condominiums[i].saveProperties();
@@ -193,7 +242,7 @@ void Corporation::manageCondominium() {
 		condominiums[i].showCondominium();
 		switch(showMenu.showMenu()) {
 		case 1:
-			condominiums[i].manageCond();
+			condominiums[i].manageCond(getWorkersList());
 			break;
 		case 2:
 			i = (i+1) % condominiums.size();
@@ -231,7 +280,7 @@ void Corporation::gettingReal() {
 
 void Corporation::timeGoing() {
 	string monthsInput;
-	int monthsToPass;
+	int monthsToPass = 0;
 	cout << "How many months would you like to pass?\n";
 	// checking input & stuff
 
@@ -245,5 +294,23 @@ void Corporation::timeGoing() {
 			*/
 		}
 		incDate(); // passa para o mes seguinte
+	}
+}
+
+vector <Worker*> Corporation::getWorkersList() {
+	vector <Worker*> tempvector;
+
+	for(unsigned int i=0; i<workers.size(); i++) {
+		tempvector.push_back(&workers[i]);
+	}
+
+	return tempvector;
+}
+
+bool Corporation::isEmpty() {
+	if(condominiums.size() > 0) {
+		return false;
+	} else {
+		return true;
 	}
 }

@@ -12,20 +12,21 @@
 #include <string>
 #include <iostream>
 #include <stdlib.h>
+#include "worker.h"
 
 using namespace std;
 
 class Maintenance {
 	int monthsLeft;
-	int type;
 	string name;
+	int type; //0 = monthly, 1 = trimestal, 2 = annually
+	Worker* worker;
 public:
 	Maintenance();
-	Maintenance(int,int,string);
+	Maintenance(int,int,string,Worker*);
+	Maintenance(int,string,Worker*);
 	void setMonth(int);
 	int getMonth();
-	void setType(int);
-	int getType();
 	void setName(string);
 	string getName();
 	void decMonths();

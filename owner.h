@@ -15,10 +15,12 @@ using namespace std;
 
 class Owner {
 	string name;
+	int contract; //0 = monthly, 1 = trimestal, 2 = annually
+	int monthsLeft;
+public:
 	Owner(string);
 };
 
-// Ver bem se estas classes estao bem definidas porque nao sei se faz mt sentido isto
 class Dweller : public Owner {
 	string address;
 	Dweller(string);

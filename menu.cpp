@@ -64,6 +64,42 @@ int Menu::promptInt(string message) {
 	return outputvalue;
 }
 
+float Menu::promptFloat(string message) {
+	string tempinput;
+	float outputvalue;
+	bool validInput;
+	do
+	{
+		cout << message;
+		getline(cin,tempinput);
+		validInput = true;
+		if (cin.fail())
+		{
+			validInput = false;
+			cin.clear();
+			cin.ignore(10000, '\n');
+		}
+		if(!tempinput.empty()) {
+			for (unsigned int i = 0; i < tempinput.length(); i++)
+			{
+				if (!isdigit(tempinput[i])) {
+					validInput=false;
+					break;
+				}
+			}
+		} else {
+			validInput = false;
+		}
+		if (validInput==true) {
+			outputvalue=atof(tempinput.c_str());
+		}
+		if(!validInput) {
+			cout << endl << "This input is not valid. Please try and follow the indicated instructions." << endl << endl;
+		}
+	} while (!validInput);
+	return outputvalue;
+}
+
 int Menu::showMenu() {
 	unsigned int option;
 	bool valid = false;
