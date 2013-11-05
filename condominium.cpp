@@ -159,6 +159,7 @@ void Condominium::manageCond(vector <Worker*> workers) {
 	showMenu.addMenuItem("Manage the existing properties");
 	showMenu.addMenuItem("Add maintenance task");
 	showMenu.addMenuItem("Remove maintenance task");
+	showMenu.addMenuItem("Manage the existing maintenance tasks");
 	showMenu.addMenuItem("Go BACK to the previous Menu");
 
 	while(showMenu.isActive()) {
@@ -194,8 +195,11 @@ void Condominium::manageCond(vector <Worker*> workers) {
 			if(workers.size()==0) {
 				cout << "There are no workers yet. Please add one worker from the Main Menu first." << endl << endl;
 			} else {
-				addMaintenanceToCondominium(workers);
+				removeMaintenanceFromCond();
 			}
+			break;
+		case 6:
+			// manage tasks
 			break;
 		default:
 			showMenu.toggleMenu();
@@ -325,4 +329,29 @@ void Condominium::saveMaintenances() {
 			file << endl;
 	}
 	file.close();
+}
+
+void Condominium::removeMaintenanceFromCond() {
+	stringstream name;
+	int id;
+	Menu menu("Choose one of the id's");
+	for(unsigned int i=0;i<maintenance.size();i++) {
+		name << "name: " << maintenance[i]->getName() << " , method of payment: ";
+		if(maintenance[i]->getType()==0){
+			name << "monthly";
+		}else if(maintenance[i]->getType() == 1){
+			name << "trimestral";
+		} else {
+			name << "annually";
+		}
+		menu.addMenuItem(name.str());
+		name.clear();
+		name.str("");
+	}
+	menu.addMenuItem("Go back to the PREVIOUS menu");
+	id = menu.showMenu();
+	if(id<=maintenance.size()){
+		maintenance.erase(maintenance.begin() + (id - 1));
+		saveMaintenances();
+	}
 }

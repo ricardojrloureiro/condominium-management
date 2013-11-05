@@ -58,7 +58,7 @@ void Corporation::loadWorker(string filename){
 	int id, wage;
 	string name;
 	vector <string> workersInfo;
-	file.open(filename);
+	file.open(filename.c_str());
 	int lineNumber = 0;
 	while (file.good())
 	{
@@ -90,7 +90,7 @@ void Corporation::loadCondominiums(string filename) {
 	string line;
 	int id;
 	vector <string> condominiumInfo;
-	file.open(filename);
+	file.open(filename.c_str());
 	int lineNumber = 0;
 	while (file.good())
 	{
@@ -388,4 +388,3 @@ void Corporation::addWorker() {
 void Corporation::addWorker(Worker w1) {
 	workers.push_back(w1);
 }
-

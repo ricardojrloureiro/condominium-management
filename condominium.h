@@ -64,6 +64,7 @@ public:
 	float getBaseStoreCost();
 	Worker* getWorkerFromList(vector<Worker*>);
 	void saveMaintenances();
+	void removeMaintenanceFromCond();
 };
 
 
