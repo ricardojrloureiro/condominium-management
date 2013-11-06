@@ -29,12 +29,34 @@ void Corporation::incDate() {
 	}
 }
 
+/* get functions*/
+
 int Corporation::getAno() {
 	return date/100;
 }
 
 int Corporation::getMes() {
 	return date%100;
+}
+
+Worker* Corporation::getWorker(int id) {
+	for(unsigned int i=0; i<workers.size(); i++) {
+		if(workers[i].getId() == id) {
+			return &workers[i];
+			break;
+		}
+	}
+	return 0;
+}
+
+vector <Worker*> Corporation::getWorkersList() {
+	vector <Worker*> tempvector;
+
+	for(unsigned int i=0; i<workers.size(); i++) {
+		tempvector.push_back(&workers[i]);
+	}
+
+	return tempvector;
 }
 
 // remove/add functions
@@ -51,6 +73,49 @@ void Corporation::removeCondominium(Condominium cond){
 void Corporation::addCondominium(Condominium cond){
 	condominiums.push_back(cond);
 }
+
+void Corporation::addWorker() {
+	string name = "";
+	int wage=0;
+	Menu showMenu("Workers");
+	showMenu.addMenuItem("Add a new worker");
+	showMenu.addMenuItem("Go back to the MAIN menu");
+
+	while(showMenu.isActive()){
+		switch(showMenu.showMenu()){
+		case 1:{
+			name = Menu::promptString("Insert Worker's name: ");
+			wage = Menu::promptInt("Insert Worker's wage: ");
+			Worker worker(name,wage);
+			addWorker(worker);
+			break;}
+		case 2:{
+			showMenu.toggleMenu();
+			break;}
+		}
+	}
+	saveWorkers();
+}
+
+void Corporation::addWorker(Worker w1) {
+	workers.push_back(w1);
+}
+
+void Corporation::createCondominium() {
+	string name;
+	name = Menu::promptString("Name: ");
+	float areaMultiplier = Menu::promptFloat("Cost per Square Meter: ");
+	float floorMultiplier = Menu::promptFloat("Floor Multiplier: ");
+	float baseApartmentCost = Menu::promptFloat("Base Apartment Cost: ");
+	float baseOfficeCost = Menu::promptFloat("Base Office Cost: ");
+	float baseStoreCost = Menu::promptFloat("Base Store Cost: ");
+	Condominium condominium(name, areaMultiplier, floorMultiplier, baseApartmentCost, baseOfficeCost, baseStoreCost);
+	addCondominium(condominium);
+	saveCondominiums("condominiums.csv");
+}
+
+
+/* load functions */
 
 void Corporation::loadWorker(string filename){
 	ifstream file;
@@ -163,6 +228,7 @@ void Corporation::loadMaintenance(int condominiumid) {
 	ifstream file(filename.c_str());
 	string line;
 	int monthsLeft, type, workerid;
+	float hours;
 	vector <string> maintenanceInfo;
 	int lineNumber = 0;
 	while (file.good())
@@ -182,22 +248,13 @@ void Corporation::loadMaintenance(int condominiumid) {
 				type = atoi(maintenanceInfo[1].c_str());
 				name = maintenanceInfo[2];
 				workerid = atoi(maintenanceInfo[3].c_str());
-				condominiums[searchCondominiumId(condominiumid)].addMaintenance(new Maintenance(monthsLeft, type, name, getWorker(workerid)));
+				hours = atof(maintenanceInfo[4].c_str());
+				condominiums[searchCondominiumId(condominiumid)].addMaintenance(new Maintenance(monthsLeft,hours, type, name, getWorker(workerid)));
 				maintenanceInfo.clear();
 			}
 		}
 		lineNumber++;
 	}
-}
-
-Worker* Corporation::getWorker(int id) {
-	for(unsigned int i=0; i<workers.size(); i++) {
-		if(workers[i].getId() == id) {
-			return &workers[i];
-			break;
-		}
-	}
-	return 0;
 }
 
 int Corporation::searchCondominiumId(int condominiumdid) {
@@ -207,19 +264,6 @@ int Corporation::searchCondominiumId(int condominiumdid) {
 		}
 	}
 	return 0;
-}
-
-void Corporation::createCondominium() {
-	string name;
-	name = Menu::promptString("Name: ");
-	float areaMultiplier = Menu::promptFloat("Cost per Square Meter: ");
-	float floorMultiplier = Menu::promptFloat("Floor Multiplier: ");
-	float baseApartmentCost = Menu::promptFloat("Base Apartment Cost: ");
-	float baseOfficeCost = Menu::promptFloat("Base Office Cost: ");
-	float baseStoreCost = Menu::promptFloat("Base Store Cost: ");
-	Condominium condominium(name, areaMultiplier, floorMultiplier, baseApartmentCost, baseOfficeCost, baseStoreCost);
-	addCondominium(condominium);
-	saveCondominiums("condominiums.csv");
 }
 
 void Corporation::showAllCondominiums() {
@@ -250,6 +294,8 @@ void Corporation::showAllCondominiums() {
 		}
 	}
 }
+
+/* save functions */
 
 void Corporation::saveCondominiums(string filename){
 	ofstream file(filename.c_str());
@@ -326,10 +372,8 @@ void Corporation::gettingReal() {
 }
 
 void Corporation::timeGoing() {
-	string monthsInput;
-	int monthsToPass = 0;
-	cout << "How many months would you like to pass?\n";
-	// checking input & stuff
+	unsigned int monthsToPass;
+	monthsToPass = Menu::promptInt("How many months would you like to pass? : ");
 
 	for(unsigned int i=0;i<monthsToPass;i++){
 		for(unsigned int j=0;j<condominiums.size();j++){
@@ -344,16 +388,6 @@ void Corporation::timeGoing() {
 	}
 }
 
-vector <Worker*> Corporation::getWorkersList() {
-	vector <Worker*> tempvector;
-
-	for(unsigned int i=0; i<workers.size(); i++) {
-		tempvector.push_back(&workers[i]);
-	}
-
-	return tempvector;
-}
-
 bool Corporation::isEmpty() {
 	if(condominiums.size() > 0) {
 		return false;
@@ -362,29 +396,3 @@ bool Corporation::isEmpty() {
 	}
 }
 
-void Corporation::addWorker() {
-	string name = "";
-	int wage=0;
-	Menu showMenu("Workers");
-	showMenu.addMenuItem("Add a new worker");
-	showMenu.addMenuItem("Go back to the MAIN menu");
-
-	while(showMenu.isActive()){
-		switch(showMenu.showMenu()){
-		case 1:{
-			name = Menu::promptString("Insert Worker's name: ");
-			wage = Menu::promptInt("Insert Worker's wage: ");
-			Worker worker(name,wage);
-			addWorker(worker);
-			break;}
-		case 2:{
-			showMenu.toggleMenu();
-			break;}
-		}
-	}
-	saveWorkers();
-}
-
-void Corporation::addWorker(Worker w1) {
-	workers.push_back(w1);
-}

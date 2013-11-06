@@ -25,41 +25,53 @@ class Corporation {
 	vector <Worker> workers;
 	int date; // mm-aaaa
 public:
+	/* constructors */
 	Corporation();
 	Corporation(int);
+
+	/*manage functions */
 	void manageCondominium();
+
+	/* load functions */
 	void loadCondominiums(string);
 	void loadProperties(int);
 	void loadMaintenance(int);
-	void saveCondominiums(string);
-	int searchCondominiumId(int);
-	void removeCondominium(Condominium);
-	void addCondominium(Condominium);
-
-	void addWorker();
-	void createCondominium();
-	void removeWorker(Worker);
-	void addWorker(Worker);
 	void loadWorker(string);
+
+	/* save functions */
+	void saveCondominiums(string);
 	void saveWorkers();
 
+	/* remove functions */
+	void removeCondominium(Condominium);
+	void removeWorker(Worker);
+
+	/* add functions */
+	void addWorker();
+	void addWorker(Worker);
+	void addCondominium(Condominium);
+	void createCondominium();
+
+	/* get functions */
+	int getMes();
+	int getAno();
+	vector<Worker*> getWorkersList();
+	Worker* getWorker(int id);
+
+	/* set functions */
+	void incDate();
+
+
+	/* show functions */
 	void showCondominium(int);
 	void showAllCondominiums();
 	int showAllCondominiums2();
 
-	void gettingReal(); // the real badass function
-	void incDate();
-	int getMes();
-	int getAno();
+	/* search & others */
+	int searchCondominiumId(int);
+	void gettingReal();
 	void timeGoing();
-
 	bool isEmpty();
-
-	Worker* getWorker(int id);
-	vector<Worker*> getWorkersList();
-
-
 };
-
 
 #endif /* CORPORATION_H_ */

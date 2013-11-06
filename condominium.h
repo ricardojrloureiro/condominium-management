@@ -34,38 +34,52 @@ class Condominium {
 	static long condominiumId;
 
 public:
+	/*constructor*/
 	Condominium(string,float,float,float,float,float);
 	Condominium(long, string,float,float,float,float,float);
+
+	/* add/remove functions */
 	void addProperty(Property*);
-	bool removeProperty(Property*);
-	void removePropertyFromCond();
-	void addMaintenanceToCondominium();
 	void addProptoCond();
 	void addMaintenance(Maintenance*);
-	void showCondominium();
-	void showProperties();
-	int getId();
-	string getName();
-	void saveProperties();
-	int getProfit();
-	void manageCond(vector<Worker*>);
-	void managePropertyFromCond();
 	void addMaintenanceToCondominium(vector<Worker*>);
-	bool isEmpty();
-	void setAreaMultiplier(float);
+	void addMaintenanceToCondominium();
+
+	/* set functions */
 	float getAreaMultiplier();
-	void setFloorMultiplier(float);
 	float getFloorMultiplier();
-	void setBaseApartmentCost(float);
 	float getBaseApartmentCost();
-	void setBaseOfficeCost(float);
 	float getBaseOfficeCost();
-	void setBaseStoreCost(float);
 	float getBaseStoreCost();
 	Worker* getWorkerFromList(vector<Worker*>);
+	int getProfit();
+	int getId();
+	string getName();
+
+	/* set functions */
+	void setAreaMultiplier(float);
+	void setFloorMultiplier(float);
+	void setBaseApartmentCost(float);
+	void setBaseOfficeCost(float);
+	void setBaseStoreCost(float);
+
+	/*Manage functions */
+	void manageCond(vector<Worker*>);
+	void managePropertyFromCond();
+	void manageTaskFromCond();
+
+	/* save functions */
+	void saveProperties();
 	void saveMaintenances();
+
+	/* remove functions */
+	bool removeProperty(Property*);
+	void removePropertyFromCond();
 	void removeMaintenanceFromCond();
+
+	/* show & other */
+	void showCondominium();
+	void showProperties();
+	bool isEmpty();
 };
-
-
 #endif /* CONDOMINIUM_H_ */

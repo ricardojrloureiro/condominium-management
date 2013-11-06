@@ -22,7 +22,6 @@ class Property {
 protected:
 	int area;
 	int floor;
-	vector<Maintenance *> maintenances;
 	Owner* owner;
 	string address;
 public:
@@ -34,8 +33,7 @@ public:
 	string getAddress();
 	virtual int returnType() const = 0;
 	virtual string printType() const = 0;
-	void addMaintenance(Maintenance *);
-	void removeMaintenance();
+
 };
 
 class Apartment : public Property {

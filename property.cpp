@@ -60,37 +60,16 @@ Property::Property() {
 	address = "";
 }
 
-Apartment::Apartment(){
-	address = "";
+Apartment::Apartment():Property(){
 }
 
-Office::Office(){
-	address = "";
+Office::Office():Property(){
 }
 
-Store::Store(){
-	address = "";
+Store::Store():Property(){
 }
 
 void Property::setAddress(string name) {
 	address = name;
 }
 
-void Property::addMaintenance(Maintenance *p1) {
-	maintenances.push_back(p1);
-}
-
-void Property::removeMaintenance() {
-	stringstream name;
-	int id;
-	Menu menu("Choose one of the id's");
-	for(unsigned int i=0;i<maintenances.size();i++) {
-		name << "Name: " << maintenances[i]->getName();
-		menu.addMenuItem(name.str());
-		name.clear();
-		name.str("");
-	}
-	menu.addMenuItem("Go back to the PREVIOUS menu");
-	id = menu.showMenu();
-	maintenances.erase(maintenances.begin() + (id - 1));
-}
