@@ -19,12 +19,14 @@
 #include "condominium.h"
 #include "worker.h"
 #include "property.h"
+#include "owner.h"
 
 using namespace std;
 
 class Corporation {
 	vector <Condominium> condominiums;
 	vector <Worker> workers;
+	vector <Owner> owners;
 	float totalProfitLoss;
 	int date; // mmaaaa
 public:
@@ -42,10 +44,12 @@ public:
 	void loadMaintenance(int);
 	void loadWorkers(string);
 	void loadReports(string);
+	void loadOwner(string);
 
 	/* save functions */
 	void saveCondominiums(string);
 	void saveWorkers();
+	void saveOwners();
 
 	/* remove functions */
 	void removeCondominium(Condominium);
@@ -61,7 +65,10 @@ public:
 	int getMonth();
 	int getYear();
 	vector<Worker*> getWorkersList();
-	Worker* getWorker(int id);
+	Worker* getWorker(int);
+	vector<Owner*> getOwnersList();
+	Owner* getOwner(int);
+
 
 	/* set functions */
 	void incDate();

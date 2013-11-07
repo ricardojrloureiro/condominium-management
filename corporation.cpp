@@ -56,6 +56,16 @@ Worker* Corporation::getWorker(int id) {
 	return 0;
 }
 
+Owner* Corporation::getOwner(int id) {
+	for(unsigned int i=0; i<owners.size(); i++) {
+		if(owners[i].getId() == id) {
+			return &owners[i];
+			break;
+		}
+	}
+	return 0;
+}
+
 vector <Worker*> Corporation::getWorkersList() {
 	vector <Worker*> tempvector;
 
@@ -65,6 +75,17 @@ vector <Worker*> Corporation::getWorkersList() {
 
 	return tempvector;
 }
+
+vector <Owner*> Corporation::getOwnersList() {
+	vector <Owner*> tempvector;
+
+	for(unsigned int i=0; i<owners.size(); i++) {
+		tempvector.push_back(&owners[i]);
+	}
+
+	return tempvector;
+}
+
 
 // remove/add functions
 
@@ -228,7 +249,7 @@ void Corporation::loadProperties(int condominiumid) {
 	string filename = ssfilename.str(), address;
 	ifstream file(filename.c_str());
 	string line;
-	int type, propertyFloor;
+	int type, propertyFloor,Id;
 	float area;
 	vector <string> propertyInfo;
 	int lineNumber = 0;
@@ -246,17 +267,18 @@ void Corporation::loadProperties(int condominiumid) {
 
 			cout << propertyInfo.size();
 
-			if(propertyInfo.size() == 5){
+			if(propertyInfo.size() == 6){
 				type = atol(propertyInfo[0].c_str());
 				address = propertyInfo[1];
 				area = atof(propertyInfo[2].c_str());
 				propertyFloor = atof(propertyInfo[3].c_str());
+				Id= atoi(propertyInfo[4].c_str());
 				if (type==1) {
-					condominiums[searchCondominiumId(condominiumid)].addProperty(new Apartment(address,area,propertyFloor));
+					condominiums[searchCondominiumId(condominiumid)].addProperty(new Apartment(address,area,propertyFloor,getOwner(Id)));
 				} else if (type==2) {
-					condominiums[searchCondominiumId(condominiumid)].addProperty(new Office(address,area,propertyFloor));
+					condominiums[searchCondominiumId(condominiumid)].addProperty(new Office(address,area,propertyFloor,getOwner(Id)));
 				} else if (type==3) {
-					condominiums[searchCondominiumId(condominiumid)].addProperty(new Store(address,area,propertyFloor));
+					condominiums[searchCondominiumId(condominiumid)].addProperty(new Store(address,area,propertyFloor,getOwner(Id)));
 				}
 				propertyInfo.clear();
 			}
@@ -411,7 +433,7 @@ void Corporation::manageCondominium() {
 		condominiums[i].showCondominium();
 		switch(showMenu.showMenu()) {
 		case 1:
-			condominiums[i].manageCond(getWorkersList());
+			condominiums[i].manageCond(getWorkersList(),getOwnersList());
 			break;
 		case 2:
 			i = (i+1) % condominiums.size();
@@ -438,7 +460,7 @@ void Corporation::manageWorkers() {
 		//workers[i].showCondominium();
 		switch(showMenu.showMenu()) {
 		case 1:
-			condominiums[i].manageCond(getWorkersList());
+			condominiums[i].manageCond(getWorkersList(),getOwnersList());
 			break;
 		case 2:
 			i = (i+1) % condominiums.size();
@@ -499,7 +521,7 @@ void Corporation::fastForward() {
 				message.str("");
 				message.clear();
 			}
-			cout << endl << condominiums[j].getName() << " generated a total profit/loss of " << profitloss << "â‚¬" << endl;
+			cout << endl << condominiums[j].getName() << " generated a total profit/loss of " << profitloss << "€" << endl;
 			condominiums[j].advanceOneMonth();
 		}
 		incDate();

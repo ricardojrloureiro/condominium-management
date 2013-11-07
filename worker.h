@@ -23,7 +23,6 @@ public:
 	void setName(string);
 	float getWage();
 	void setWage(float);
-
 	Worker(string);
 	Worker(long,float,string);
 	Worker(string,float);

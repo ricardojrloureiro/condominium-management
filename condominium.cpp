@@ -55,7 +55,7 @@ void Condominium::addProperty(Property* p1){
 	properties.push_back(p1);
 }
 
-void Condominium::addProptoCond() {
+void Condominium::addProptoCond(vector <Owner*> owners) {
 	string address;
 	float area;
 	int floor;
@@ -66,24 +66,33 @@ void Condominium::addProptoCond() {
 	Menu.addMenuItem("Go BACK to the PREVIOUS menu");
 	while(Menu.isActive()) {
 		switch(Menu.showMenu()) {
-		case 1:
+		case 1:{
 			address = Menu::promptString("Apartament Address: ");
 			area = Menu::promptFloat("Apartment Area: ");
 			floor = Menu::promptInt("Which floor is the apartment? ");
-			this->addProperty(new Apartment(address, area, floor));
+			cout << "Which owner will do this task? " << endl;
+			Owner* owner = getOwnerFromList(owners);
+			this->addProperty(new Apartment(address, area, floor,owner));
 			break;
-		case 2:
+		}
+		case 2:{
 			address = Menu::promptString("Office Address: ");
 			area = Menu::promptFloat("Office Area: ");
 			floor = Menu::promptInt("Which floor is the office? ");
-			this->addProperty(new Office(address, area, floor));
+			cout << "Which owner will do this task? " << endl;
+			Owner* owner = getOwnerFromList(owners);
+			this->addProperty(new Apartment(address, area, floor,owner));
 			break;
-		case 3:
+		}
+		case 3:{
 			address = Menu::promptString("Store Address: ");
 			area = Menu::promptFloat("Store Area: ");
 			floor = Menu::promptInt("Which floor is the store? ");
-			this->addProperty(new Store(address, area, floor));
+			cout << "Which owner will do this task? " << endl;
+			Owner* owner = getOwnerFromList(owners);
+			this->addProperty(new Apartment(address, area, floor,owner));
 			break;
+		}
 		default:
 			break;
 		}
@@ -148,6 +157,16 @@ Worker* Condominium::getWorkerFromList(vector <Worker*> workers) {
 	return workers[workersMenu.showMenu()-1];
 }
 
+Owner* Condominium::getOwnerFromList(vector <Owner*> owners) {
+
+	Menu ownersMenu("Owners List");
+	for (unsigned int i=0; i<owners.size(); i++) {
+		ownersMenu.addMenuItem(owners[i]->getName());
+	}
+	ownersMenu.addMenuItem("Go back to the PREVIOUS menu");
+	return owners[ownersMenu.showMenu()-1];
+}
+
 /* SET FUNCTIONS*/
 
 void Condominium::setAreaMultiplier(float areaMultiplier) {
@@ -172,7 +191,7 @@ void Condominium::setBaseStoreCost(float baseStoreCost) {
 
 /*Manage functions */
 
-void Condominium::manageCond(vector <Worker*> workers) {
+void Condominium::manageCond(vector <Worker*> workers, vector<Owner*> owners) {
 	stringstream topic;
 	topic << "Managing " << getName() << endl;
 	string topic2 = topic.str();
@@ -189,7 +208,7 @@ void Condominium::manageCond(vector <Worker*> workers) {
 		switch(showMenu.showMenu()) {
 		case 1:
 			//add
-			addProptoCond();
+			addProptoCond(owners);
 			break;
 		case 2:
 			//remove
@@ -204,7 +223,7 @@ void Condominium::manageCond(vector <Worker*> workers) {
 			if(this->isEmpty()) {
 				cout << "There are no properties yet. Please add one property first." << endl << endl;
 			} else {
-				managePropertyFromCond();
+				managePropertyFromCond(owners);
 			}
 			break;
 		case 4:
@@ -235,7 +254,7 @@ void Condominium::manageCond(vector <Worker*> workers) {
 	}
 }
 
-void Condominium::managePropertyFromCond() {
+void Condominium::managePropertyFromCond(vector<Owner*> owners) {
 	stringstream name;
 	unsigned int id;
 	string newAddress;
@@ -332,10 +351,10 @@ void Condominium::saveProperties(){
 	ssfilename << "properties" << id << ".csv";
 	string filename = ssfilename.str();
 	ofstream file(filename.c_str());
-	file << "type" << "," << "address" << "," << "area" << "," << "floor" << endl;
+	file << "type" << "," << "address" << "," << "area" << "," << "floor" << "," << "ownerId" << endl;
 	for(unsigned int i = 0; i < properties.size(); i++)
 	{
-		file << properties[i]->returnType() << "," << properties[i]->getAddress() << "," << properties[i]->getArea() << "," << properties[i]->getFloor();
+		file << properties[i]->returnType() << "," << properties[i]->getAddress() << "," << properties[i]->getArea() << "," << properties[i]->getFloor() << "," << properties[i]->getOwnerId();
 		if(i < (properties.size() -1))
 			file << endl;
 	}

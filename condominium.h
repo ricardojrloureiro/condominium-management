@@ -16,6 +16,7 @@
 #include "worker.h"
 #include "property.h"
 #include "menu.h"
+#include "owner.h"
 #include <stdlib.h>
 
 using namespace std;
@@ -40,10 +41,10 @@ public:
 
 	/* add/remove functions */
 	void addProperty(Property*);
-	void addProptoCond();
+	void addProptoCond(vector <Owner*>);
 	void addMaintenance(Maintenance*);
 	void addMaintenanceToCondominium(vector<Worker*>);
-	void addMaintenanceToCondominium();
+
 
 	/* get functions */
 	float getAreaMultiplier();
@@ -52,6 +53,7 @@ public:
 	float getBaseOfficeCost();
 	float getBaseStoreCost();
 	Worker* getWorkerFromList(vector<Worker*>);
+	Owner* getOwnerFromList(vector<Owner*>);
 	int getId();
 	string getName();
 
@@ -63,8 +65,8 @@ public:
 	void setBaseStoreCost(float);
 
 	/*Manage functions */
-	void manageCond(vector<Worker*>);
-	void managePropertyFromCond();
+	void manageCond(vector<Worker*>,vector<Owner*>);
+	void managePropertyFromCond(vector<Owner*>);
 	void manageTaskFromCond();
 	float getProfitLoss();
 	float getPropertyCost(int);

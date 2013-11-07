@@ -17,13 +17,15 @@ class Owner {
 	string name;
 	int contract; //0 = monthly, 1 = trimestal, 2 = annually
 	int monthsLeft;
+	static long ownerId;
+	long id;
 public:
 	Owner(string, int, int);
-};
+	Owner(int,string,int,int);
 
-class Dweller : public Owner {
-	string address;
-	Dweller(string);
+	//get functions
+	int getId();
+	string getName();
 };
 
 #endif /* OWNER_H_ */

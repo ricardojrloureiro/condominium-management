@@ -9,19 +9,21 @@
 
 // constructors
 
-Property::Property(string address, float area, int floor) {
+Property::Property(string address, float area, int floor,Owner *owner) {
+	totalDue=0;
 	this->address = address;
 	this->area = area;
 	this->floor = floor;
+	this->owner = owner;
 }
 
-Apartment::Apartment(string address, float area, int floor) : Property(address, area, floor) {
+Apartment::Apartment(string address, float area, int floor, Owner *owner) : Property(address, area, floor,owner) {
 }
 
-Office::Office(string address, float area, int floor) : Property(address, area, floor) {
+Office::Office(string address, float area, int floor,Owner *owner) : Property(address, area, floor,owner) {
 }
 
-Store::Store(string address, float area, int floor) : Property(address, area, floor) {
+Store::Store(string address, float area, int floor,Owner *owner) : Property(address, area, floor,owner) {
 }
 
 // get & sets
@@ -77,5 +79,9 @@ Store::Store():Property(){
 
 void Property::setAddress(string name) {
 	address = name;
+}
+
+int Property::getOwnerId() {
+	return owner->getId();
 }
 

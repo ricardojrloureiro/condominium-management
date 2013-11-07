@@ -28,19 +28,20 @@ protected:
 public:
 	Property();
 	void setAddress(string);
-	Property(string, float, int);
+	Property(string,float,int,Owner*);
 	float getArea();
 	int getFloor();
 	string getAddress();
 	virtual int returnType() const = 0;
 	virtual string printType() const = 0;
+	int getOwnerId();
 
 };
 
 class Apartment : public Property {
 public:
 	Apartment();
-	Apartment(string,float,int);
+	Apartment(string,float,int,Owner *);
 	void showInfo() const;
 	int returnType() const;
 	string printType() const;
@@ -49,7 +50,7 @@ public:
 class Office : public Property {
 public:
 	Office();
-	Office(string,float,int);
+	Office(string,float,int,Owner *);
 	void showInfo() const;
 	int returnType() const;
 	string printType() const;
@@ -58,7 +59,7 @@ public:
 class Store : public Property {
 public:
 	Store();
-	Store(string,float,int);
+	Store(string,float,int,Owner *);
 	void showInfo() const;
 	int returnType() const;
 	string printType() const;
