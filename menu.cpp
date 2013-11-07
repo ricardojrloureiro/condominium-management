@@ -68,6 +68,7 @@ float Menu::promptFloat(string message) {
 	string tempinput;
 	float outputvalue;
 	bool validInput;
+	bool dotUsed;
 	do
 	{
 		cout << message;
@@ -79,12 +80,16 @@ float Menu::promptFloat(string message) {
 			cin.clear();
 			cin.ignore(10000, '\n');
 		}
+		dotUsed = false;
 		if(!tempinput.empty()) {
 			for (unsigned int i = 0; i < tempinput.length(); i++)
 			{
-				if (!isdigit(tempinput[i])) {
+				if (!isdigit(tempinput[i]) && dotUsed) {
 					validInput=false;
 					break;
+				}
+				if(tempinput[i] == '.') {
+					dotUsed = true;
 				}
 			}
 		} else {

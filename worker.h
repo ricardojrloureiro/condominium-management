@@ -16,17 +16,17 @@ using namespace std;
 class Worker{
 	long id;
 	string name;
-	int wage;
+	float wage;
 	static long workerId;
 public:
 	string getName();
 	void setName(string);
-	int getWage();
-	void setWage(int);
+	float getWage();
+	void setWage(float);
 
 	Worker(string);
-	Worker(long,int,string);
-	Worker(string,int);
+	Worker(long,float,string);
+	Worker(string,float);
 
 	long getId();
 };

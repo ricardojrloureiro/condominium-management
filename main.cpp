@@ -16,8 +16,8 @@ Corporation corporation(date);
 int main() {
 	Menu mainMenu("Main Menu");
 	mainMenu.addMenuItem("Condominiums");
-	mainMenu.addMenuItem("Finance Reports");
 	mainMenu.addMenuItem("Add workers to the Corporation");
+	mainMenu.addMenuItem("Finance Reports");
 	mainMenu.addMenuItem("Quit");
 
 	Menu condominiumsMenu("Condominiums");
@@ -26,6 +26,10 @@ int main() {
 	condominiumsMenu.addMenuItem("Manage existing condominium");
 	condominiumsMenu.addMenuItem("Return to Main Menu");
 
+	Menu workersMenu("Manage Workers");
+	workersMenu.addMenuItem("Add new worker");
+	workersMenu.addMenuItem("Manage existing worker");
+	workersMenu.addMenuItem("Return to Main Menu");
 	while(mainMenu.isActive()) {
 		switch(mainMenu.showMenu()) {
 			case 1:
@@ -56,10 +60,24 @@ int main() {
 			}
 			break;
 			case 2:
-				corporation.gettingReal();
+				workersMenu.activateMenu();
+				while(workersMenu.isActive()) {
+					switch(workersMenu.showMenu()) {
+						case 1:
+							corporation.addWorker();
+							break;
+						case 2:
+							//manage workers;
+							break;
+						case 3:
+							workersMenu.toggleMenu();
+							break;
+					}
+				}
+				corporation.addWorker();
 			break;
 			case 3:
-				corporation.addWorker();
+				corporation.gettingReal();
 			// add workers
 			break;
 			case 4:

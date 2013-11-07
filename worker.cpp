@@ -18,8 +18,16 @@ Worker::Worker(string name) {
 	this->name = name;
 }
 
-Worker::Worker(long id,int wage, string name) {
+Worker::Worker(string name, float wage) {
+	workerId++;
+	id = workerId;
+	this->name = name;
+	this->wage = wage;
+}
+
+Worker::Worker(long id, float wage, string name) {
 	workerId = id;
+	this->id = id;
 	this->wage = wage;
 	this->name = name;
 }
@@ -34,17 +42,12 @@ string Worker::getName(){
 	return name;
 }
 
-int Worker::getWage() {
+float Worker::getWage() {
 	return wage;
 }
 
-void Worker::setWage(int wage) {
+void Worker::setWage(float wage) {
 	this->wage=wage;
 }
 
-Worker::Worker(string name, int wage) {
-	workerId++;
-	id = workerId;
-	this->name = name;
-	this->wage = wage;
-}
+

@@ -95,9 +95,10 @@ void Condominium::addMaintenanceToCondominium(vector <Worker*> workers) {
 	typeMenu.addMenuItem("Trimestral");
 	typeMenu.addMenuItem("Annually");
 	int type = typeMenu.showMenu() - 1;
-	float hours = Menu::promptFloat("What will be the time of the maintenance : ");
+	float duration = Menu::promptFloat("How long will each maintenance take? ");
+	cout << "Which worker will do this task? " << endl;
 	Worker* worker = getWorkerFromList(workers);
-	this->addMaintenance(new Maintenance(type,hours ,name, worker));
+	this->addMaintenance(new Maintenance(type,duration,name,worker));
 	saveMaintenances();
 }
 
@@ -273,12 +274,12 @@ void Condominium::managePropertyFromCond() {
 void Condominium::manageTaskFromCond() {
 	stringstream name;
 	unsigned int id,type;
-	float hours;
+	float duration;
 	string newName;
 	Menu menu("Choose one of the IDs");
 	for(unsigned int i=0;i<maintenance.size();i++) {
 		name << "Name: " << maintenance[i]->getName() << ", Type: " << maintenance[i]->printType() <<
-				", Hours: " << maintenance[i]->getHours();
+				", Duration: " << maintenance[i]->getDuration();
 		menu.addMenuItem(name.str());
 		name.clear();
 		name.str("");
@@ -290,7 +291,7 @@ void Condominium::manageTaskFromCond() {
 		manage.addMenuItem("Edit name");
 		manage.addMenuItem("Edit method of payment");
 		manage.addMenuItem("Edit worker");
-		manage.addMenuItem("Edit hour");
+		manage.addMenuItem("Edit duration");
 		manage.addMenuItem("Go to the PREVIOUS menu");
 		while(manage.isActive()){
 			switch (manage.showMenu()) {
@@ -313,8 +314,8 @@ void Condominium::manageTaskFromCond() {
 			case 3:
 				break;
 			case 4:{
-				hours = Menu::promptFloat("New time to complete: ");
-				maintenance[id-1]->setHours(hours);
+				duration = Menu::promptFloat("New maintenance duration: ");
+				maintenance[id-1]->setDuration(duration);
 				manage.toggleMenu();
 				break;
 			}
@@ -349,9 +350,9 @@ void Condominium::saveMaintenances() {
 	ssfilename << "maintenance" << id << ".csv";
 	string filename = ssfilename.str();
 	ofstream file(filename.c_str());
-	file << "MonthsLeft" << "," << "Type" << "," << "Name" << "," << "WorkerId" << endl;
+	file << "MonthsLeft" << "," << "Type" << "," << "Name" << "," << "WorkerId" << "," << "Duration" << endl;
 	for(unsigned int i = 0; i < maintenance.size(); i++){
-		file << maintenance[i]->getMonth() << "," << maintenance[i]->getType() << "," << maintenance[i]->getName() << "," << 1 << "," << maintenance[i]->getHours();
+		file << maintenance[i]->getMonth() << "," << maintenance[i]->getType() << "," << maintenance[i]->getName() << "," << maintenance[i]->getWorkerId() << "," << maintenance[i]->getDuration();
 		if(i < (maintenance.size() -1))
 			file << endl;
 	}

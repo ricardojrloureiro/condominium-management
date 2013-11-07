@@ -11,14 +11,14 @@
 
 Corporation::Corporation(){
 	date = 201310;
-	loadCondominiums("condominiums.csv");
 	loadWorker("workers.csv");
+	loadCondominiums("condominiums.csv");	
 }
 
 Corporation::Corporation(int date) {
 	this->date = date;
-	loadCondominiums("condominiums.csv");
 	loadWorker("workers.csv");
+	loadCondominiums("condominiums.csv");
 }
 
 void Corporation::incDate() {
@@ -76,7 +76,7 @@ void Corporation::addCondominium(Condominium cond){
 
 void Corporation::addWorker() {
 	string name = "";
-	int wage=0;
+	float wage=0;
 	Menu showMenu("Workers");
 	showMenu.addMenuItem("Add a new worker");
 	showMenu.addMenuItem("Go back to the MAIN menu");
@@ -85,16 +85,17 @@ void Corporation::addWorker() {
 		switch(showMenu.showMenu()){
 		case 1:{
 			name = Menu::promptString("Insert Worker's name: ");
-			wage = Menu::promptInt("Insert Worker's wage: ");
+			wage = Menu::promptFloat("Insert Worker's wage: ");
 			Worker worker(name,wage);
 			addWorker(worker);
+			saveWorkers();
 			break;}
 		case 2:{
 			showMenu.toggleMenu();
 			break;}
 		}
 	}
-	saveWorkers();
+	
 }
 
 void Corporation::addWorker(Worker w1) {
@@ -120,7 +121,8 @@ void Corporation::createCondominium() {
 void Corporation::loadWorker(string filename){
 	ifstream file;
 	string line;
-	int id, wage;
+	long id;
+	float wage;
 	string name;
 	vector <string> workersInfo;
 	file.open(filename.c_str());
@@ -139,7 +141,7 @@ void Corporation::loadWorker(string filename){
 
 			id = atol(workersInfo[0].c_str());
 			name = workersInfo[1];
-			wage = atol(workersInfo[2].c_str());
+			wage = atof(workersInfo[2].c_str());
 			Worker wtemp(id,wage,name);
 			workers.push_back(wtemp);
 
@@ -228,7 +230,7 @@ void Corporation::loadMaintenance(int condominiumid) {
 	ifstream file(filename.c_str());
 	string line;
 	int monthsLeft, type, workerid;
-	float hours;
+	float duration;
 	vector <string> maintenanceInfo;
 	int lineNumber = 0;
 	while (file.good())
@@ -248,8 +250,8 @@ void Corporation::loadMaintenance(int condominiumid) {
 				type = atoi(maintenanceInfo[1].c_str());
 				name = maintenanceInfo[2];
 				workerid = atoi(maintenanceInfo[3].c_str());
-				hours = atof(maintenanceInfo[4].c_str());
-				condominiums[searchCondominiumId(condominiumid)].addMaintenance(new Maintenance(monthsLeft,hours, type, name, getWorker(workerid)));
+				duration = atof(maintenanceInfo[4].c_str());
+				condominiums[searchCondominiumId(condominiumid)].addMaintenance(new Maintenance(monthsLeft,duration, type, name, getWorker(workerid)));
 				maintenanceInfo.clear();
 			}
 		}
@@ -325,7 +327,7 @@ void Corporation::saveWorkers() {
 
 void Corporation::manageCondominium() {
 	int i= 0;
-	Menu showMenu("Condominium management");
+	Menu showMenu("Condominium Management");
 	showMenu.addMenuItem("Choose this condominium to manage");
 	showMenu.addMenuItem("Go to the NEXT condominium");
 	showMenu.addMenuItem("Go to the PREVIOUS condominium");
@@ -333,6 +335,33 @@ void Corporation::manageCondominium() {
 
 	while(showMenu.isActive()) {
 		condominiums[i].showCondominium();
+		switch(showMenu.showMenu()) {
+		case 1:
+			condominiums[i].manageCond(getWorkersList());
+			break;
+		case 2:
+			i = (i+1) % condominiums.size();
+			break;
+		case 3:
+			i = (i-1) % condominiums.size();
+			break;
+		default:
+			showMenu.toggleMenu();
+			break;
+		}
+	}
+}
+
+void Corporation::manageWorkers() {
+	int i= 0;
+	Menu showMenu("Workers Management");
+	showMenu.addMenuItem("Choose this worker to manage");
+	showMenu.addMenuItem("Go to the NEXT worker");
+	showMenu.addMenuItem("Go to the PREVIOUS worker");
+	showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
+
+	while(showMenu.isActive()) {
+		//workers[i].showCondominium();
 		switch(showMenu.showMenu()) {
 		case 1:
 			condominiums[i].manageCond(getWorkersList());

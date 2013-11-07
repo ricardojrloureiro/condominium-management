@@ -4,16 +4,16 @@
 Maintenance::Maintenance() {
 	name = "";
 	monthsLeft = 0;
-	hours=0;
+	duration=0;
 	type=0;
 	this->worker = new Worker("");
 }
 
-Maintenance::Maintenance(int type,float hours, string name, Worker* worker) {
+Maintenance::Maintenance(int type,float duration, string name, Worker* worker) {
 	this->type = type;
 	this->name = name;
 	this->worker = worker;
-	this->hours = hours;
+	this->duration = duration;
 	switch(type) {
 		case 0:
 			monthsLeft = 1;
@@ -30,9 +30,9 @@ Maintenance::Maintenance(int type,float hours, string name, Worker* worker) {
 	}
 }
 
-Maintenance::Maintenance(int monthsLeft,float hours, int type, string name, Worker* worker) {
+Maintenance::Maintenance(int monthsLeft,float duration, int type, string name, Worker* worker) {
 	this->monthsLeft = monthsLeft;
-	this->hours = hours;
+	this->duration = duration;
 	this->type = type;
 	this->name = name;
 	this->worker = worker;
@@ -89,10 +89,10 @@ string Maintenance::printType() {
 	}
 }
 
-void Maintenance::setHours(float hours) {
-	this->hours = hours;
+void Maintenance::setDuration(float duration) {
+	this->duration = duration;
 }
 
-float Maintenance::getHours() {
-	return hours;
+float Maintenance::getDuration() {
+	return duration;
 }

@@ -3,15 +3,134 @@
 	{
 		"selected_items":
 		[
+			[
+				"prompt",
+				"promptString"
+			],
+			[
+				"is",
+				"isActive"
+			],
+			[
+				"prope",
+				"properties"
+			],
+			[
+				"wo",
+				"workers"
+			],
+			[
+				"add",
+				"addMaintenanceToCondominium"
+			],
+			[
+				"getWork",
+				"getWorkersList"
+			],
+			[
+				"getwo",
+				"getWorkerFromList"
+			],
+			[
+				"C",
+				"Condominium"
+			],
+			[
+				"worke",
+				"workersMenu"
+			],
+			[
+				"get",
+				"getName"
+			],
+			[
+				"work",
+				"workersMenu"
+			],
+			[
+				"an",
+				"addMenuItem"
+			],
+			[
+				"addMe",
+				"addMenuItem"
+			],
+			[
+				"type",
+				"typeMenu"
+			],
+			[
+				"pro",
+				"promptInt"
+			],
+			[
+				"addMain",
+				"addMaintenanceToProperty"
+			],
+			[
+				"maintan",
+				"maintenanceInfo"
+			],
+			[
+				"months",
+				"monthsLeft"
+			],
+			[
+				"base",
+				"baseOfficeCost"
+			],
+			[
+				"set",
+				"setBaseOfficeCost"
+			],
+			[
+				"bas",
+				"baseApartmentCost"
+			],
+			[
+				"are",
+				"areaMultiplier"
+			],
+			[
+				"to",
+				"toggleMenu"
+			],
+			[
+				"propert",
+				"property"
+			],
+			[
+				"condo",
+				"condominiums"
+			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "main.cpp",
+			"file": "condominium.cpp",
 			"settings":
 			{
-				"buffer_size": 1127,
+				"buffer_size": 8084,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "/*\n * condominio.h\n *\n *  Created on: Oct 10, 2013\n *      Author: rui\n */\n\n#ifndef CONDOMINIUM_H_\n#define CONDOMINIUM_H_\n\n#include <vector>\n#include <string>\n#include <sstream>\n#include <fstream>\n\n#include \"worker.h\"\n#include \"property.h\"\n#include \"menu.h\"\n#include <stdlib.h>\n\nusing namespace std;\n\nclass Condominium {\n	long id;\n	float areaMultiplier;\n	float floorMultiplier;\n	float baseApartmentCost;\n	float baseOfficeCost;\n	float baseStoreCost;\n	string name;\n	vector <Maintenance*> ma intenance;\n	vector <Property*> properties;\n	vector <int> fixedCosts; //monthly costs for water, electricity, ...\n	static long condominiumId;\n\npublic:\n	Condominium(string,float,float,float,float,float);\n	Condominium(long, string,float,float,float,float,float);\n	void addProperty(Property*);\n	bool removeProperty(Property*);\n	void removePropertyFromCond();\n	void addMaintenanceToCondominium();\n	void addProptoCond();\n	void addMaintenance(Maintenance*);\n	void showCondominium();\n	void showProperties();\n	int getId();\n	string getName();\n	void saveProperties();\n	int getProfit();\n	void manageCond(vector<Worker*>);\n	void managePropertyFromCond();\n	void addMaintenanceToCondominium(vector<Worker*>);\n	bool isEmpty();\n	void setAreaMultiplier(float);\n	float getAreaMultiplier();\n	void setFloorMultiplier(float);\n	float getFloorMultiplier();\n	void setBaseApartmentCost(float);\n	float getBaseApartmentCost();\n	void setBaseOfficeCost(float);\n	float getBaseOfficeCost();\n	void setBaseStoreCost(float);\n	float getBaseStoreCost();\n	Worker* getWorkerFromList(vector<Worker*>);\n};\n\n\n#endif /* CONDOMINIUM_H_ */\n",
+			"file": "condominium.h",
+			"file_size": 1583,
+			"file_write_time": 130281397920000000,
+			"settings":
+			{
+				"buffer_size": 1584,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "maintenance.h",
+			"settings":
+			{
+				"buffer_size": 609,
 				"line_ending": "Unix"
 			}
 		}
@@ -19,7 +138,7 @@
 	"build_system": "Packages/User/Makefile.sublime-build",
 	"command_palette":
 	{
-		"height": 47.0,
+		"height": 392.0,
 		"selected_items":
 		[
 			[
@@ -52,17 +171,29 @@
 	},
 	"file_history":
 	[
+		"/Users/rui/Projects/AEDA/src/condominium.h",
+		"/Users/rui/Projects/AEDA/src/corporation.h",
+		"/Users/rui/Projects/AEDA/src/corporation.cpp",
+		"/Users/rui/Projects/AEDA/src/worker.h",
+		"/Users/rui/Projects/AEDA/src/worker.cpp",
+		"/Users/rui/Projects/AEDA/src/main.cpp",
+		"/Users/rui/Projects/AEDA/src/maintenance.cpp",
+		"/Users/rui/Projects/AEDA/src/maintenance.h",
+		"/Users/rui/Projects/AEDA/src/menu.cpp",
+		"/Users/rui/Projects/AEDA/src/condominium.cpp",
+		"/Users/rui/Projects/AEDA/src/property.h",
+		"/Users/rui/Projects/AEDA/src/owner.h",
+		"/Users/rui/Projects/AEDA/src/menu.h",
+		"/Users/rui/Projects/AEDA/src/property.cpp",
+		"/Users/rui/Projects/AEDA/src/owner.cpp",
 		"/Users/rui/Library/Application Support/Sublime Text 3/Packages/User/teste.sublime-build",
 		"/Users/rui/Library/Application Support/Sublime Text 3/Packages/User/Makefile.sublime-build",
-		"/Users/rui/Projects/AEDA/src/menu.cpp",
-		"/Users/rui/Projects/AEDA/src/maintenance.cpp",
-		"/Users/rui/Projects/AEDA/src/main.cpp",
 		"/Users/rui/Projects/AEDA/src/aeda.sublime-project",
 		"/Users/rui/Projects/AEDA/src/Cpp.sublime-build"
 	],
 	"find":
 	{
-		"height": 0.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -76,6 +207,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"addWorker",
+			"if(id!=",
+			"if(!=",
+			"workers",
+			"mainten"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -93,24 +229,53 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "main.cpp",
+					"file": "condominium.cpp",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1127,
+						"buffer_size": 8084,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								205,
-								205
+								6072,
+								6072
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false,
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2096.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "condominium.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1584,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								489,
+								489
 							]
 						],
 						"settings":
@@ -119,7 +284,35 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 68.0,
+						"translation.y": 341.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "maintenance.h",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 609,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -129,7 +322,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 23.0
+		"height": 25.0
 	},
 	"input":
 	{
@@ -165,7 +358,7 @@
 	"project": "aeda.sublime-project",
 	"replace":
 	{
-		"height": 0.0
+		"height": 46.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -173,6 +366,38 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"cond",
+				"condominium.cpp"
+			],
+			[
+				"con",
+				"condominium.h"
+			],
+			[
+				"prop",
+				"property.h"
+			],
+			[
+				"menu",
+				"menu.cpp"
+			],
+			[
+				"main",
+				"main.cpp"
+			],
+			[
+				"corpo",
+				"corporation.cpp"
+			],
+			[
+				"pro",
+				"property.h"
+			],
+			[
+				"man",
+				"maintenance.cpp"
+			]
 		],
 		"width": 0.0
 	},

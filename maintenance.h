@@ -18,7 +18,7 @@ using namespace std;
 
 class Maintenance {
 	int monthsLeft;
-	int hours;
+	float duration;
 	string name;
 	int type; //0 = monthly, 1 = trimestal, 2 = annually
 	Worker* worker;
@@ -33,14 +33,14 @@ public:
 	void setName(string);
 	string getName();
 	void setType(int);
-	void setHours(float);
+	void setDuration(float);
 	void decMonths();
 
 	/* get functions */
 	int getMonth();
 	int getType();
 	int getWorkerId();
-	float getHours();
+	float getDuration();
 
 	/* other */
 	bool payMonth();

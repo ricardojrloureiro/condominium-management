@@ -65,7 +65,7 @@ public:
 	/* show functions */
 	void showCondominium(int);
 	void showAllCondominiums();
-	int showAllCondominiums2();
+	void manageWorkers();
 
 	/* search & others */
 	int searchCondominiumId(int);
