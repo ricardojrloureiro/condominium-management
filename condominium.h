@@ -66,8 +66,9 @@ public:
 
 	/*Manage functions */
 	void manageCond(vector<Worker*>,vector<Owner*>);
+	void manageCondFixedValues();
 	void managePropertyFromCond(vector<Owner*>);
-	void manageTaskFromCond();
+	void manageTaskFromCond(vector<Worker*>);
 	float getProfitLoss();
 	float getPropertyCost(int);
 	void advanceOneMonth();

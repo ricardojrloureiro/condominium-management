@@ -54,3 +54,7 @@ void Worker::setName(string name) {
         this->name = name;
 }
 
+void Worker::setId(int id){
+	this->id = id;
+}
+

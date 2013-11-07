@@ -35,7 +35,9 @@ public:
 	virtual int returnType() const = 0;
 	virtual string printType() const = 0;
 	int getOwnerId();
-
+	void setOwnerId(int);
+	void setOwner(Owner*);
+	string getOwnerName();
 };
 
 class Apartment : public Property {

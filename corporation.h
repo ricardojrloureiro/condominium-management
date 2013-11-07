@@ -37,6 +37,7 @@ public:
 	/*manage functions */
 	void manageCondominium();
 	void manageWorkers(int);
+	void manageOwners(int);
 
 	/* load functions */
 	void loadCondominiums(string);
@@ -44,7 +45,7 @@ public:
 	void loadMaintenance(int);
 	void loadWorkers(string);
 	void loadReports(string);
-	void loadOwner(string);
+	void loadOwners(string);
 
 	/* save functions */
 	void saveCondominiums(string);
@@ -58,6 +59,8 @@ public:
 	/* add functions */
 	void addWorker();
 	void addWorker(Worker);
+	void addOwner();
+	void addOwner(Owner);
 	void addCondominium(Condominium);
 	void createCondominium();
 
@@ -69,16 +72,15 @@ public:
 	vector<Owner*> getOwnersList();
 	Owner* getOwner(int);
 
-
 	/* set functions */
 	void incDate();
-
 
 	/* show functions */
 	void showCondominium(int);
 	void showAllCondominiums();
 	void manageWorkers();
 	void showWorker();
+	void showOwner();
 
 	/* search & others */
 	int searchCondominiumId(int);

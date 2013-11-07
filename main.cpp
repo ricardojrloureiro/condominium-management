@@ -15,7 +15,8 @@ Corporation corporation;
 int main() {
 	Menu mainMenu("Main Menu");
 	mainMenu.addMenuItem("Condominiums");
-	mainMenu.addMenuItem("Add workers to the Corporation");
+	mainMenu.addMenuItem("Manage Workers");
+	mainMenu.addMenuItem("Manage Owners");
 	mainMenu.addMenuItem("Finance Reports");
 	mainMenu.addMenuItem("Quit");
 
@@ -29,58 +30,81 @@ int main() {
 	workersMenu.addMenuItem("Add new worker");
 	workersMenu.addMenuItem("Manage existing worker");
 	workersMenu.addMenuItem("Return to Main Menu");
+
+	Menu ownersMenu("Manage Owners");
+	ownersMenu.addMenuItem("Add new owner");
+	ownersMenu.addMenuItem("Manage existing owner");
+	ownersMenu.addMenuItem("Return to Main Menu");
+
 	while(mainMenu.isActive()) {
 		switch(mainMenu.showMenu()) {
-			case 1:
+		case 1:
 			condominiumsMenu.activateMenu();
 			while(condominiumsMenu.isActive()) {
 				switch(condominiumsMenu.showMenu()) {
-					case 1:
+				case 1:
 					corporation.createCondominium();
 					break;
-					case 2:
+				case 2:
 					if(corporation.isEmpty()) {
 						cout << "There are no condominiums yet. Please add one first." << endl;
 					} else {
 						corporation.showAllCondominiums();
 					}
 					break;
-					case 3:
+				case 3:
 					if(corporation.isEmpty()) {
 						cout << "There are no condominiums yet. Please add one first." << endl;
 					} else {
 						corporation.manageCondominium();
+						corporation.saveCondominiums("condominiums.csv");
 					}
 					break;
-					case 4:
+				case 4:
 					condominiumsMenu.toggleMenu();
 					break;
 				}
 			}
 			break;
-			case 2:
-				workersMenu.activateMenu();
-				while(workersMenu.isActive()) {
-					switch(workersMenu.showMenu()) {
-						case 1:
-							corporation.addWorker();
-							break;
-						case 2:
-							corporation.showWorker();
-							break;
-						case 3:
-							workersMenu.toggleMenu();
-							break;
-					}
+		case 2:
+			workersMenu.activateMenu();
+			while(workersMenu.isActive()) {
+				switch(workersMenu.showMenu()) {
+				case 1:
+					corporation.addWorker();
+					break;
+				case 2:
+					corporation.showWorker();
+					break;
+				case 3:
+					workersMenu.toggleMenu();
+					break;
 				}
-				corporation.addWorker();
+			}
 			break;
-			case 3:
-				corporation.financeReports();
-			// add workers
+		case 3:
+			ownersMenu.activateMenu();
+			while(ownersMenu.isActive()) {
+				switch(ownersMenu.showMenu()) {
+				case 1:
+					corporation.addOwner();
+					break;
+				case 2:
+					corporation.showOwner();
+					break;
+				case 3:
+					ownersMenu.toggleMenu();
+					break;
+				}
+			}
 			break;
-			case 4:
+		case 4:
+			corporation.financeReports();
+			break;
+		case 5:
 			mainMenu.toggleMenu();
+			break;
+
 		}
 	}
 }

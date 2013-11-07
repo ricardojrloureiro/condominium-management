@@ -42,7 +42,9 @@ public:
 	int getWorkerId();
 	float getDuration();
 	float getWorkerWage();
-
+	void setWorkerId(int);
+	string getWorkerName();
+	void setWorker(Worker*);
 	/* other */
 	bool payMonth();
 	string printType();

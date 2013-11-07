@@ -26,6 +26,7 @@ public:
 	Worker(string);
 	Worker(long,float,string);
 	Worker(string,float);
+	void setId(int);
 
 	long getId();
 };

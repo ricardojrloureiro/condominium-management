@@ -65,6 +65,9 @@ string Store::printType() const {
 }
 
 Property::Property() {
+	totalDue = 0;
+	floor = 0;
+	area=0;
 	address = "";
 }
 
@@ -85,3 +88,14 @@ int Property::getOwnerId() {
 	return owner->getId();
 }
 
+void Property::setOwnerId(int id){
+	owner->setId(id);
+}
+
+void Property::setOwner(Owner* O){
+	owner=O;
+}
+
+string Property::getOwnerName() {
+	return owner->getName();
+}

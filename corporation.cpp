@@ -18,6 +18,7 @@ Corporation::Corporation(){
 	date = atoi(datess.str().c_str());
 	totalProfitLoss = 0;
 	loadWorkers("workers.csv");
+	loadOwners("owners.csv");
 	loadCondominiums("condominiums.csv");	
 }
 
@@ -123,11 +124,44 @@ void Corporation::addWorker() {
 			break;}
 		}
 	}
-	
+
+}
+
+void Corporation::addOwner() {
+	string name = "";
+	int contractType=0;
+	Menu showMenu("Owners");
+	showMenu.addMenuItem("Add a new owner");
+	showMenu.addMenuItem("Go back to the MAIN menu");
+
+	while(showMenu.isActive()){
+		switch(showMenu.showMenu()){
+		case 1:{
+			name = Menu::promptString("Insert Owner's name: ");
+			Menu subMenu("Which type of contract will this owner have?");
+			subMenu.addMenuItem("monthly");
+			subMenu.addMenuItem("trimestal");
+			subMenu.addMenuItem("annually");
+			contractType = subMenu.showMenu();
+			Owner owner(name,(contractType- 1));
+			addOwner(owner);
+			saveOwners();
+			break;
+		}
+		case 2:{
+			showMenu.toggleMenu();
+			break;}
+		}
+	}
+
 }
 
 void Corporation::addWorker(Worker w1) {
 	workers.push_back(w1);
+}
+
+void Corporation::addOwner(Owner w1) {
+	owners.push_back(w1);
 }
 
 void Corporation::createCondominium() {
@@ -174,6 +208,41 @@ void Corporation::loadWorkers(string filename){
 			workers.push_back(wtemp);
 
 			workersInfo.clear();
+		}
+		lineNumber++;
+	}
+	file.close();
+}
+
+void Corporation::loadOwners(string filename){
+	ifstream file;
+	string line;
+	long id;
+	int contractType,monthsLeft;
+	string name;
+	vector <string> ownersInfo;
+	file.open(filename.c_str());
+	int lineNumber = 0;
+	while (file.good())
+	{
+		getline(file,line);
+		if (lineNumber > 0) {
+			istringstream iss(line);
+			do
+			{
+				string sub;
+				getline(iss, sub , ',');
+				ownersInfo.push_back(sub);
+			} while (iss);
+
+			id = atol(ownersInfo[0].c_str());
+			name = ownersInfo[1];
+			contractType = atoi(ownersInfo[2].c_str());
+			monthsLeft = atoi(ownersInfo[3].c_str());
+			Owner otemp(id,name,contractType,monthsLeft);
+			owners.push_back(otemp);
+
+			ownersInfo.clear();
 		}
 		lineNumber++;
 	}
@@ -264,9 +333,6 @@ void Corporation::loadProperties(int condominiumid) {
 				getline(iss, sub , ',');
 				propertyInfo.push_back(sub);
 			} while (iss);
-
-			cout << propertyInfo.size();
-
 			if(propertyInfo.size() == 6){
 				type = atol(propertyInfo[0].c_str());
 				address = propertyInfo[1];
@@ -389,37 +455,86 @@ void Corporation::saveWorkers() {
 	file.close();
 }
 
-void Corporation::manageWorkers(int id){
-        stringstream topic;
-        topic << "Managing " << workers[id].getName() << ", wage: " << workers[id].getWage() << endl;
-        string topic2 = topic.str();
-        Menu showMenu(topic2.c_str());
-        showMenu.addMenuItem("Edit Workers Name");
-        showMenu.addMenuItem("Edit Workers Wage");
-        showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
- 
-        while(showMenu.isActive()) {
-                switch(showMenu.showMenu()) {
-                case 1:{
-                        string name = Menu::promptString("New Name: ");
-                        workers[id].setName(name);
-                        saveWorkers();
-                        showMenu.toggleMenu();
-                        break;
-                }
-                case 2:{
-                        float wage = Menu::promptFloat("Set New Wage: ");
-                        workers[id].setWage(wage);
-                        saveWorkers();
-                        showMenu.toggleMenu();
-                        break;
-                }
-                case 3:
-                        showMenu.toggleMenu();
-                        break;
-                }
-        }
+void Corporation::saveOwners() {
+	ofstream file("owners.csv");
+	file << "id,name,contractType,monthsLeft" << endl;
+	for(unsigned int i = 0; i < owners.size(); i++)
+	{
+		file << owners[i].getId() << "," << owners[i].getName() << "," << owners[i].getContractType() << "," << owners[i].getMonthsLeft();
+		if (i < (owners.size() -1))
+			file << endl;
+	}
+	file.close();
 }
+
+void Corporation::manageWorkers(int id){
+	stringstream topic;
+	topic << "Managing " << workers[id].getName() << ", wage: " << workers[id].getWage() << endl;
+	string topic2 = topic.str();
+	Menu showMenu(topic2.c_str());
+	showMenu.addMenuItem("Edit Workers Name");
+	showMenu.addMenuItem("Edit Workers Wage");
+	showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
+
+	while(showMenu.isActive()) {
+		switch(showMenu.showMenu()) {
+		case 1:{
+			string name = Menu::promptString("New Name: ");
+			workers[id].setName(name);
+			saveWorkers();
+			showMenu.toggleMenu();
+			break;
+		}
+		case 2:{
+			float wage = Menu::promptFloat("Set New Wage: ");
+			workers[id].setWage(wage);
+			saveWorkers();
+			showMenu.toggleMenu();
+			break;
+		}
+		case 3:
+			showMenu.toggleMenu();
+			break;
+		}
+	}
+}
+
+void Corporation::manageOwners(int id){
+	stringstream topic;
+	topic << "Managing " << owners[id].getName() << ", wage: " << owners[id].printType() << endl;
+	string topic2 = topic.str();
+	Menu showMenu(topic2.c_str());
+	showMenu.addMenuItem("Edit Workers Name");
+	showMenu.addMenuItem("Edit Workers Payment Method");
+	showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
+
+	while(showMenu.isActive()) {
+		switch(showMenu.showMenu()) {
+		case 1:{
+			string name = Menu::promptString("New Name: ");
+			owners[id].setName(name);
+			saveOwners();
+			showMenu.toggleMenu();
+			break;
+		}
+		case 2:{
+			Menu subMenu("Which type of contract will this owner have?");
+			subMenu.addMenuItem("monthly");
+			subMenu.addMenuItem("trimestal");
+			subMenu.addMenuItem("annually");
+			int type = subMenu.showMenu();
+			owners[id].setType(type-1);
+			saveOwners();
+			showMenu.toggleMenu();
+			break;
+		}
+		case 3:
+			showMenu.toggleMenu();
+			break;
+		}
+	}
+}
+
 
 void Corporation::manageCondominium() {
 	int i= 0;
@@ -494,7 +609,7 @@ void Corporation::financeReports() {
 		default: // going back
 			break;
 		}
-		
+
 	}
 }
 
@@ -534,7 +649,7 @@ void Corporation::fastForward() {
 		cout << negativeCondominiums[i] << endl;
 	}
 	cout << endl;
-	
+
 }
 
 bool Corporation::isEmpty() {
@@ -546,33 +661,65 @@ bool Corporation::isEmpty() {
 }
 
 void Corporation::showWorker() {
-        if(workers.size()==0){
-                cout << "There are no workers in this corporation, please add one first" << endl;
-        }else {
- 
-                int i= 0;
-                Menu showMenu("Workers Management");
-                showMenu.addMenuItem("Choose this worker to manage");
-                showMenu.addMenuItem("Go to the NEXT worker");
-                showMenu.addMenuItem("Go to the PREVIOUS worker");
-                showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
- 
-                while(showMenu.isActive()) {
-                        cout << "Name: " << workers[i].getName() << " ,Wage: " << workers[i].getWage() << endl;
-                        switch(showMenu.showMenu()) {
-                        case 1:
-                                manageWorkers(i);
-                                break;
-                        case 2:
-                                i = (i+1) % workers.size();
-                                break;
-                        case 3:
-                                i = (i-1) % workers.size();
-                                break;
-                        default:
-                                showMenu.toggleMenu();
-                                break;
-                        }
-                }
-        }
+	if(workers.size()==0){
+		cout << "There are no workers in this corporation, please add one first" << endl;
+	}else {
+
+		int i= 0;
+		Menu showMenu("Workers Management");
+		showMenu.addMenuItem("Choose this worker to manage");
+		showMenu.addMenuItem("Go to the NEXT worker");
+		showMenu.addMenuItem("Go to the PREVIOUS worker");
+		showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
+
+		while(showMenu.isActive()) {
+			cout << "Name: " << workers[i].getName() << " ,Wage: " << workers[i].getWage() << endl;
+			switch(showMenu.showMenu()) {
+			case 1:
+				manageWorkers(i);
+				break;
+			case 2:
+				i = (i+1) % workers.size();
+				break;
+			case 3:
+				i = (i-1) % workers.size();
+				break;
+			default:
+				showMenu.toggleMenu();
+				break;
+			}
+		}
+	}
+}
+
+void Corporation::showOwner() {
+	if(owners.size()==0){
+		cout << "There are no owners in this corporation, please add one first" << endl;
+	}else {
+
+		int i= 0;
+		Menu showMenu("Owners Management");
+		showMenu.addMenuItem("Choose this owner to manage");
+		showMenu.addMenuItem("Go to the NEXT worker");
+		showMenu.addMenuItem("Go to the PREVIOUS worker");
+		showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
+
+		while(showMenu.isActive()) {
+			cout << "Name: " << owners[i].getName() << " ,contractType: " << owners[i].printType() << endl;
+			switch(showMenu.showMenu()) {
+			case 1:
+				manageOwners(i);
+				break;
+			case 2:
+				i = (i+1) % owners.size();
+				break;
+			case 3:
+				i = (i-1) % owners.size();
+				break;
+			default:
+				showMenu.toggleMenu();
+				break;
+			}
+		}
+	}
 }

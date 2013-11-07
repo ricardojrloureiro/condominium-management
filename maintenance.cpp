@@ -116,3 +116,15 @@ float Maintenance::getDuration() {
 float Maintenance::getWorkerWage() {
 	return worker->getWage();
 }
+
+void Maintenance::setWorkerId(int id) {
+	worker->setId(id);
+}
+
+string Maintenance::getWorkerName() {
+	return worker->getName();
+}
+
+void Maintenance::setWorker(Worker* w1){
+	worker = w1;
+}

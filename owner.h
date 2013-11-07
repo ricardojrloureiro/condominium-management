@@ -20,12 +20,21 @@ class Owner {
 	static long ownerId;
 	long id;
 public:
+	Owner(string,int);
 	Owner(string, int, int);
 	Owner(int,string,int,int);
 
 	//get functions
 	int getId();
 	string getName();
+	int getContractType();
+	int getMonthsLeft();
+	string printType();
+
+	// set functions
+	void setName(string);
+	void setType(int);
+	void setId(int);
 };
 
 #endif /* OWNER_H_ */

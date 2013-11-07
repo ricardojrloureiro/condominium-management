@@ -70,7 +70,7 @@ void Condominium::addProptoCond(vector <Owner*> owners) {
 			address = Menu::promptString("Apartament Address: ");
 			area = Menu::promptFloat("Apartment Area: ");
 			floor = Menu::promptInt("Which floor is the apartment? ");
-			cout << "Which owner will do this task? " << endl;
+			cout << "Which owner will be living here? " << endl;
 			Owner* owner = getOwnerFromList(owners);
 			this->addProperty(new Apartment(address, area, floor,owner));
 			break;
@@ -79,7 +79,7 @@ void Condominium::addProptoCond(vector <Owner*> owners) {
 			address = Menu::promptString("Office Address: ");
 			area = Menu::promptFloat("Office Area: ");
 			floor = Menu::promptInt("Which floor is the office? ");
-			cout << "Which owner will do this task? " << endl;
+			cout << "Which owner will be living here?  " << endl;
 			Owner* owner = getOwnerFromList(owners);
 			this->addProperty(new Apartment(address, area, floor,owner));
 			break;
@@ -88,7 +88,7 @@ void Condominium::addProptoCond(vector <Owner*> owners) {
 			address = Menu::promptString("Store Address: ");
 			area = Menu::promptFloat("Store Area: ");
 			floor = Menu::promptInt("Which floor is the store? ");
-			cout << "Which owner will do this task? " << endl;
+			cout << "Which owner will be living here?  " << endl;
 			Owner* owner = getOwnerFromList(owners);
 			this->addProperty(new Apartment(address, area, floor,owner));
 			break;
@@ -154,7 +154,13 @@ Worker* Condominium::getWorkerFromList(vector <Worker*> workers) {
 		workersMenu.addMenuItem(workers[i]->getName());
 	}
 	workersMenu.addMenuItem("Go back to the PREVIOUS menu");
-	return workers[workersMenu.showMenu()-1];
+	unsigned int option=workersMenu.showMenu();
+	cout << "option" << option << endl;
+	if(option>workers.size()){
+		return 0;
+	} else {
+		return workers[option-1];
+	}
 }
 
 Owner* Condominium::getOwnerFromList(vector <Owner*> owners) {
@@ -164,7 +170,12 @@ Owner* Condominium::getOwnerFromList(vector <Owner*> owners) {
 		ownersMenu.addMenuItem(owners[i]->getName());
 	}
 	ownersMenu.addMenuItem("Go back to the PREVIOUS menu");
-	return owners[ownersMenu.showMenu()-1];
+	unsigned int option=ownersMenu.showMenu();
+	if(option>owners.size()){
+		return 0;
+	} else {
+		return owners[option-1];
+	}
 }
 
 /* SET FUNCTIONS*/
@@ -193,7 +204,7 @@ void Condominium::setBaseStoreCost(float baseStoreCost) {
 
 void Condominium::manageCond(vector <Worker*> workers, vector<Owner*> owners) {
 	stringstream topic;
-	topic << "Managing " << getName() << endl;
+	topic << "Managing " << endl;
 	string topic2 = topic.str();
 	Menu showMenu(topic2.c_str());
 	showMenu.addMenuItem("Add a new property");
@@ -202,6 +213,7 @@ void Condominium::manageCond(vector <Worker*> workers, vector<Owner*> owners) {
 	showMenu.addMenuItem("Add maintenance task");
 	showMenu.addMenuItem("Remove maintenance task");
 	showMenu.addMenuItem("Manage the existing maintenance tasks");
+	showMenu.addMenuItem("Manage the condominium fixed values");
 	showMenu.addMenuItem("Go BACK to the previous Menu");
 
 	while(showMenu.isActive()) {
@@ -244,8 +256,11 @@ void Condominium::manageCond(vector <Worker*> workers, vector<Owner*> owners) {
 			if(maintenance.size()==0) {
 				cout << "There are no maintenances yet. Please add one first." << endl << endl;
 			} else {
-				manageTaskFromCond();
+				manageTaskFromCond(workers);
 			}
+			break;
+		case 7:
+			manageCondFixedValues();
 			break;
 		default:
 			showMenu.toggleMenu();
@@ -260,7 +275,7 @@ void Condominium::managePropertyFromCond(vector<Owner*> owners) {
 	string newAddress;
 	Menu menu("Choose one of the IDs");
 	for(unsigned int i=0;i<properties.size();i++) {
-		name << "Address: " << properties[i]->getAddress();
+		name << "Address: " << properties[i]->getAddress() << " ,dweller: " << properties[i]->getOwnerName();
 		menu.addMenuItem(name.str());
 		name.clear();
 		name.str("");
@@ -270,6 +285,7 @@ void Condominium::managePropertyFromCond(vector<Owner*> owners) {
 	if(id<=properties.size()) {
 		Menu manage("Managing");
 		manage.addMenuItem("Edit address");
+		manage.addMenuItem("Change the dweller");
 		manage.addMenuItem("Go to the PREVIOUS menu");
 		while(manage.isActive()){
 			switch (manage.showMenu()) {
@@ -277,17 +293,27 @@ void Condominium::managePropertyFromCond(vector<Owner*> owners) {
 				cout << "New Address: ";
 				getline(cin,newAddress);
 				properties[id-1]->setAddress(newAddress);
+				saveProperties();
 				break;
-			case 2:
+			case 2:{
+				cout << "Which owner will be living here? " << endl;
+				Owner* owner = getOwnerFromList(owners);
+				if(owner == 0){
+					break;
+				}
+				properties[id-1]->setOwner(owner);
+				saveProperties();
+				break;
+			}
+			case 3:
 				manage.toggleMenu();
 				break;
 			}
 		}
-		saveProperties();
 	}
 }
 
-void Condominium::manageTaskFromCond() {
+void Condominium::manageTaskFromCond(vector<Worker*> workers) {
 	stringstream name;
 	unsigned int id,type;
 	float duration;
@@ -295,7 +321,7 @@ void Condominium::manageTaskFromCond() {
 	Menu menu("Choose one of the IDs");
 	for(unsigned int i=0;i<maintenance.size();i++) {
 		name << "Name: " << maintenance[i]->getName() << ", Type: " << maintenance[i]->printType() <<
-				", Duration: " << maintenance[i]->getDuration();
+				", Duration: " << maintenance[i]->getDuration() << ", worker: " << maintenance[i]->getWorkerName();
 		menu.addMenuItem(name.str());
 		name.clear();
 		name.str("");
@@ -315,6 +341,7 @@ void Condominium::manageTaskFromCond() {
 				newName = Menu::promptString("New Name: ");
 				maintenance[id-1]->setName(newName);
 				manage.toggleMenu();
+				saveMaintenances();
 				break;
 			}
 			case 2:{
@@ -325,14 +352,25 @@ void Condominium::manageTaskFromCond() {
 				type = subMenu.showMenu();
 				maintenance[id-1]->setType(type-1);
 				manage.toggleMenu();
+				saveMaintenances();
 				break;
 			}
-			case 3:
+			case 3:{
+				cout << "Which worker will do the task? " << endl;
+				Worker* worker = getWorkerFromList(workers);
+				if(worker == 0){
+					break;
+				}
+				maintenance[id-1]->setWorker(worker);
+				saveMaintenances();
 				break;
-			case 4:{
+			}
+			case 4:
+			{
 				duration = Menu::promptFloat("New maintenance duration: ");
 				maintenance[id-1]->setDuration(duration);
 				manage.toggleMenu();
+				saveMaintenances();
 				break;
 			}
 			case 5:
@@ -340,7 +378,7 @@ void Condominium::manageTaskFromCond() {
 				break;
 			}
 		}
-		saveMaintenances();
+
 	}
 }
 
@@ -481,3 +519,49 @@ void Condominium::advanceOneMonth() {
 	}
 }
 
+void Condominium::manageCondFixedValues() {
+	Menu manage("Managing");
+	manage.addMenuItem("Edit name");
+	manage.addMenuItem("Edit Area Multiplier");
+	manage.addMenuItem("Edit Floor Multiplier");
+	manage.addMenuItem("Edit Base Office cost");
+	manage.addMenuItem("Edit Base Apartment cost");
+	manage.addMenuItem("Edit Base Store cost");
+	manage.addMenuItem("Go to the PREVIOUS menu");
+	switch (manage.showMenu()) {
+	case 1:{
+		string name = Menu::promptString("New name: ");
+		this->name=name;
+		break;
+	}
+	case 2:{
+		float area = Menu::promptFloat("New area: ");
+		this->areaMultiplier=area;
+		break;
+	}
+	case 3:{
+		float floor = Menu::promptFloat("New floor: ");
+		this->floorMultiplier=floor;
+		break;
+	}
+	case 4:{
+		float baseOffice = Menu::promptFloat("New base Office cost: ");
+		this->baseOfficeCost=baseOffice;
+		break;
+	}
+	case 5:{
+		float baseApartment = Menu::promptFloat("New base Apartment cost: ");
+		this->baseApartmentCost=baseApartment;
+		break;
+	}
+	case 6:{
+		float baseStore = Menu::promptFloat("New base Store cost: ");
+		this->baseStoreCost=baseStore;
+		break;
+	}
+	case 7:{
+		manage.toggleMenu();
+		break;
+	}
+	}
+}
