@@ -20,16 +20,16 @@ using namespace std;
 
 class Property {
 protected:
-	int area;
+	float area;
 	int floor;
 	Owner* owner;
 	string address;
 public:
 	Property();
 	void setAddress(string);
-	Property(string);
-	void setCost(int);
-	int getCost();
+	Property(string, float, int);
+	float getArea();
+	int getFloor();
 	string getAddress();
 	virtual int returnType() const = 0;
 	virtual string printType() const = 0;
@@ -39,7 +39,7 @@ public:
 class Apartment : public Property {
 public:
 	Apartment();
-	Apartment(string);
+	Apartment(string,float,int);
 	void showInfo() const;
 	int returnType() const;
 	string printType() const;
@@ -48,7 +48,7 @@ public:
 class Office : public Property {
 public:
 	Office();
-	Office(string);
+	Office(string,float,int);
 	void showInfo() const;
 	int returnType() const;
 	string printType() const;
@@ -57,7 +57,7 @@ public:
 class Store : public Property {
 public:
 	Store();
-	Store(string);
+	Store(string,float,int);
 	void showInfo() const;
 	int returnType() const;
 	string printType() const;

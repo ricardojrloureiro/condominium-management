@@ -13,6 +13,8 @@
 #include <fstream>
 #include <sstream>
 #include <stdlib.h>
+#include <ctime>
+#include <iostream>
 
 #include "condominium.h"
 #include "worker.h"
@@ -23,7 +25,8 @@ using namespace std;
 class Corporation {
 	vector <Condominium> condominiums;
 	vector <Worker> workers;
-	int date; // mm-aaaa
+	float totalProfitLoss;
+	int date; // mmaaaa
 public:
 	/* constructors */
 	Corporation();
@@ -36,7 +39,7 @@ public:
 	void loadCondominiums(string);
 	void loadProperties(int);
 	void loadMaintenance(int);
-	void loadWorker(string);
+	void loadWorkers(string);
 
 	/* save functions */
 	void saveCondominiums(string);
@@ -53,8 +56,8 @@ public:
 	void createCondominium();
 
 	/* get functions */
-	int getMes();
-	int getAno();
+	int getMonth();
+	int getYear();
 	vector<Worker*> getWorkersList();
 	Worker* getWorker(int id);
 
@@ -69,8 +72,8 @@ public:
 
 	/* search & others */
 	int searchCondominiumId(int);
-	void gettingReal();
-	void timeGoing();
+	void financeReports();
+	void fastForward();
 	bool isEmpty();
 };
 

@@ -10,20 +10,27 @@
 // constructor
 
 Corporation::Corporation(){
-	date = 201310;
-	loadWorker("workers.csv");
+	time_t now = time(0);
+	tm *ltm = localtime(&now);
+	stringstream datess;
+	datess << 1900 + ltm->tm_year;
+	datess << 1 + ltm->tm_mon;
+	date = atoi(datess.str().c_str());
+	totalProfitLoss = 0;
+	loadWorkers("workers.csv");
 	loadCondominiums("condominiums.csv");	
 }
 
 Corporation::Corporation(int date) {
 	this->date = date;
-	loadWorker("workers.csv");
+	loadReports("reports.csv");
+	loadWorkers("workers.csv");
 	loadCondominiums("condominiums.csv");
 }
 
 void Corporation::incDate() {
 	if(date%100 == 12){
-		date = ((date / 100) + 1) * 100;
+		date = ((date / 100) + 1) * 100 + 1;
 	} else {
 		date++;
 	}
@@ -31,11 +38,11 @@ void Corporation::incDate() {
 
 /* get functions*/
 
-int Corporation::getAno() {
+int Corporation::getYear() {
 	return date/100;
 }
 
-int Corporation::getMes() {
+int Corporation::getMonth() {
 	return date%100;
 }
 
@@ -118,7 +125,7 @@ void Corporation::createCondominium() {
 
 /* load functions */
 
-void Corporation::loadWorker(string filename){
+void Corporation::loadWorkers(string filename){
 	ifstream file;
 	string line;
 	long id;
@@ -185,13 +192,47 @@ void Corporation::loadCondominiums(string filename) {
 	file.close();
 }
 
+void Corporation::loadReports(string filename) {
+	ifstream file;
+	string line;
+	int id;
+	vector <string> reportsInfo;
+	file.open(filename.c_str());
+	int lineNumber = 0;
+	while (file.good())
+	{
+		getline(file,line);
+		if (lineNumber > 0) {
+			istringstream iss(line);
+			do
+			{
+				string sub;
+				getline(iss, sub , ',');
+				reportsInfo.push_back(sub);
+			} while (iss);
+
+			id = atol(reportsInfo[0].c_str());
+			if(id>0) {
+				Condominium condominium(id, condominiumInfo[1], atof(condominiumInfo[2].c_str()), atof(condominiumInfo[3].c_str()), atof(condominiumInfo[4].c_str()), atof(condominiumInfo[5].c_str()), atof(condominiumInfo[6].c_str()));
+				condominiums.push_back(condominium);
+				loadProperties(id);
+				loadMaintenance(id);
+			}
+			condominiumInfo.clear();
+		}
+		lineNumber++;
+	}
+	file.close();
+}
+
 void Corporation::loadProperties(int condominiumid) {
 	stringstream ssfilename;
 	ssfilename << "properties" << condominiumid << ".csv";
 	string filename = ssfilename.str(), address;
 	ifstream file(filename.c_str());
 	string line;
-	int type;
+	int type, propertyFloor;
+	float area;
 	vector <string> propertyInfo;
 	int lineNumber = 0;
 	while (file.good())
@@ -206,15 +247,19 @@ void Corporation::loadProperties(int condominiumid) {
 				propertyInfo.push_back(sub);
 			} while (iss);
 
-			if(propertyInfo.size() == 4){
+			cout << propertyInfo.size();
+
+			if(propertyInfo.size() == 5){
 				type = atol(propertyInfo[0].c_str());
 				address = propertyInfo[1];
+				area = atof(propertyInfo[2].c_str());
+				propertyFloor = atof(propertyInfo[3].c_str());
 				if (type==1) {
-					condominiums[searchCondominiumId(condominiumid)].addProperty(new Apartment(address));
+					condominiums[searchCondominiumId(condominiumid)].addProperty(new Apartment(address,area,propertyFloor));
 				} else if (type==2) {
-					condominiums[searchCondominiumId(condominiumid)].addProperty(new Office(address));
+					condominiums[searchCondominiumId(condominiumid)].addProperty(new Office(address,area,propertyFloor));
 				} else if (type==3) {
-					condominiums[searchCondominiumId(condominiumid)].addProperty(new Store(address));
+					condominiums[searchCondominiumId(condominiumid)].addProperty(new Store(address,area,propertyFloor));
 				}
 				propertyInfo.clear();
 			}
@@ -301,7 +346,7 @@ void Corporation::showAllCondominiums() {
 
 void Corporation::saveCondominiums(string filename){
 	ofstream file(filename.c_str());
-	file << "id,name" << endl;
+	file << "id,name,areaMultiplier,floorMultiplier,baseApartmentCost,baseOfficeCost,baseStoreCost" << endl;
 	for(unsigned int i = 0; i < condominiums.size(); i++)
 	{
 		file << condominiums[i].getId() << "," << condominiums[i].getName() << "," << condominiums[i].getAreaMultiplier() << "," << condominiums[i].getFloorMultiplier() << "," << condominiums[i].getBaseApartmentCost() << "," << condominiums[i].getBaseOfficeCost() << "," << condominiums[i].getBaseStoreCost();
@@ -379,42 +424,66 @@ void Corporation::manageWorkers() {
 	}
 }
 
-void Corporation::gettingReal() {
-	Menu showMenu("Welcome to the Real life bro");
-	showMenu.addMenuItem("Flying throught time");
-	showMenu.addMenuItem("Check condominium's reports");
+void Corporation::financeReports() {
+	Menu showMenu("Finance Reports");
+	showMenu.addMenuItem("Browse through all reports");
+	showMenu.addMenuItem("Fast Forward time ");
 	showMenu.addMenuItem("Go to the MAIN menu");
 	while(showMenu.isActive()){
 		switch (showMenu.showMenu()) {
 		case 1:
-			//real stuff
-			timeGoing();
+			//browse reports
 			break;
 		case 2:
-			//checking files
+			fastForward();
+			break;
+		case 3:
+			showMenu.toggleMenu();
 			break;
 		default: // going back
 			break;
 		}
-		showMenu.toggleMenu();
+		
 	}
 }
 
-void Corporation::timeGoing() {
-	unsigned int monthsToPass;
-	monthsToPass = Menu::promptInt("How many months would you like to pass? : ");
-
-	for(unsigned int i=0;i<monthsToPass;i++){
+void Corporation::fastForward() {
+	vector <int> fixedCosts;
+	vector <string> negativeCondominiums;
+	unsigned int monthsToAdvance;
+	stringstream message;
+	float profitlosssum = 0, fixed, profitloss;
+	monthsToAdvance = Menu::promptInt("How many months would you like to advance? ");
+	for(unsigned int i=0;i<monthsToAdvance;i++){
 		for(unsigned int j=0;j<condominiums.size();j++){
-			/*
-			 chamar funcao que vai propriedade a propriedade dentro de cada condominio:
-			 -Escrever relatorio mensal de cada propriedade; //por a escrever no fim do .txt//
-			 -Escrever relatorios de 3 em 3 meses;
-			 -Escrever relatorios anuais;
-			 */
+			cout << endl;
+			message << condominiums[j].getName() << " electrity/water/other costs for " << getMonth() << "/" << getYear() << ": ";
+			fixed = Menu::promptFloat(message.str());
+			fixedCosts.push_back(fixed);
+			message.str("");
+			message.clear();
+			profitloss = (condominiums[j].getProfitLoss() - fixed);
+			profitlosssum += profitloss;
+			if(profitloss<0) {
+				message << condominiums[j].getName() << " - Month " << getMonth() << "/" << getYear();
+				negativeCondominiums.push_back(message.str());
+				message.str("");
+				message.clear();
+			}
+			cout << endl << condominiums[j].getName() << " generated a total profit/loss of " << profitloss << "€" << endl;
+			condominiums[j].advanceOneMonth();
 		}
-		incDate(); // passa para o mes seguinte
+		incDate();
 	}
+	cout << endl << "Months Fast Forwarded: " << monthsToAdvance << endl;
+	cout << "Total Profit/Loss: " << profitlosssum << "€" << endl;
+	cout << "Average Profit/Loss " << profitlosssum/monthsToAdvance << "€" << endl;
+	cout << "List of negative condominius: " << endl;
+	for(unsigned int i=0; i<negativeCondominiums.size(); i++) {
+		cout << negativeCondominiums[i] << endl;
+	}
+	cout << endl;
+	
 }
 
 bool Corporation::isEmpty() {
@@ -424,4 +493,3 @@ bool Corporation::isEmpty() {
 		return true;
 	}
 }
-

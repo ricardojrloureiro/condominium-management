@@ -57,6 +57,8 @@ void Condominium::addProperty(Property* p1){
 
 void Condominium::addProptoCond() {
 	string address;
+	float area;
+	int floor;
 	Menu Menu("Which type of property would you like to build?\n");
 	Menu.addMenuItem("Apartment");
 	Menu.addMenuItem("Office");
@@ -65,19 +67,22 @@ void Condominium::addProptoCond() {
 	while(Menu.isActive()) {
 		switch(Menu.showMenu()) {
 		case 1:
-			cout << "Apartment Address: ";
-			getline(cin,address);
-			this->addProperty(new Apartment(address));
+			address = Menu::promptString("Apartament Address: ");
+			area = Menu::promptFloat("Apartment Area: ");
+			floor = Menu::promptInt("Which floor is the apartment? ");
+			this->addProperty(new Apartment(address, area, floor));
 			break;
 		case 2:
-			cout << "Office Address: ";
-			getline(cin,address);
-			this->addProperty(new Office(address));
+			address = Menu::promptString("Office Address: ");
+			area = Menu::promptFloat("Office Area: ");
+			floor = Menu::promptInt("Which floor is the office? ");
+			this->addProperty(new Office(address, area, floor));
 			break;
 		case 3:
-			cout << "Store Address: ";
-			getline(cin,address);
-			this->addProperty(new Store(address));
+			address = Menu::promptString("Store Address: ");
+			area = Menu::promptFloat("Store Area: ");
+			floor = Menu::promptInt("Which floor is the store? ");
+			this->addProperty(new Store(address, area, floor));
 			break;
 		default:
 			break;
@@ -111,14 +116,6 @@ int Condominium::getId() {
 
 string Condominium::getName() {
 	return name;
-}
-
-int Condominium::getProfit() {
-	int income = 0;
-	for(unsigned int i=0; i<properties.size(); i++) {
-		income += properties[i]->getCost();
-	}
-	return income;
 }
 
 float Condominium::getAreaMultiplier() {
@@ -335,10 +332,10 @@ void Condominium::saveProperties(){
 	ssfilename << "properties" << id << ".csv";
 	string filename = ssfilename.str();
 	ofstream file(filename.c_str());
-	file << "type" << "," << "address" << "," << "cost" << endl;
+	file << "type" << "," << "address" << "," << "area" << "," << "floor" << endl;
 	for(unsigned int i = 0; i < properties.size(); i++)
 	{
-		file << properties[i]->returnType() << "," << properties[i]->getAddress() << "," << properties[i]->getCost();
+		file << properties[i]->returnType() << "," << properties[i]->getAddress() << "," << properties[i]->getArea() << "," << properties[i]->getFloor();
 		if(i < (properties.size() -1))
 			file << endl;
 	}
@@ -424,8 +421,44 @@ void Condominium::showProperties() {
 	for(unsigned int i = 0; i < properties.size(); i++)	{
 		cout << "Property #" << i+1 << endl;
 		cout << "Type: " << properties[i]->printType() << endl;
-		cout << "Address: " << properties[i]->getAddress() << endl;
-		cout << "Cost: " << properties[i]->getCost() << endl << endl;
+		cout << "Area: " << properties[i]->getArea() << endl;
+		cout << "Floor: " << properties[i]->getFloor() << endl;
+		cout << "Address: " << properties[i]->getAddress() << endl << endl;
+	}
+}
+
+float Condominium::getPropertyCost(int propertyid) {
+	int type = properties[propertyid]->returnType();
+	float cost = (properties[propertyid]->getArea()*areaMultiplier) + (properties[propertyid]->getFloor()*floorMultiplier);
+	if(type == 1) {
+		cost += baseApartmentCost;
+	} else if(type == 2) {
+		cost += baseOfficeCost;
+	} else if(type == 3) {
+		cost += baseStoreCost;
+	} else {
+		return 0;
+	}
+	return cost;
+}
+
+float Condominium::getProfitLoss() {
+	float revenue = 0;
+	float cost = 0;
+	for (unsigned int i = 0; i < properties.size(); i++) {
+		revenue += getPropertyCost(i);
+	}
+	for (unsigned int i = 0; i < maintenance.size(); i++) {
+		if(maintenance[i]->payMonth()) {
+			cost += maintenance[i]->getDuration() * maintenance[i]->getWorkerWage();
+		}
+	}
+	return (revenue-cost);
+}
+
+void Condominium::advanceOneMonth() {
+	for(unsigned int i = 0; i < maintenance.size(); i++) {
+		maintenance[i]->decMonth();
 	}
 }
 

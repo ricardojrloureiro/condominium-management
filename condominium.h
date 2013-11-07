@@ -45,14 +45,13 @@ public:
 	void addMaintenanceToCondominium(vector<Worker*>);
 	void addMaintenanceToCondominium();
 
-	/* set functions */
+	/* get functions */
 	float getAreaMultiplier();
 	float getFloorMultiplier();
 	float getBaseApartmentCost();
 	float getBaseOfficeCost();
 	float getBaseStoreCost();
 	Worker* getWorkerFromList(vector<Worker*>);
-	int getProfit();
 	int getId();
 	string getName();
 
@@ -67,7 +66,10 @@ public:
 	void manageCond(vector<Worker*>);
 	void managePropertyFromCond();
 	void manageTaskFromCond();
-
+	float getProfitLoss();
+	float getPropertyCost(int);
+	void advanceOneMonth();
+	
 	/* save functions */
 	void saveProperties();
 	void saveMaintenances();

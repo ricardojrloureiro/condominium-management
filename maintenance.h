@@ -34,13 +34,14 @@ public:
 	string getName();
 	void setType(int);
 	void setDuration(float);
-	void decMonths();
+	void decMonth();
 
 	/* get functions */
 	int getMonth();
 	int getType();
 	int getWorkerId();
 	float getDuration();
+	float getWorkerWage();
 
 	/* other */
 	bool payMonth();

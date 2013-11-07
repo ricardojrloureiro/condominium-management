@@ -10,8 +10,7 @@
 #include <string>
 
 using namespace std;
-int date = 201310;
-Corporation corporation(date);
+Corporation corporation;
 
 int main() {
 	Menu mainMenu("Main Menu");
@@ -77,7 +76,7 @@ int main() {
 				corporation.addWorker();
 			break;
 			case 3:
-				corporation.gettingReal();
+				corporation.financeReports();
 			// add workers
 			break;
 			case 4:

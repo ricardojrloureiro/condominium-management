@@ -9,27 +9,33 @@
 
 // constructors
 
-Property::Property(string address) {
+Property::Property(string address, float area, int floor) {
 	this->address = address;
+	this->area = area;
+	this->floor = floor;
 }
 
-Apartment::Apartment(string address) : Property(address) {
+Apartment::Apartment(string address, float area, int floor) : Property(address, area, floor) {
 }
 
-Office::Office(string address) : Property(address) {
+Office::Office(string address, float area, int floor) : Property(address, area, floor) {
 }
 
-Store::Store(string address) : Property(address) {
+Store::Store(string address, float area, int floor) : Property(address, area, floor) {
 }
 
 // get & sets
 
-int Property::getCost() {
-	return 0;
-}
-
 string Property::getAddress() {
 	return address;
+}
+
+float Property::getArea() {
+	return area;
+}
+
+int Property::getFloor() {
+	return floor;
 }
 
 int Apartment::returnType() const {

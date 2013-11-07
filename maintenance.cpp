@@ -65,14 +65,30 @@ void Maintenance::setType(int type) {
 }
 
 bool Maintenance::payMonth() {
-	if(monthsLeft == 0){
+	if(monthsLeft == 1){
 		return true;
 	}
 	return false;
 }
 
-void Maintenance::decMonths() {
+void Maintenance::decMonth() {
 	monthsLeft--;
+	if(monthsLeft == 0) {
+		switch(type) {
+		case 0:
+			monthsLeft = 1;
+			break;
+		case 1:
+			monthsLeft = 3;
+			break;
+		case 2: 
+			monthsLeft = 12;
+			break;
+		default:
+			monthsLeft = 0;
+			break;
+		}
+	}
 }
 
 int Maintenance::getWorkerId() {
@@ -95,4 +111,8 @@ void Maintenance::setDuration(float duration) {
 
 float Maintenance::getDuration() {
 	return duration;
+}
+
+float Maintenance::getWorkerWage() {
+	return worker->getWage();
 }
