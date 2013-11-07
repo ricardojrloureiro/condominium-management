@@ -213,12 +213,9 @@ void Corporation::loadReports(string filename) {
 
 			id = atol(reportsInfo[0].c_str());
 			if(id>0) {
-				Condominium condominium(id, condominiumInfo[1], atof(condominiumInfo[2].c_str()), atof(condominiumInfo[3].c_str()), atof(condominiumInfo[4].c_str()), atof(condominiumInfo[5].c_str()), atof(condominiumInfo[6].c_str()));
-				condominiums.push_back(condominium);
-				loadProperties(id);
-				loadMaintenance(id);
+				//condominiums.push_back(condominium);
 			}
-			condominiumInfo.clear();
+			reportsInfo.clear();
 		}
 		lineNumber++;
 	}
@@ -370,6 +367,38 @@ void Corporation::saveWorkers() {
 	file.close();
 }
 
+void Corporation::manageWorkers(int id){
+        stringstream topic;
+        topic << "Managing " << workers[id].getName() << ", wage: " << workers[id].getWage() << endl;
+        string topic2 = topic.str();
+        Menu showMenu(topic2.c_str());
+        showMenu.addMenuItem("Edit Workers Name");
+        showMenu.addMenuItem("Edit Workers Wage");
+        showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
+ 
+        while(showMenu.isActive()) {
+                switch(showMenu.showMenu()) {
+                case 1:{
+                        string name = Menu::promptString("New Name: ");
+                        workers[id].setName(name);
+                        saveWorkers();
+                        showMenu.toggleMenu();
+                        break;
+                }
+                case 2:{
+                        float wage = Menu::promptFloat("Set New Wage: ");
+                        workers[id].setWage(wage);
+                        saveWorkers();
+                        showMenu.toggleMenu();
+                        break;
+                }
+                case 3:
+                        showMenu.toggleMenu();
+                        break;
+                }
+        }
+}
+
 void Corporation::manageCondominium() {
 	int i= 0;
 	Menu showMenu("Condominium Management");
@@ -492,4 +521,36 @@ bool Corporation::isEmpty() {
 	} else {
 		return true;
 	}
+}
+
+void Corporation::showWorker() {
+        if(workers.size()==0){
+                cout << "There are no workers in this corporation, please add one first" << endl;
+        }else {
+ 
+                int i= 0;
+                Menu showMenu("Workers Management");
+                showMenu.addMenuItem("Choose this worker to manage");
+                showMenu.addMenuItem("Go to the NEXT worker");
+                showMenu.addMenuItem("Go to the PREVIOUS worker");
+                showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
+ 
+                while(showMenu.isActive()) {
+                        cout << "Name: " << workers[i].getName() << " ,Wage: " << workers[i].getWage() << endl;
+                        switch(showMenu.showMenu()) {
+                        case 1:
+                                manageWorkers(i);
+                                break;
+                        case 2:
+                                i = (i+1) % workers.size();
+                                break;
+                        case 3:
+                                i = (i-1) % workers.size();
+                                break;
+                        default:
+                                showMenu.toggleMenu();
+                                break;
+                        }
+                }
+        }
 }

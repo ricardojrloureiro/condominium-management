@@ -50,4 +50,7 @@ void Worker::setWage(float wage) {
 	this->wage=wage;
 }
 
+void Worker::setName(string name) {
+        this->name = name;
+}
 

@@ -34,12 +34,14 @@ public:
 
 	/*manage functions */
 	void manageCondominium();
+	void manageWorkers(int);
 
 	/* load functions */
 	void loadCondominiums(string);
 	void loadProperties(int);
 	void loadMaintenance(int);
 	void loadWorkers(string);
+	void loadReports(string);
 
 	/* save functions */
 	void saveCondominiums(string);
@@ -69,6 +71,7 @@ public:
 	void showCondominium(int);
 	void showAllCondominiums();
 	void manageWorkers();
+	void showWorker();
 
 	/* search & others */
 	int searchCondominiumId(int);

@@ -66,7 +66,7 @@ int main() {
 							corporation.addWorker();
 							break;
 						case 2:
-							//manage workers;
+							corporation.showWorker();
 							break;
 						case 3:
 							workersMenu.toggleMenu();

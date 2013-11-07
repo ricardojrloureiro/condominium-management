@@ -22,6 +22,7 @@ class Property {
 protected:
 	float area;
 	int floor;
+	float totalDue;
 	Owner* owner;
 	string address;
 public:

@@ -18,7 +18,7 @@ class Owner {
 	int contract; //0 = monthly, 1 = trimestal, 2 = annually
 	int monthsLeft;
 public:
-	Owner(string);
+	Owner(string, int, int);
 };
 
 class Dweller : public Owner {
