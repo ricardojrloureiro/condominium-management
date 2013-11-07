@@ -11,3 +11,4 @@ Thumbs.db
 #SUBLIME
 *.sublime-project
 *.sublime-workspace
+*.csv
