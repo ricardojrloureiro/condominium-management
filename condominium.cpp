@@ -1,10 +1,3 @@
-/*
- * condominio.cpp
- *
- *  Created on: Oct 10, 2013
- *      Author: rui
- */
-
 #include "condominium.h"
 
 long Condominium::condominiumId = 0;

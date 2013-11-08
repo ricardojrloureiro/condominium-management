@@ -1,10 +1,3 @@
-/*
- * condominio.h
- *
- *  Created on: Oct 10, 2013
- *      Author: rui
- */
-
 #ifndef CONDOMINIUM_H_
 #define CONDOMINIUM_H_
 

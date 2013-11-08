@@ -1,10 +1,3 @@
-/*
- * Maintenance.h
- *
- *  Created on: Oct 14, 2013
- *      Author: rui
- */
-
 #ifndef MAINTENANCE_H_
 #define MAINTENANCE_H_
 

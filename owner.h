@@ -1,10 +1,3 @@
-/*
- * proprietario.h
- *
- *  Created on: Oct 10, 2013
- *      Author: rui
- */
-
 #ifndef OWNER_H_
 #define OWNER_H_
 

@@ -1,10 +1,3 @@
-/*
- * workers.h
- *
- *  Created on: Oct 12, 2013
- *      Author: ricardo
- */
-
 #ifndef WORKER_H_
 #define WORKER_H_
 

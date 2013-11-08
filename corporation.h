@@ -1,10 +1,3 @@
-/*
- * Corporation.h
- *
- *  Created on: Oct 12, 2013
- *      Author: ricardo
- */
-
 #ifndef CORPORATION_H_
 #define CORPORATION_H_
 
@@ -20,6 +13,7 @@
 #include "worker.h"
 #include "property.h"
 #include "owner.h"
+#include "report.h"
 
 using namespace std;
 

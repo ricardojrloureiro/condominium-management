@@ -1,10 +1,3 @@
-/*
- * propriedade.h
- *
- *  Created on: Oct 10, 2013
- *      Author: rui
- */
-
 #ifndef PROPERTY_H_
 #define PROPERTY_H_
 

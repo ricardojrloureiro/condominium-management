@@ -1,10 +1,3 @@
-/*
- * corporation.cpp
- *
- *  Created on: Oct 12, 2013
- *      Author: ricardo
- */
-
 #include "corporation.h"
 
 // constructor
@@ -642,8 +635,8 @@ void Corporation::fastForward() {
 		incDate();
 	}
 	cout << endl << "Months Fast Forwarded: " << monthsToAdvance << endl;
-	cout << "Total Profit/Loss: " << profitlosssum << "â‚¬" << endl;
-	cout << "Average Profit/Loss " << profitlosssum/monthsToAdvance << "â‚¬" << endl;
+	cout << "Total Profit/Loss: " << profitlosssum << "€" << endl;
+	cout << "Average Profit/Loss " << profitlosssum/monthsToAdvance << "€" << endl;
 	cout << "List of negative condominius: " << endl;
 	for(unsigned int i=0; i<negativeCondominiums.size(); i++) {
 		cout << negativeCondominiums[i] << endl;

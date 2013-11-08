@@ -1,10 +1,3 @@
-/*
- * workers.cpp
- *
- *  Created on: Oct 12, 2013
- *      Author: ricardo
- */
-
 #include "worker.h"
 
  long Worker::workerId = 0;
