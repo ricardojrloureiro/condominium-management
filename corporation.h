@@ -21,6 +21,7 @@ class Corporation {
 	vector <Condominium> condominiums;
 	vector <Worker> workers;
 	vector <Owner> owners;
+	vector <Report> reports;
 	float totalProfitLoss;
 	int date; // mmaaaa
 public:
@@ -51,6 +52,7 @@ public:
 	void removeWorker(Worker);
 
 	/* add functions */
+	void addReport(Report);
 	void addWorker();
 	void addWorker(Worker);
 	void addOwner();
@@ -61,6 +63,7 @@ public:
 	/* get functions */
 	int getMonth();
 	int getYear();
+	int getLastDate();
 	vector<Worker*> getWorkersList();
 	Worker* getWorker(int);
 	vector<Owner*> getOwnersList();

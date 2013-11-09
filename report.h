@@ -4,31 +4,36 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <fstream>
 #include "maintenance.h"
 using namespace std;
 
 class Report {
-	int date;
-	vector<string> negativeCond;
-	vector<float> profitlosses;
-	vector<Maintenance> maintenancesdone;
+	int date; // date of the report
+	int type; // 0-monthly report, 1- trimestral report, 2- annual report
+	vector<string> negativeCond; // all the negative condominiums
+	vector<float> profitlosses; // all the profitloss from all condominiums
 
 public:
 	/* constructors */
 	Report();
-	Report(int,vector<string>,vector<float>,vector<Maintenance>);
+	Report(int, int, vector<string>, vector<float>);
 
 	/* set */
 	void setDate(int);
 	void setNegConds(vector<string>);
 	void setProfitLosses(vector<float>);
-	void setDoneMain(vector<Maintenance>);
 
 	/* get functions */
+	int getMonth();
+	int getYear();
 	int getDate();
+	int getType();
 	vector<string> getNegConds();
 	vector<float> getProfitLoss();
-	vector<Maintenance> getMaintenances();
+
+	/* save report */
+	void saveReport();
 
 };
 

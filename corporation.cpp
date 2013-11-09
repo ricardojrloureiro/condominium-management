@@ -3,12 +3,16 @@
 // constructor
 
 Corporation::Corporation(){
-	time_t now = time(0);
-	tm *ltm = localtime(&now);
-	stringstream datess;
-	datess << 1900 + ltm->tm_year;
-	datess << 1 + ltm->tm_mon;
-	date = atoi(datess.str().c_str());
+	if(reports.size()==0){
+		time_t now = time(0);
+		tm *ltm = localtime(&now);
+		stringstream datess;
+		datess << 1900 + ltm->tm_year;
+		datess << 1 + ltm->tm_mon;
+		date = atoi(datess.str().c_str());
+	}else {
+		date = getLastDate();
+	}
 	totalProfitLoss = 0;
 	loadWorkers("workers.csv");
 	loadOwners("owners.csv");
@@ -31,6 +35,10 @@ void Corporation::incDate() {
 }
 
 /* get functions*/
+
+int Corporation::getLastDate() {
+	reports[reports.size()-1].getDate();
+}
 
 int Corporation::getYear() {
 	return date/100;
@@ -147,6 +155,10 @@ void Corporation::addOwner() {
 		}
 	}
 
+}
+
+void Corporation::addReport(Report report) {
+	reports.push_back(report);
 }
 
 void Corporation::addWorker(Worker w1) {
@@ -608,7 +620,9 @@ void Corporation::financeReports() {
 
 void Corporation::fastForward() {
 	vector <int> fixedCosts;
+	vector <float> profitlosses;
 	vector <string> negativeCondominiums;
+	vector <string> negCondPerMonth;
 	unsigned int monthsToAdvance;
 	stringstream message;
 	float profitlosssum = 0, fixed, profitloss;
@@ -622,16 +636,27 @@ void Corporation::fastForward() {
 			message.str("");
 			message.clear();
 			profitloss = (condominiums[j].getProfitLoss() - fixed);
+			profitlosses.clear();
+			profitlosses.push_back(profitloss); // get a float vector with the all profitloss
 			profitlosssum += profitloss;
 			if(profitloss<0) {
 				message << condominiums[j].getName() << " - Month " << getMonth() << "/" << getYear();
 				negativeCondominiums.push_back(message.str());
+				negCondPerMonth.clear();
+				negCondPerMonth.push_back(condominiums[j].getName());
 				message.str("");
 				message.clear();
 			}
 			cout << endl << condominiums[j].getName() << " generated a total profit/loss of " << profitloss << "€" << endl;
 			condominiums[j].advanceOneMonth();
 		}
+		// passes the information of the current month to the report
+		Report report;
+		report.setDate(date);
+		report.setNegConds(negCondPerMonth);
+		report.setProfitLosses(profitlosses);
+		addReport(report);
+		report.saveReport();
 		incDate();
 	}
 	cout << endl << "Months Fast Forwarded: " << monthsToAdvance << endl;
