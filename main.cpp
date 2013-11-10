@@ -5,6 +5,7 @@
 #include "worker.h"
 #include "menu.h"
 #include "maintenance.h"
+#include "report.h"
 #include <iostream>
 #include <ctime>
 #include <string>

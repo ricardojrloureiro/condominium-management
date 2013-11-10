@@ -18,10 +18,12 @@ protected:
 	float totalDue;
 	Owner* owner;
 	string address;
+	int monthsLeft;
 public:
 	Property();
 	void setAddress(string);
 	Property(string,float,int,Owner*);
+	Property(string,float,int,Owner*,float,int);
 	float getArea();
 	int getFloor();
 	string getAddress();
@@ -31,12 +33,19 @@ public:
 	void setOwnerId(int);
 	void setOwner(Owner*);
 	string getOwnerName();
+	bool payMonth();
+	void addDue(float);
+	float getDue();
+	int getMonthsLeft();
+	void decMonth();
+	void resetDue();
 };
 
 class Apartment : public Property {
 public:
 	Apartment();
 	Apartment(string,float,int,Owner *);
+	Apartment(string,float,int,Owner *,float,int);
 	void showInfo() const;
 	int returnType() const;
 	string printType() const;
@@ -46,6 +55,7 @@ class Office : public Property {
 public:
 	Office();
 	Office(string,float,int,Owner *);
+	Office(string,float,int,Owner *,float,int);
 	void showInfo() const;
 	int returnType() const;
 	string printType() const;
@@ -55,6 +65,7 @@ class Store : public Property {
 public:
 	Store();
 	Store(string,float,int,Owner *);
+	Store(string,float,int,Owner *,float,int);
 	void showInfo() const;
 	int returnType() const;
 	string printType() const;

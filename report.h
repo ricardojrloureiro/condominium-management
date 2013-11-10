@@ -5,35 +5,47 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include "maintenance.h"
+#include <sstream>
 using namespace std;
 
 class Report {
+	struct MaintenanceReport {
+		string name;
+		int condominiumid;
+		int workerid;
+		float cost;
+	};
+	struct PropertiesReport {
+		string address;
+		int condominiumid;
+		int ownerid;
+		float amountPaid;
+	};
+
 	int date; // date of the report
-	int type; // 0-monthly report, 1- trimestral report, 2- annual report
-	vector<string> negativeCond; // all the negative condominiums
-	vector<float> profitlosses; // all the profitloss from all condominiums
+
+	vector<MaintenanceReport> maintenance;
+	vector<PropertiesReport> properties;
+
+	float totalProfitLoss;
 
 public:
 	/* constructors */
 	Report();
-	Report(int, int, vector<string>, vector<float>);
+	Report(int, int, vector< vector <string> >, vector< vector <string> >);
 
 	/* set */
 	void setDate(int);
-	void setNegConds(vector<string>);
-	void setProfitLosses(vector<float>);
 
 	/* get functions */
 	int getMonth();
 	int getYear();
 	int getDate();
-	int getType();
-	vector<string> getNegConds();
-	vector<float> getProfitLoss();
+	float getProfitLoss();
 
 	/* save report */
-	void saveReport();
+	void saveMaintenanceReport();
+	void savePropertiesReport();
 
 };
 

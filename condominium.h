@@ -49,6 +49,8 @@ public:
 	Owner* getOwnerFromList(vector<Owner*>);
 	int getId();
 	string getName();
+	vector < vector <string> > getMaintenanceReport();
+	vector < vector <string> > getPropertiesReport();
 
 	/* set functions */
 	void setAreaMultiplier(float);

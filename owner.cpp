@@ -3,22 +3,11 @@
 long Owner::ownerId = 0;
 
 // constructor
-
-
-Owner::Owner(string nome, int contract, int monthsLeft){
-	ownerId++;
-	this->id = ownerId;
-	this->name = nome;
-	this->contract = contract;
-	this->monthsLeft = monthsLeft;
-}
-
-Owner::Owner(int id,string nome, int contract, int monthsLeft){
+Owner::Owner(int id,string nome, int contract){
 	ownerId++;
 	this->id = id;
 	this->name = nome;
 	this->contract = contract;
-	this->monthsLeft = monthsLeft;
 }
 
 Owner::Owner(string name, int contractType) {
@@ -26,21 +15,6 @@ Owner::Owner(string name, int contractType) {
 	this->id = ownerId;
 	this->name = name;
 	this->contract = contractType;
-	switch (contractType) {
-	case 0:
-		monthsLeft=1;
-		break;
-	case 1:
-		monthsLeft=3;
-		break;
-	case 2:
-		monthsLeft=12;
-		break;
-	}
-}
-
-int Owner::getMonthsLeft() {
-	return monthsLeft;
 }
 
 int Owner::getId() {
@@ -79,15 +53,4 @@ void Owner::setName(string name) {
 
 void Owner::setType(int type) {
 	this->contract = type;
-	switch (type) {
-		case 0:
-			monthsLeft=1;
-			break;
-		case 1:
-			monthsLeft=3;
-			break;
-		case 2:
-			monthsLeft=12;
-			break;
-	}
 }

@@ -9,13 +9,12 @@ using namespace std;
 class Owner {
 	string name;
 	int contract; //0 = monthly, 1 = trimestal, 2 = annually
-	int monthsLeft;
 	static long ownerId;
 	long id;
 public:
 	Owner(string,int);
 	Owner(string, int, int);
-	Owner(int,string,int,int);
+	Owner(int,string,int);
 
 	//get functions
 	int getId();

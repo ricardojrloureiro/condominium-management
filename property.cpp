@@ -8,6 +8,26 @@ Property::Property(string address, float area, int floor,Owner *owner) {
 	this->area = area;
 	this->floor = floor;
 	this->owner = owner;
+	switch (owner->getContractType()) {
+	case 0:
+		monthsLeft=1;
+		break;
+	case 1:
+		monthsLeft=3;
+		break;
+	case 2:
+		monthsLeft=12;
+		break;
+	}
+}
+
+Property::Property(string address, float area, int floor,Owner *owner,float totalDue,int monthsLeft) {
+	this->address = address;
+	this->area = area;
+	this->floor = floor;
+	this->owner = owner;
+	this->totalDue = totalDue;
+	this->monthsLeft = monthsLeft;
 }
 
 Apartment::Apartment(string address, float area, int floor, Owner *owner) : Property(address, area, floor,owner) {
@@ -17,6 +37,15 @@ Office::Office(string address, float area, int floor,Owner *owner) : Property(ad
 }
 
 Store::Store(string address, float area, int floor,Owner *owner) : Property(address, area, floor,owner) {
+}
+
+Apartment::Apartment(string address, float area, int floor, Owner *owner,float totalDue,int monthsLeft) : Property(address, area, floor,owner,totalDue,monthsLeft) {
+}
+
+Office::Office(string address, float area, int floor,Owner *owner,float totalDue,int monthsLeft) : Property(address, area, floor,owner,totalDue,monthsLeft) {
+}
+
+Store::Store(string address, float area, int floor,Owner *owner,float totalDue,int monthsLeft) : Property(address, area, floor,owner,totalDue,monthsLeft) {
 }
 
 // get & sets
@@ -91,4 +120,47 @@ void Property::setOwner(Owner* O){
 
 string Property::getOwnerName() {
 	return owner->getName();
+}
+
+bool Property::payMonth() {
+	if(monthsLeft == 1){
+		return true;
+	}
+	return false;
+}
+
+void Property::decMonth() {
+	monthsLeft--;
+	if(monthsLeft == 0) {
+		switch(owner->getContractType()) {
+		case 0:
+			monthsLeft = 1;
+			break;
+		case 1:
+			monthsLeft = 3;
+			break;
+		case 2: 
+			monthsLeft = 12;
+			break;
+		default:
+			monthsLeft = 0;
+			break;
+		}
+	}
+}
+
+void Property::addDue(float amount) {
+	totalDue += amount;
+}
+
+float Property::getDue() {
+	return totalDue;
+}
+
+int Property::getMonthsLeft() {
+	return monthsLeft;
+}
+
+void Property::resetDue() {
+	this->totalDue = 0;
 }

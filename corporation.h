@@ -22,12 +22,10 @@ class Corporation {
 	vector <Worker> workers;
 	vector <Owner> owners;
 	vector <Report> reports;
-	float totalProfitLoss;
 	int date; // mmaaaa
 public:
 	/* constructors */
 	Corporation();
-	Corporation(int);
 
 	/*manage functions */
 	void manageCondominium();
@@ -41,11 +39,14 @@ public:
 	void loadWorkers(string);
 	void loadReports(string);
 	void loadOwners(string);
+	vector < vector < string > > loadMaintenanceReport(int);
+	vector < vector < string > > loadPropertiesReport(int);
 
 	/* save functions */
 	void saveCondominiums(string);
 	void saveWorkers();
 	void saveOwners();
+	void saveReports(string);
 
 	/* remove functions */
 	void removeCondominium(Condominium);

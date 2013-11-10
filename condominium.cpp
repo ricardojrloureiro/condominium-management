@@ -52,47 +52,51 @@ void Condominium::addProptoCond(vector <Owner*> owners) {
 	string address;
 	float area;
 	int floor;
-	Menu Menu("Which type of property would you like to build?\n");
-	Menu.addMenuItem("Apartment");
-	Menu.addMenuItem("Office");
-	Menu.addMenuItem("Store");
-	Menu.addMenuItem("Go BACK to the PREVIOUS menu");
-	while(Menu.isActive()) {
-		switch(Menu.showMenu()) {
-		case 1:{
-			address = Menu::promptString("Apartament Address: ");
-			area = Menu::promptFloat("Apartment Area: ");
-			floor = Menu::promptInt("Which floor is the apartment? ");
-			cout << "Which owner will be living here? " << endl;
-			Owner* owner = getOwnerFromList(owners);
-			this->addProperty(new Apartment(address, area, floor,owner));
-			break;
+	if(owners.size()>0) {
+		Menu Menu("Which type of property would you like to build?\n");
+		Menu.addMenuItem("Apartment");
+		Menu.addMenuItem("Office");
+		Menu.addMenuItem("Store");
+		Menu.addMenuItem("Go BACK to the PREVIOUS menu");
+		while(Menu.isActive()) {
+			switch(Menu.showMenu()) {
+			case 1:{
+				address = Menu::promptString("Apartament Address: ");
+				area = Menu::promptFloat("Apartment Area: ");
+				floor = Menu::promptInt("Which floor is the apartment? ");
+				cout << "Which owner will be living here? " << endl;
+				Owner* owner = getOwnerFromList(owners);
+				this->addProperty(new Apartment(address, area, floor,owner));
+				break;
+			}
+			case 2:{
+				address = Menu::promptString("Office Address: ");
+				area = Menu::promptFloat("Office Area: ");
+				floor = Menu::promptInt("Which floor is the office? ");
+				cout << "Which owner will be living here?  " << endl;
+				Owner* owner = getOwnerFromList(owners);
+				this->addProperty(new Office(address, area, floor,owner));
+				break;
+			}
+			case 3:{
+				address = Menu::promptString("Store Address: ");
+				area = Menu::promptFloat("Store Area: ");
+				floor = Menu::promptInt("Which floor is the store? ");
+				cout << "Which owner will be living here?  " << endl;
+				Owner* owner = getOwnerFromList(owners);
+				this->addProperty(new Store(address, area, floor,owner));
+				break;
+			}
+			default:
+				break;
+			}
+			Menu.toggleMenu();
 		}
-		case 2:{
-			address = Menu::promptString("Office Address: ");
-			area = Menu::promptFloat("Office Area: ");
-			floor = Menu::promptInt("Which floor is the office? ");
-			cout << "Which owner will be living here?  " << endl;
-			Owner* owner = getOwnerFromList(owners);
-			this->addProperty(new Apartment(address, area, floor,owner));
-			break;
-		}
-		case 3:{
-			address = Menu::promptString("Store Address: ");
-			area = Menu::promptFloat("Store Area: ");
-			floor = Menu::promptInt("Which floor is the store? ");
-			cout << "Which owner will be living here?  " << endl;
-			Owner* owner = getOwnerFromList(owners);
-			this->addProperty(new Apartment(address, area, floor,owner));
-			break;
-		}
-		default:
-			break;
-		}
-		Menu.toggleMenu();
+		//save the properties
+		saveProperties();
+	} else {
+		cout << "There are no Owners yet." << endl << "Please go back to the Main Menu and add a Owner to continue." << endl << endl;
 	}
-	//save the properties
-	saveProperties();
 }
 
 void Condominium::addMaintenanceToCondominium(vector <Worker*> workers) {
@@ -148,7 +152,6 @@ Worker* Condominium::getWorkerFromList(vector <Worker*> workers) {
 	}
 	workersMenu.addMenuItem("Go back to the PREVIOUS menu");
 	unsigned int option=workersMenu.showMenu();
-	cout << "option" << option << endl;
 	if(option>workers.size()){
 		return 0;
 	} else {
@@ -157,12 +160,10 @@ Worker* Condominium::getWorkerFromList(vector <Worker*> workers) {
 }
 
 Owner* Condominium::getOwnerFromList(vector <Owner*> owners) {
-
 	Menu ownersMenu("Owners List");
 	for (unsigned int i=0; i<owners.size(); i++) {
 		ownersMenu.addMenuItem(owners[i]->getName());
 	}
-	ownersMenu.addMenuItem("Go back to the PREVIOUS menu");
 	unsigned int option=ownersMenu.showMenu();
 	if(option>owners.size()){
 		return 0;
@@ -268,7 +269,7 @@ void Condominium::managePropertyFromCond(vector<Owner*> owners) {
 	string newAddress;
 	Menu menu("Choose one of the IDs");
 	for(unsigned int i=0;i<properties.size();i++) {
-		name << "Address: " << properties[i]->getAddress() << " ,dweller: " << properties[i]->getOwnerName();
+		name << "Address: " << properties[i]->getAddress() << " - Owner: " << properties[i]->getOwnerName();
 		menu.addMenuItem(name.str());
 		name.clear();
 		name.str("");
@@ -382,10 +383,10 @@ void Condominium::saveProperties(){
 	ssfilename << "properties" << id << ".csv";
 	string filename = ssfilename.str();
 	ofstream file(filename.c_str());
-	file << "type" << "," << "address" << "," << "area" << "," << "floor" << "," << "ownerId" << endl;
+	file << "type" << "," << "address" << "," << "area" << "," << "floor" << "," << "ownerId" << "," << "totalDue" << "," << "monthsLeft" << endl;
 	for(unsigned int i = 0; i < properties.size(); i++)
 	{
-		file << properties[i]->returnType() << "," << properties[i]->getAddress() << "," << properties[i]->getArea() << "," << properties[i]->getFloor() << "," << properties[i]->getOwnerId();
+		file << properties[i]->returnType() << "," << properties[i]->getAddress() << "," << properties[i]->getArea() << "," << properties[i]->getFloor() << "," << properties[i]->getOwnerId() << "," << properties[i]->getDue() << "," << properties[i]->getMonthsLeft();
 		if(i < (properties.size() -1))
 			file << endl;
 	}
@@ -496,7 +497,12 @@ float Condominium::getProfitLoss() {
 	float revenue = 0;
 	float cost = 0;
 	for (unsigned int i = 0; i < properties.size(); i++) {
-		revenue += getPropertyCost(i);
+		if(properties[i]->payMonth()) {
+			revenue += properties[i]->getDue();
+			properties[i]->resetDue();
+		} else {
+			properties[i]->addDue(getPropertyCost(i));
+		}
 	}
 	for (unsigned int i = 0; i < maintenance.size(); i++) {
 		if(maintenance[i]->payMonth()) {
@@ -506,9 +512,50 @@ float Condominium::getProfitLoss() {
 	return (revenue-cost);
 }
 
+vector <vector <string> > Condominium::getMaintenanceReport() {
+	vector <vector <string> > result;
+	for(unsigned int i=0; i < maintenance.size(); i++) {
+		if(maintenance[i]->payMonth()) {
+			vector <string> temp;
+			stringstream idConvert, workerConvert, costConvert;
+			temp.push_back(maintenance[i]->getName());
+			idConvert << id;
+			temp.push_back(idConvert.str());
+			workerConvert << maintenance[i]->getWorkerId();
+			temp.push_back(workerConvert.str());
+			costConvert << maintenance[i]->getDuration() * maintenance[i]->getWorkerWage();
+			temp.push_back(costConvert.str());
+			result.push_back(temp);
+		}
+	}
+	return result;
+}
+
+vector <vector <string> > Condominium::getPropertiesReport() {
+	vector <vector <string> > result;
+	for(unsigned int i=0; i < properties.size(); i++) {
+		if(properties[i]->payMonth()) {
+			vector <string> temp;
+			stringstream idConvert, ownerConvert, costConvert;
+			temp.push_back(properties[i]->getAddress());
+			idConvert << id;
+			temp.push_back(idConvert.str());
+			ownerConvert << properties[i]->getOwnerId();
+			temp.push_back(ownerConvert.str());
+			costConvert << properties[i]->getDue();
+			temp.push_back(costConvert.str());
+			result.push_back(temp);
+		}
+	}
+	return result;
+}
+
 void Condominium::advanceOneMonth() {
 	for(unsigned int i = 0; i < maintenance.size(); i++) {
 		maintenance[i]->decMonth();
+	}
+	for(unsigned int i = 0; i < properties.size(); i++) {
+		properties[i]->decMonth();
 	}
 }
 

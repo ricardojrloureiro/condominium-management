@@ -3,6 +3,11 @@
 // constructor
 
 Corporation::Corporation(){
+	loadWorkers("workers.csv");
+	loadOwners("owners.csv");
+	loadCondominiums("condominiums.csv");
+	loadReports("reports.csv");
+
 	if(reports.size()==0){
 		time_t now = time(0);
 		tm *ltm = localtime(&now);
@@ -10,20 +15,10 @@ Corporation::Corporation(){
 		datess << 1900 + ltm->tm_year;
 		datess << 1 + ltm->tm_mon;
 		date = atoi(datess.str().c_str());
-	}else {
+	} else {
 		date = getLastDate();
+		incDate();
 	}
-	totalProfitLoss = 0;
-	loadWorkers("workers.csv");
-	loadOwners("owners.csv");
-	loadCondominiums("condominiums.csv");	
-}
-
-Corporation::Corporation(int date) {
-	this->date = date;
-	loadReports("reports.csv");
-	loadWorkers("workers.csv");
-	loadCondominiums("condominiums.csv");
 }
 
 void Corporation::incDate() {
@@ -37,7 +32,7 @@ void Corporation::incDate() {
 /* get functions*/
 
 int Corporation::getLastDate() {
-	reports[reports.size()-1].getDate();
+	return reports[reports.size()-1].getDate();
 }
 
 int Corporation::getYear() {
@@ -107,54 +102,26 @@ void Corporation::addCondominium(Condominium cond){
 void Corporation::addWorker() {
 	string name = "";
 	float wage=0;
-	Menu showMenu("Workers");
-	showMenu.addMenuItem("Add a new worker");
-	showMenu.addMenuItem("Go back to the MAIN menu");
-
-	while(showMenu.isActive()){
-		switch(showMenu.showMenu()){
-		case 1:{
-			name = Menu::promptString("Insert Worker's name: ");
-			wage = Menu::promptFloat("Insert Worker's wage: ");
-			Worker worker(name,wage);
-			addWorker(worker);
-			saveWorkers();
-			break;}
-		case 2:{
-			showMenu.toggleMenu();
-			break;}
-		}
-	}
+	name = Menu::promptString("Insert Worker's name: ");
+	wage = Menu::promptFloat("Insert Worker's wage: ");
+	Worker worker(name,wage);
+	addWorker(worker);
+	saveWorkers();
 
 }
 
 void Corporation::addOwner() {
 	string name = "";
 	int contractType=0;
-	Menu showMenu("Owners");
-	showMenu.addMenuItem("Add a new owner");
-	showMenu.addMenuItem("Go back to the MAIN menu");
-
-	while(showMenu.isActive()){
-		switch(showMenu.showMenu()){
-		case 1:{
-			name = Menu::promptString("Insert Owner's name: ");
-			Menu subMenu("Which type of contract will this owner have?");
-			subMenu.addMenuItem("monthly");
-			subMenu.addMenuItem("trimestal");
-			subMenu.addMenuItem("annually");
-			contractType = subMenu.showMenu();
-			Owner owner(name,(contractType- 1));
-			addOwner(owner);
-			saveOwners();
-			break;
-		}
-		case 2:{
-			showMenu.toggleMenu();
-			break;}
-		}
-	}
-
+	name = Menu::promptString("Insert Owner's name: ");
+	Menu subMenu("Which type of contract will this owner have?");
+	subMenu.addMenuItem("Monthly Payment");
+	subMenu.addMenuItem("Trimestral Payment");
+	subMenu.addMenuItem("Annually Payment");
+	contractType = subMenu.showMenu();
+	Owner owner(name,(contractType- 1));
+	addOwner(owner);
+	saveOwners();
 }
 
 void Corporation::addReport(Report report) {
@@ -223,7 +190,7 @@ void Corporation::loadOwners(string filename){
 	ifstream file;
 	string line;
 	long id;
-	int contractType,monthsLeft;
+	int contractType;
 	string name;
 	vector <string> ownersInfo;
 	file.open(filename.c_str());
@@ -243,8 +210,7 @@ void Corporation::loadOwners(string filename){
 			id = atol(ownersInfo[0].c_str());
 			name = ownersInfo[1];
 			contractType = atoi(ownersInfo[2].c_str());
-			monthsLeft = atoi(ownersInfo[3].c_str());
-			Owner otemp(id,name,contractType,monthsLeft);
+			Owner otemp(id,name,contractType);
 			owners.push_back(otemp);
 
 			ownersInfo.clear();
@@ -290,8 +256,9 @@ void Corporation::loadCondominiums(string filename) {
 void Corporation::loadReports(string filename) {
 	ifstream file;
 	string line;
-	int id;
+	int date, profitLoss;
 	vector <string> reportsInfo;
+	vector < vector <string > > maintenanceReport, propertiesReport;
 	file.open(filename.c_str());
 	int lineNumber = 0;
 	while (file.good())
@@ -306,9 +273,13 @@ void Corporation::loadReports(string filename) {
 				reportsInfo.push_back(sub);
 			} while (iss);
 
-			id = atol(reportsInfo[0].c_str());
-			if(id>0) {
-				//condominiums.push_back(condominium);
+			date = atoi(reportsInfo[0].c_str());
+			profitLoss = atof(reportsInfo[1].c_str());
+			maintenanceReport = loadMaintenanceReport(date);
+			propertiesReport = loadPropertiesReport(date);
+			Report tempreport(date,profitLoss,maintenanceReport,propertiesReport);
+			if(date>0) {
+				reports.push_back(tempreport);
 			}
 			reportsInfo.clear();
 		}
@@ -317,14 +288,82 @@ void Corporation::loadReports(string filename) {
 	file.close();
 }
 
+vector < vector <string> > Corporation::loadMaintenanceReport(int date) {
+	stringstream ssfilename;
+	ssfilename << date << "maintenance" << ".csv";
+	string filename = ssfilename.str();
+	ifstream file(filename.c_str());
+	string line;
+	vector <string> maintenanceInfo, maintenanceInfoFiltered;
+	int lineNumber = 0;
+	vector < vector <string> > result;
+	while (file.good())
+	{
+		getline(file,line);
+		if (lineNumber > 0) {
+			istringstream iss(line);
+			do
+			{
+				string sub;
+				getline(iss, sub , ',');
+				maintenanceInfo.push_back(sub);
+			} while (iss);
+			if(maintenanceInfo.size()==5) {
+				for(unsigned int i = 0; i<4; i++) {
+					maintenanceInfoFiltered.push_back(maintenanceInfo[i]);
+				}
+				result.push_back(maintenanceInfoFiltered);
+			}
+			maintenanceInfoFiltered.clear();
+			maintenanceInfo.clear();
+		}
+		lineNumber++;
+	}
+	return result;
+}
+
+vector < vector <string> > Corporation::loadPropertiesReport (int date) {
+	stringstream ssfilename;
+	ssfilename << date << "properties" << ".csv";
+	string filename = ssfilename.str();
+	ifstream file(filename.c_str());
+	string line;
+	vector <string> propertiesInfo, propertiesInfoFiltered;
+	int lineNumber = 0;
+	vector < vector <string> > result;
+	while (file.good())
+	{
+		getline(file,line);
+		if (lineNumber > 0) {
+			istringstream iss(line);
+			do
+			{
+				string sub;
+				getline(iss, sub , ',');
+				propertiesInfo.push_back(sub);
+			} while (iss);
+			if(propertiesInfo.size()==5) {
+				for(unsigned int i = 0; i<4; i++) {
+					propertiesInfoFiltered.push_back(propertiesInfo[i]);
+				}
+				result.push_back(propertiesInfoFiltered);
+			}
+			propertiesInfoFiltered.clear();
+			propertiesInfo.clear();
+		}
+	lineNumber++;
+	}
+	return result;
+}
+
 void Corporation::loadProperties(int condominiumid) {
 	stringstream ssfilename;
 	ssfilename << "properties" << condominiumid << ".csv";
 	string filename = ssfilename.str(), address;
 	ifstream file(filename.c_str());
 	string line;
-	int type, propertyFloor,Id;
-	float area;
+	int type, propertyFloor,Id, monthsLeft;
+	float area, totalDue;
 	vector <string> propertyInfo;
 	int lineNumber = 0;
 	while (file.good())
@@ -338,18 +377,20 @@ void Corporation::loadProperties(int condominiumid) {
 				getline(iss, sub , ',');
 				propertyInfo.push_back(sub);
 			} while (iss);
-			if(propertyInfo.size() == 6){
+			if(propertyInfo.size() == 8){
 				type = atol(propertyInfo[0].c_str());
 				address = propertyInfo[1];
 				area = atof(propertyInfo[2].c_str());
 				propertyFloor = atof(propertyInfo[3].c_str());
 				Id= atoi(propertyInfo[4].c_str());
+				totalDue = atof(propertyInfo[5].c_str());
+				monthsLeft = atoi(propertyInfo[6].c_str());
 				if (type==1) {
-					condominiums[searchCondominiumId(condominiumid)].addProperty(new Apartment(address,area,propertyFloor,getOwner(Id)));
+					condominiums[searchCondominiumId(condominiumid)].addProperty(new Apartment(address,area,propertyFloor,getOwner(Id),totalDue,monthsLeft));
 				} else if (type==2) {
-					condominiums[searchCondominiumId(condominiumid)].addProperty(new Office(address,area,propertyFloor,getOwner(Id)));
+					condominiums[searchCondominiumId(condominiumid)].addProperty(new Office(address,area,propertyFloor,getOwner(Id),totalDue,monthsLeft));
 				} else if (type==3) {
-					condominiums[searchCondominiumId(condominiumid)].addProperty(new Store(address,area,propertyFloor,getOwner(Id)));
+					condominiums[searchCondominiumId(condominiumid)].addProperty(new Store(address,area,propertyFloor,getOwner(Id),totalDue,monthsLeft));
 				}
 				propertyInfo.clear();
 			}
@@ -462,10 +503,10 @@ void Corporation::saveWorkers() {
 
 void Corporation::saveOwners() {
 	ofstream file("owners.csv");
-	file << "id,name,contractType,monthsLeft" << endl;
+	file << "id,name,contractType" << endl;
 	for(unsigned int i = 0; i < owners.size(); i++)
 	{
-		file << owners[i].getId() << "," << owners[i].getName() << "," << owners[i].getContractType() << "," << owners[i].getMonthsLeft();
+		file << owners[i].getId() << "," << owners[i].getName() << "," << owners[i].getContractType();
 		if (i < (owners.size() -1))
 			file << endl;
 	}
@@ -506,11 +547,11 @@ void Corporation::manageWorkers(int id){
 
 void Corporation::manageOwners(int id){
 	stringstream topic;
-	topic << "Managing " << owners[id].getName() << ", wage: " << owners[id].printType() << endl;
+	topic << "Managing " << owners[id].getName() << " - Contract: " << owners[id].printType() << endl;
 	string topic2 = topic.str();
 	Menu showMenu(topic2.c_str());
-	showMenu.addMenuItem("Edit Workers Name");
-	showMenu.addMenuItem("Edit Workers Payment Method");
+	showMenu.addMenuItem("Edit Owner's Name");
+	showMenu.addMenuItem("Edit Owner's Contract Type");
 	showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
 
 	while(showMenu.isActive()) {
@@ -524,9 +565,9 @@ void Corporation::manageOwners(int id){
 		}
 		case 2:{
 			Menu subMenu("Which type of contract will this owner have?");
-			subMenu.addMenuItem("monthly");
-			subMenu.addMenuItem("trimestal");
-			subMenu.addMenuItem("annually");
+			subMenu.addMenuItem("Monthly Payment");
+			subMenu.addMenuItem("Trimestral Payment");
+			subMenu.addMenuItem("Annually Payment");
 			int type = subMenu.showMenu();
 			owners[id].setType(type-1);
 			saveOwners();
@@ -568,33 +609,6 @@ void Corporation::manageCondominium() {
 	}
 }
 
-void Corporation::manageWorkers() {
-	int i= 0;
-	Menu showMenu("Workers Management");
-	showMenu.addMenuItem("Choose this worker to manage");
-	showMenu.addMenuItem("Go to the NEXT worker");
-	showMenu.addMenuItem("Go to the PREVIOUS worker");
-	showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
-
-	while(showMenu.isActive()) {
-		//workers[i].showCondominium();
-		switch(showMenu.showMenu()) {
-		case 1:
-			condominiums[i].manageCond(getWorkersList(),getOwnersList());
-			break;
-		case 2:
-			i = (i+1) % condominiums.size();
-			break;
-		case 3:
-			i = (i-1) % condominiums.size();
-			break;
-		default:
-			showMenu.toggleMenu();
-			break;
-		}
-	}
-}
-
 void Corporation::financeReports() {
 	Menu showMenu("Finance Reports");
 	showMenu.addMenuItem("Browse through all reports");
@@ -603,7 +617,7 @@ void Corporation::financeReports() {
 	while(showMenu.isActive()){
 		switch (showMenu.showMenu()) {
 		case 1:
-			//browse reports
+			browseReports();
 			break;
 		case 2:
 			fastForward();
@@ -618,11 +632,29 @@ void Corporation::financeReports() {
 	}
 }
 
+void Corporation::browseReports() {
+	
+}
+
+void Corporation::saveReports(string filename) {
+	ofstream file(filename.c_str());
+	file << "date,totalProfitLoss" << endl;
+	for(unsigned int i = 0; i < reports.size(); i++)
+	{
+		file << reports[i].getDate() << "," << reports[i].getProfitLoss();
+		if (i < (reports.size() -1))
+			file << endl;
+		reports[i].saveMaintenanceReport();
+		reports[i].savePropertiesReport();
+	}
+	file.close();
+}
+
 void Corporation::fastForward() {
 	vector <int> fixedCosts;
 	vector <float> profitlosses;
 	vector <string> negativeCondominiums;
-	vector <string> negCondPerMonth;
+	vector < vector <string> > maintenanceReportVec, propertiesReportVec, tempMaintenance, tempProperties;
 	unsigned int monthsToAdvance;
 	stringstream message;
 	float profitlosssum = 0, fixed, profitloss;
@@ -642,32 +674,35 @@ void Corporation::fastForward() {
 			if(profitloss<0) {
 				message << condominiums[j].getName() << " - Month " << getMonth() << "/" << getYear();
 				negativeCondominiums.push_back(message.str());
-				negCondPerMonth.clear();
-				negCondPerMonth.push_back(condominiums[j].getName());
 				message.str("");
 				message.clear();
 			}
-			cout << endl << condominiums[j].getName() << " generated a total profit/loss of " << profitloss << "€" << endl;
+			cout << endl << condominiums[j].getName() << " generated a total profit/loss of " << profitloss << " euros" << endl;
+			tempMaintenance = condominiums[j].getMaintenanceReport();
+			tempProperties = condominiums[j].getPropertiesReport();
+			for(unsigned int w=0; w<tempMaintenance.size(); w++) {
+				maintenanceReportVec.push_back(tempMaintenance[w]);
+			}
+			for(unsigned int w=0; w<tempProperties.size(); w++) {
+				propertiesReportVec.push_back(tempProperties[w]);
+			}
 			condominiums[j].advanceOneMonth();
 		}
 		// passes the information of the current month to the report
-		Report report;
-		report.setDate(date);
-		report.setNegConds(negCondPerMonth);
-		report.setProfitLosses(profitlosses);
+		Report report(date,profitloss, maintenanceReportVec, propertiesReportVec);
 		addReport(report);
-		report.saveReport();
+		saveReports("reports.csv");
 		incDate();
 	}
 	cout << endl << "Months Fast Forwarded: " << monthsToAdvance << endl;
-	cout << "Total Profit/Loss: " << profitlosssum << "€" << endl;
-	cout << "Average Profit/Loss " << profitlosssum/monthsToAdvance << "€" << endl;
-	cout << "List of negative condominius: " << endl;
+	cout << "Total Profit/Loss: " << profitlosssum << " euros" << endl;
+	cout << "Average Profit/Loss per month: " << profitlosssum/monthsToAdvance << " euros " << endl;
+	cout << "List of condominius with a monthly loss: " << endl;
 	for(unsigned int i=0; i<negativeCondominiums.size(); i++) {
 		cout << negativeCondominiums[i] << endl;
 	}
 	cout << endl;
-
+	saveCondominiums("condominiums.csv");
 }
 
 bool Corporation::isEmpty() {
@@ -691,7 +726,7 @@ void Corporation::showWorker() {
 		showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
 
 		while(showMenu.isActive()) {
-			cout << "Name: " << workers[i].getName() << " ,Wage: " << workers[i].getWage() << endl;
+			cout << "Name: " << workers[i].getName() << ", wage: " << workers[i].getWage() << endl;
 			switch(showMenu.showMenu()) {
 			case 1:
 				manageWorkers(i);
@@ -712,7 +747,7 @@ void Corporation::showWorker() {
 
 void Corporation::showOwner() {
 	if(owners.size()==0){
-		cout << "There are no owners in this corporation, please add one first" << endl;
+		cout << "There are no owners in this corporation, please add one first" << endl << endl;
 	}else {
 
 		int i= 0;
@@ -723,7 +758,7 @@ void Corporation::showOwner() {
 		showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
 
 		while(showMenu.isActive()) {
-			cout << "Name: " << owners[i].getName() << " ,contractType: " << owners[i].printType() << endl;
+			cout << "Name: " << owners[i].getName() << " - Contract: " << owners[i].printType() << endl;
 			switch(showMenu.showMenu()) {
 			case 1:
 				manageOwners(i);
