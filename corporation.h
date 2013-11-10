@@ -79,6 +79,7 @@ public:
 	void manageWorkers();
 	void showWorker();
 	void showOwner();
+	void browseReports();
 
 	/* search & others */
 	int searchCondominiumId(int);
