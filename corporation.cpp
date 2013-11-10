@@ -633,7 +633,36 @@ void Corporation::financeReports() {
 }
 
 void Corporation::browseReports() {
-	
+	int i= 0;
+
+	cout << endl;
+	Menu showMenu("Reports List");
+	showMenu.addMenuItem("List all maintenance performed");
+	showMenu.addMenuItem("List all properties that paid");
+	showMenu.addMenuItem("Go to the NEXT report");
+	showMenu.addMenuItem("Go to the PREVIOUS report");
+	showMenu.addMenuItem("Go BACK to the PREVIOUS menu");
+
+	while(showMenu.isActive()) {
+		reports[i].showInfo();
+		switch(showMenu.showMenu()) {
+		case 1:
+			reports[i].showMaintenance();
+			break;
+		case 2:
+			reports[i].showProperties();
+			break;
+		case 3:
+			i = (i+1) % reports.size();
+			break;
+		case 4:
+			i = (i-1) % reports.size();
+			break;
+		default:
+			showMenu.toggleMenu();
+			break;
+		}
+	}
 }
 
 void Corporation::saveReports(string filename) {
@@ -692,6 +721,8 @@ void Corporation::fastForward() {
 		Report report(date,profitloss, maintenanceReportVec, propertiesReportVec);
 		addReport(report);
 		saveReports("reports.csv");
+		maintenanceReportVec.clear();
+		propertiesReportVec.clear();
 		incDate();
 	}
 	cout << endl << "Months Fast Forwarded: " << monthsToAdvance << endl;

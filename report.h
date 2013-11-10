@@ -6,6 +6,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+
+#include "menu.h"
 using namespace std;
 
 class Report {
@@ -42,6 +44,9 @@ public:
 	int getYear();
 	int getDate();
 	float getProfitLoss();
+	void showInfo();
+	void showProperties();
+	void showMaintenance();
 
 	/* save report */
 	void saveMaintenanceReport();

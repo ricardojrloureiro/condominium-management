@@ -51,6 +51,36 @@ void Report::setDate(int date) {
 	this->date = date;
 }
 
+void Report::showInfo() {
+	cout << "Report for " << getMonth() << "/" << getYear() << endl << endl;
+	cout << "Total profit/loss: " << getProfitLoss() << " euros" << endl;
+	cout << "# of maintenances paid: " << maintenance.size() << endl;
+	cout << "# of properties payments received: " << properties.size() << endl;
+	cout << endl;
+}
+
+void Report::showMaintenance() {
+	cout << "Maintenance performed on the " << getMonth() << "/" << getYear() << endl << endl;
+	for(unsigned int i=0; i<maintenance.size(); i++) {
+		cout << maintenance[i].name << endl;
+		cout << "Total cost: " << maintenance[i].cost << " euros" << endl << endl;
+	}
+	Menu menu("Continue");
+	menu.addMenuItem("Continue");
+	menu.showMenu();
+}
+
+void Report::showProperties() {
+	cout << "Properties paid on the " << getMonth() << "/" << getYear() << endl << endl;
+	for(unsigned int i=0; i<properties.size(); i++) {
+		cout << properties[i].address << endl;
+		cout << "Total paid: " << properties[i].amountPaid << " euros" << endl << endl;
+	}
+	Menu menu("Continue");
+	menu.addMenuItem("Continue");
+	menu.showMenu();
+}
+
 void Report::saveMaintenanceReport() {
 	stringstream ssfilename;
 	ssfilename << date << "maintenance" << ".csv";
