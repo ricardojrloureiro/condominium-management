@@ -145,15 +145,15 @@ public:
 	string getName();
 
 	/**
-	 * @todo:
-	 * saber ao certo o que faz a funcao.
+	 * do:
+	 * Checks everything from the maintenance and returns a 2d vector of maintenances.
 	 * returns Maintenances Report
 	 */
 	vector < vector <string> > getMaintenanceReport();
 
 	/**
-	 * @todo:
-	 * saber ao certo o que faz a funcao.
+	 * do:
+	 * Checks everything from the properties and returns a 2d vector of properties reports.
 	 * returns Properties Report
 	 */
 	vector < vector <string> > getPropertiesReport();
