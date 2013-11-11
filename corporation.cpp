@@ -617,10 +617,18 @@ void Corporation::financeReports() {
 	while(showMenu.isActive()){
 		switch (showMenu.showMenu()) {
 		case 1:
+			if(reports.size()!=0){
 			browseReports();
+			} else {
+				cout << "There aren't any reports so far." << endl;
+			}
 			break;
 		case 2:
-			fastForward();
+			if(condominiums.size() != 0){
+				fastForward();
+			} else {
+				cout << "There aren't any condominiuns so far." << endl;
+			}
 			break;
 		case 3:
 			showMenu.toggleMenu();
