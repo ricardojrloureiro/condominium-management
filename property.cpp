@@ -3,7 +3,7 @@
 // constructors
 
 Property::Property(string address, float area, int floor,Owner *owner) {
-	totalDue=0;
+	totalDue=0.0;
 	this->address = address;
 	this->area = area;
 	this->floor = floor;
@@ -87,7 +87,7 @@ string Store::printType() const {
 }
 
 Property::Property() {
-	totalDue = 0;
+	totalDue = 0.0;
 	floor = 0;
 	area=0;
 	address = "";

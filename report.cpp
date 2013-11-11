@@ -85,7 +85,7 @@ void Report::saveMaintenanceReport() {
 	stringstream ssfilename;
 	ssfilename << date << "maintenance" << ".csv";
 	string filename = ssfilename.str();
-	ofstream file(filename.c_str());
+	ofstream file(filename.c_str(),ios::app);
 	file << "name" << "," << "condominiumid" << "," << "workerid" << "," << "cost" << endl;
 	for(unsigned int i = 0; i < maintenance.size(); i++)
 	{
@@ -100,7 +100,7 @@ void Report::savePropertiesReport() {
 	stringstream ssfilename;
 	ssfilename << date << "properties" << ".csv";
 	string filename = ssfilename.str();
-	ofstream file(filename.c_str());
+	ofstream file(filename.c_str(),ios::app);
 	file << "address" << "," << "condominiumid" << "," << "ownerid" << "," << "amountPaid" << endl;
 	for(unsigned int i = 0; i < properties.size(); i++)
 	{

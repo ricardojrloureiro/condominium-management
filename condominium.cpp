@@ -533,6 +533,7 @@ vector <vector <string> > Condominium::getMaintenanceReport() {
 
 vector <vector <string> > Condominium::getPropertiesReport() {
 	vector <vector <string> > result;
+	float lastDue=0;
 	for(unsigned int i=0; i < properties.size(); i++) {
 		if(properties[i]->payMonth()) {
 			vector <string> temp;
@@ -542,6 +543,18 @@ vector <vector <string> > Condominium::getPropertiesReport() {
 			temp.push_back(idConvert.str());
 			ownerConvert << properties[i]->getOwnerId();
 			temp.push_back(ownerConvert.str());
+			switch (properties[i]->returnType()) {
+				case 1:
+					lastDue = this->baseApartmentCost*properties[i]->getArea();
+					break;
+				case 2:
+					lastDue = this->baseOfficeCost*properties[i]->getArea();
+					break;
+				case 3:
+					lastDue = this->baseStoreCost*properties[i]->getArea();
+					break;
+			}
+			properties[i]->addDue(lastDue);
 			costConvert << properties[i]->getDue();
 			temp.push_back(costConvert.str());
 			result.push_back(temp);
