@@ -12,20 +12,74 @@ class Owner {
 	static long ownerId;
 	long id;
 public:
+
+	/**
+	 * Do:
+	 *  constructor
+	 * @param string owner name;
+	 * @param int owner contract;
+	 */
 	Owner(string,int);
-	Owner(string, int, int);
+
+	/**
+	 * Do:
+	 *  constructor
+	 * @param string owner name;
+	 * @param int owner contract;
+	 * @param int owners id;
+	 */
 	Owner(int,string,int);
 
-	//get functions
+	/**
+	 * Do:
+	 * returns the Owners Id.
+	 */
 	int getId();
+
+	/**
+	 * Do:
+	 *  returns the Owners Name.
+	 */
 	string getName();
+
+	/**
+	 * Do:
+	 * return the Owners Contract Type as an int.
+	 * if it is 0 -> monthly;
+	 * if it is 1 -> trimestral;
+	 * if it is 2 -> annually.
+	 */
 	int getContractType();
-	int getMonthsLeft();
+
+
+	/**
+	 * Do:
+	 * return the Owners Contract Type as a string.
+	 * if it is 0 -> "monthly";
+	 * if it is 1 -> "trimestral";
+	 * if it is 2 -> "annually".
+	 */
 	string printType();
 
-	// set functions
+	/**
+	 * Do:
+	 *  Set the current owner's name to the one in the parameter.
+	 * @param string Owners Name;
+	 */
 	void setName(string);
+
+	/**
+	 * Do:
+	 *  Set the current owner's contract type to the one in the parameter.
+	 * @param int Owners Type;
+	 */
 	void setType(int);
+
+	/**
+	 * Do:
+	 *  Set the current owner Id.
+	 * @param int Owners Id;
+	 */
 	void setId(int);
 };
 
