@@ -245,8 +245,39 @@ void Corporation::loadCondominiums(string filename) {
 				condominiums.push_back(condominium);
 				loadProperties(id);
 				loadMaintenance(id);
+				loadMeetings(id);
 			}
 			condominiumInfo.clear();
+		}
+		lineNumber++;
+	}
+	file.close();
+}
+
+void Corporation::loadMeetings(int id) {
+	stringstream ssfilename;
+	ssfilename << "meetingCond" << id << ".csv";
+	string filename = ssfilename.str();
+	ifstream file(filename.c_str());
+	string line;
+	int lineNumber = 0;
+	vector<string> maintenanceInfo;
+	while (file.good())
+	{
+		getline(file,line);
+		if (lineNumber > 0) {
+			istringstream iss(line);
+			do
+			{
+				string sub;
+				getline(iss, sub , ',');
+				maintenanceInfo.push_back(sub);
+			} while (iss);
+			int date = atoi(maintenanceInfo[0].c_str());
+			maintenanceInfo.erase(maintenanceInfo.begin());
+			Meeting m1(date,maintenanceInfo);
+			condominiums[searchCondominiumId(id)].addMeeting(m1);
+			maintenanceInfo.clear();
 		}
 		lineNumber++;
 	}
@@ -351,7 +382,7 @@ vector < vector <string> > Corporation::loadPropertiesReport (int date) {
 			propertiesInfoFiltered.clear();
 			propertiesInfo.clear();
 		}
-	lineNumber++;
+		lineNumber++;
 	}
 	return result;
 }
@@ -594,7 +625,7 @@ void Corporation::manageCondominium() {
 		condominiums[i].showCondominium();
 		switch(showMenu.showMenu()) {
 		case 1:
-			condominiums[i].manageCond(getWorkersList(),getOwnersList());
+			condominiums[i].manageCond(getWorkersList(),getOwnersList(),date);
 			break;
 		case 2:
 			i = (i+1) % condominiums.size();
@@ -618,7 +649,7 @@ void Corporation::financeReports() {
 		switch (showMenu.showMenu()) {
 		case 1:
 			if(reports.size()!=0){
-			browseReports();
+				browseReports();
 			} else {
 				cout << "There aren't any reports so far." << endl;
 			}
@@ -807,6 +838,36 @@ void Corporation::showOwner() {
 				break;
 			case 3:
 				i = (i-1) % owners.size();
+				break;
+			default:
+				showMenu.toggleMenu();
+				break;
+			}
+		}
+	}
+}
+
+void Corporation::condEvents(int date) {
+	if(condominiums.size()==0){
+		cout << "There are no condominiums in this corporation, please add one first" << endl << endl;
+	}else {
+		int i=0;
+		Menu showMenu("Condominium list");
+		showMenu.addMenuItem("Choose this condominium to create an event");
+		showMenu.addMenuItem("Go to the NEXT condominium");
+		showMenu.addMenuItem("Go to the PREVIOUS condominium");
+		showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
+		while(showMenu.isActive()) {
+			cout << "Name: " << condominiums[i].getName() << " | Properties# " << condominiums[i].getPropertiesSize() << endl;
+			switch (showMenu.showMenu()) {
+			case 1:
+				condominiums[i].arrangeMeeting(date);
+				break;
+			case 2:
+				i = (i+1) % condominiums.size();
+				break;
+			case 3:
+				i = (i-1) % condominiums.size();
 				break;
 			default:
 				showMenu.toggleMenu();

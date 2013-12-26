@@ -19,6 +19,7 @@ int main() {
 	mainMenu.addMenuItem("Manage Workers");
 	mainMenu.addMenuItem("Manage Owners");
 	mainMenu.addMenuItem("Finance Reports");
+	mainMenu.addMenuItem("Condominium Events");
 	mainMenu.addMenuItem("Quit");
 
 	Menu condominiumsMenu("Condominiums");
@@ -103,9 +104,14 @@ int main() {
 			corporation.financeReports();
 			break;
 		case 5:
+			corporation.condEvents(corporation.getDate());
+			break;
+		case 6:
 			mainMenu.toggleMenu();
 			break;
 
 		}
 	}
+
 }
+

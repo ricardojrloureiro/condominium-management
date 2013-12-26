@@ -54,7 +54,7 @@ string Property::getAddress() {
 	return address;
 }
 
-float Property::getArea() {
+float Property::getArea() const{
 	return area;
 }
 

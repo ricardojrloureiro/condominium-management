@@ -21,6 +21,10 @@ protected:
 	int monthsLeft;
 public:
 
+	bool operator <(const Property& p1) const{
+		cout << "area: " << area << " OUTRO: " << p1.getArea() << endl;
+		return area > p1.getArea();
+	}
 	/**
 	 * Do:
 	 *  constructor
@@ -60,7 +64,7 @@ public:
 	 * Do:
 	 * returns the property area.
 	 */
-	float getArea();
+	float getArea() const;
 
 	/**
 	 * Do:
@@ -154,6 +158,7 @@ public:
 	 *  sets due to 0.
 	 */
 	void resetDue();
+
 };
 
 class Apartment : public Property {
@@ -163,7 +168,6 @@ public:
 	 *  constructor.
 	 */
 	Apartment();
-
 	/**
 	 * Do:
 	 *  overload constructor.
@@ -200,7 +204,6 @@ public:
 
 class Office : public Property {
 public:
-
 	/**
 	 * Do:
 	 *  constructor.
@@ -243,7 +246,6 @@ public:
 
 class Store : public Property {
 public:
-
 	/**
 	 * Do:
 	 *  constructor.
@@ -282,6 +284,30 @@ public:
 	 *  return "Store".
 	 */
 	string printType() const;
+
+};
+
+class Equity {
+	int floor;
+	float area;
+	string address;
+	vector<float>baseCost;
+public:
+	Equity(int floor,float area, string address,vector<float>base): floor(floor),area(area),address(address),baseCost(base){}
+	float getArea()const {return area;}
+	int getFloor()const {return floor;}
+	string getAddress()const {return address;}
+	vector<float> getBases() const {return baseCost;}
+	bool operator <(const Equity &e1) const{
+		vector<float> atual = e1.getBases();
+		float cost1,cost2;
+		cost1 = area*baseCost[1] + floor*baseCost[2] + baseCost[3];
+		cost2 = e1.getArea()*atual[1] + e1.getFloor()*atual[2] + atual[3];
+		return cost1<cost2;
+	}
+	int getCost() const{
+		return area*baseCost[1] + floor*baseCost[2] + baseCost[3];
+	}
 };
 
 #endif /* PROPERTY_H_ */

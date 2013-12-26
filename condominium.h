@@ -8,11 +8,15 @@
 
 #include "worker.h"
 #include "property.h"
+#include "meeting.h"
 #include "menu.h"
 #include "owner.h"
 #include <stdlib.h>
+#include <queue>
+#include <stack>
 
 using namespace std;
+
 
 class Condominium {
 	long id;
@@ -24,10 +28,16 @@ class Condominium {
 	string name;
 	vector <Maintenance*> maintenance;
 	vector <Property*> properties;
+	priority_queue<Equity> priorProperties;
+	vector<Meeting> meetings;
 	vector <int> fixedCosts; //monthly costs for water, electricity, ...
 	static long condominiumId;
 
 public:
+
+	bool operator ==(Condominium c2){
+		return id == c2.getId();
+	}
 
 	/**
 	 * Do:
@@ -63,7 +73,7 @@ public:
 
 	/**
 	 * Do:
-	 * Shows a menu to the user that i'll help to add a property to the condominium.
+	 * Shows a menu to the user that will help to add a property to the condominium.
 	 * Allows to add between a Office, Apartment or a Store and associate it with a owner.
 	 * @param vector<Owner*> vector of owners.
 	 */
@@ -199,7 +209,7 @@ public:
 	 * @param vector<Worker*> corporation's workers.
 	 * @param vector<Owner*> owners.
 	 */
-	void manageCond(vector<Worker*>,vector<Owner*>);
+	void manageCond(vector<Worker*>,vector<Owner*>,int);
 
 	/**
 	 * Do:
@@ -257,6 +267,9 @@ public:
 	 * Removes a certain property from the condominium list.
 	 * @param Property* property to remove.
 	 */
+
+	void saveMeetings();
+
 	bool removeProperty(Property*);
 
 	/**
@@ -289,5 +302,25 @@ public:
 	 * if it has returns false other ways returns true.
 	 * */
 	bool isEmpty();
+
+	int getPropertiesSize() {return properties.size();}
+
+	void condShowPrior();
+	void arrangeMeeting(int);
+	void confirmAttendance(int);
+	void addMeeting(Meeting m1) {
+		meetings.push_back(m1);
+	}
+	template<class T>
+	bool existeEm(vector<T>v,T v1) {
+		for(typename vector<T>::iterator it = v.begin(); it != v.end(); ++it){
+			if((*it)==v1) {
+				return true;
+			}
+		}
+		return false;
+	}
 };
+
+
 #endif /* CONDOMINIUM_H_ */

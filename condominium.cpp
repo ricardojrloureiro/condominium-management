@@ -1,5 +1,6 @@
 #include "condominium.h"
-
+#include "menu.h"
+#include "Meeting.h"
 long Condominium::condominiumId = 0;
 
 /* constructor */
@@ -46,6 +47,25 @@ void Condominium::addMaintenance(Maintenance* m1){
 
 void Condominium::addProperty(Property* p1){
 	properties.push_back(p1);
+	vector<float> baseCost;
+	baseCost.push_back(areaMultiplier);
+	baseCost.push_back(floorMultiplier);
+	switch (p1->returnType()) {
+	case 1:
+		baseCost.push_back(baseApartmentCost);
+		break;
+	case 2:
+		baseCost.push_back(baseOfficeCost);
+		break;
+	case 3:
+		baseCost.push_back(baseStoreCost);
+		break;
+	default:
+		break;
+	}
+
+	Equity e1(p1->getFloor(),p1->getArea(),p1->getAddress(),baseCost);
+	priorProperties.push(e1);
 }
 
 void Condominium::addProptoCond(vector <Owner*> owners) {
@@ -196,7 +216,7 @@ void Condominium::setBaseStoreCost(float baseStoreCost) {
 
 /*Manage functions */
 
-void Condominium::manageCond(vector <Worker*> workers, vector<Owner*> owners) {
+void Condominium::manageCond(vector <Worker*> workers, vector<Owner*> owners,int date) {
 	stringstream topic;
 	topic << "Managing " << endl;
 	string topic2 = topic.str();
@@ -208,6 +228,7 @@ void Condominium::manageCond(vector <Worker*> workers, vector<Owner*> owners) {
 	showMenu.addMenuItem("Remove maintenance task");
 	showMenu.addMenuItem("Manage the existing maintenance tasks");
 	showMenu.addMenuItem("Manage the condominium fixed values");
+	showMenu.addMenuItem("Confirm meeting's attendances");
 	showMenu.addMenuItem("Go BACK to the previous Menu");
 
 	while(showMenu.isActive()) {
@@ -256,6 +277,15 @@ void Condominium::manageCond(vector <Worker*> workers, vector<Owner*> owners) {
 		case 7:
 			manageCondFixedValues();
 			break;
+		case 8:{
+			if(meetings.size()==0) {
+				cout << "There are no meetings yet. Please schedule one first." << endl << endl;
+			}
+			else {
+				confirmAttendance(date);
+			}
+		}
+		break;
 		default:
 			showMenu.toggleMenu();
 			break;
@@ -407,6 +437,24 @@ void Condominium::saveMaintenances() {
 	file.close();
 }
 
+void Condominium::saveMeetings() {
+	stringstream ssfilename;
+	ssfilename << "meetingCond" << id << ".csv";
+	string filename = ssfilename.str();
+	ofstream file(filename.c_str());
+	file << "Date" << "," << "Attending Properties" << endl;
+
+	for(unsigned int i=0;i<meetings.size();i++){
+		file << meetings[i].getDate() ;
+		for(unsigned int j=0;j<meetings[i].getAttendance().size();j++){
+			file << "," << meetings[i].getAttendance()[j];
+		}
+		if(i < (meetings.size() -1))
+			file << endl;
+	}
+
+	file.close();
+}
 /* remove functions */
 
 void Condominium::removePropertyFromCond() {
@@ -544,15 +592,15 @@ vector <vector <string> > Condominium::getPropertiesReport() {
 			ownerConvert << properties[i]->getOwnerId();
 			temp.push_back(ownerConvert.str());
 			switch (properties[i]->returnType()) {
-				case 1:
-					lastDue = this->baseApartmentCost*properties[i]->getArea();
-					break;
-				case 2:
-					lastDue = this->baseOfficeCost*properties[i]->getArea();
-					break;
-				case 3:
-					lastDue = this->baseStoreCost*properties[i]->getArea();
-					break;
+			case 1:
+				lastDue = this->baseApartmentCost*properties[i]->getArea();
+				break;
+			case 2:
+				lastDue = this->baseOfficeCost*properties[i]->getArea();
+				break;
+			case 3:
+				lastDue = this->baseStoreCost*properties[i]->getArea();
+				break;
 			}
 			properties[i]->addDue(lastDue);
 			costConvert << properties[i]->getDue();
@@ -618,3 +666,93 @@ void Condominium::manageCondFixedValues() {
 	}
 	}
 }
+
+void Condominium::condShowPrior() {
+	priority_queue<Equity> temp = priorProperties;
+	while(!temp.empty()){
+		cout << temp.top().getAddress() << " - Cost: " << temp.top().getCost() << " euros" << endl;
+		temp.pop();
+	}
+}
+
+void Condominium::arrangeMeeting(int currentDate) {
+	condShowPrior();
+	if(meetings.size()!=0){
+		if(meetings[meetings.size()-1].getDate() >= currentDate){
+			cout << "There is already a meeting scheduled for this cond, ";
+			cout << "scheduled date: " << meetings[meetings.size()-1].getDate()%100 << " - " << meetings[meetings.size()-1].getDate()/100 << endl;
+			return;
+		}
+	}
+	cout << "Choose one date for the meeting, it should be whithin 2years max." << endl << endl;
+	cout << "Current date: " << currentDate%100 << " - " << currentDate/100 << endl;
+	int month=0;
+	int year=0;
+
+	while(year<currentDate/100||year>currentDate/100+2){
+		year = Menu::promptInt("Choose a year (2 year max):");
+	}
+	bool correctMonth=false;
+	while(!correctMonth){
+		month = Menu::promptInt("Choose a month (between the current month and 12):");
+		if(year == currentDate/100) {
+			if(month >= currentDate%100 && month < 13) {
+				correctMonth=true;
+			}
+		}
+		else if(month>0&&month<13){
+			correctMonth = true;
+		}
+	}
+	cout << "The meeting has been scheduled" << endl << endl;
+
+	while(!priorProperties.empty()){
+		priorProperties.pop();
+	}
+
+	int date = year*100+month;
+	Meeting m1(date);
+	meetings.push_back(m1);
+	saveMeetings();
+}
+
+void Condominium::confirmAttendance(int currentDate) {
+	if(meetings.size()!=0){
+		if(meetings[meetings.size()-1].getDate() >= currentDate){
+			vector<string> atual = meetings[meetings.size()-1].getAttendance();
+			bool found = true;
+			while(found==true && !priorProperties.empty()){
+				string top = priorProperties.top().getAddress();
+				if(existeEm(atual,top) == true){
+					priorProperties.pop();
+				} else found = false;
+			}
+		}}
+	stringstream title;
+	int option;
+	while(!priorProperties.empty() && option != 3){
+		title << "The next property that needs confirmation is " << priorProperties.top().getAddress() << endl;
+		Menu manage(title.str());
+		manage.addMenuItem("Confirm presence");
+		manage.addMenuItem("Reject presence");
+		manage.addMenuItem("Go back");
+		option=manage.showMenu();
+		switch (option) {
+		case 1:{
+			meetings[meetings.size()-1].addAttendance(priorProperties.top().getAddress());
+			priorProperties.pop();
+		}
+		break;
+		case 2:
+			priorProperties.pop();
+			break;
+		case 3:
+			manage.toggleMenu();
+			break;
+		}
+		title.str("");
+	}
+	saveMeetings();
+}
+
+

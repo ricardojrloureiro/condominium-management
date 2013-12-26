@@ -14,6 +14,7 @@
 #include "property.h"
 #include "owner.h"
 #include "report.h"
+#include "meeting.h"
 
 using namespace std;
 
@@ -24,6 +25,8 @@ class Corporation {
 	vector <Report> reports;
 	int date; // mmaaaa
 public:
+
+	int getDate() {return date;}
 
 	/**
 	 * Do:
@@ -93,6 +96,8 @@ public:
 	 * @param string filename.
 	 */
 	void loadOwners(string);
+
+	void loadMeetings(int);
 
 	/**
 	 * Do:
@@ -304,9 +309,18 @@ public:
 
 	/**
 	 * Do:
+	 * Allows each condominium to manage their own event and realise it.
+	 */
+	void condEvents(int);
+
+	/**
+	 * Do:
 	 * Check if there is any condominium returns true if there isnt or if there is returns false.
 	 */
 	bool isEmpty();
+
+
+
 };
 
 #endif /* CORPORATION_H_ */
