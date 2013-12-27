@@ -34,13 +34,13 @@ public:
 	 * Do:
 	 * returns the Owners Id.
 	 */
-	int getId();
+	int getId()const;
 
 	/**
 	 * Do:
 	 *  returns the Owners Name.
 	 */
-	string getName();
+	string getName() const;
 
 	/**
 	 * Do:
@@ -59,7 +59,7 @@ public:
 	 * if it is 1 -> "trimestral";
 	 * if it is 2 -> "annually".
 	 */
-	string printType();
+	string printType() const;
 
 	/**
 	 * Do:

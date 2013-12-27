@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <ctime>
 #include <iostream>
+#include <tr1/unordered_set>
+#include <queue>
 
 #include "condominium.h"
 #include "worker.h"
@@ -17,14 +19,28 @@
 #include "meeting.h"
 
 using namespace std;
+struct ownerHash
+{
+	int operator() (const Owner & o1) const {
+		return o1.getId();
+	}
+	bool operator() (const Owner & o1, const Owner & o2) const{
+		return o1.getId() == o2.getId();
+	}
+};
+typedef tr1::unordered_set<Owner, ownerHash, ownerHash> HashOwners;
+
 
 class Corporation {
 	vector <Condominium> condominiums;
 	vector <Worker> workers;
 	vector <Owner> owners;
 	vector <Report> reports;
+	HashOwners possibleOwners;
 	int date; // mmaaaa
 public:
+	void showPossibleOwners();
+	void addToPossibleOwners(Owner);
 
 	int getDate() {return date;}
 
@@ -319,7 +335,7 @@ public:
 	 */
 	bool isEmpty();
 
-
+	void fillPossibleOwners();
 
 };
 

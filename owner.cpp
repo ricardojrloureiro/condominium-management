@@ -17,14 +17,14 @@ Owner::Owner(string name, int contractType) {
 	this->contract = contractType;
 }
 
-int Owner::getId() {
+int Owner::getId() const {
 	return id;
 }
 
 void Owner::setId(int id){
 	this->id = id;
 }
-string Owner::getName() {
+string Owner::getName() const {
 	return name;
 }
 
@@ -32,7 +32,7 @@ int Owner::getContractType() {
 	return contract;
 }
 
-string Owner::printType() {
+string Owner::printType() const{
 	switch (contract) {
 		case 0:
 			return "monthly";

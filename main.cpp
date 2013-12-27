@@ -36,6 +36,7 @@ int main() {
 	Menu ownersMenu("Manage Owners");
 	ownersMenu.addMenuItem("Add new owner");
 	ownersMenu.addMenuItem("Manage existing owner");
+	ownersMenu.addMenuItem("Check owners without properties");
 	ownersMenu.addMenuItem("Return to Main Menu");
 
 	while(mainMenu.isActive()) {
@@ -60,6 +61,7 @@ int main() {
 					} else {
 						corporation.manageCondominium();
 						corporation.saveCondominiums("condominiums.csv");
+						corporation.fillPossibleOwners();
 					}
 					break;
 				case 4:
@@ -95,6 +97,9 @@ int main() {
 					corporation.showOwner();
 					break;
 				case 3:
+					corporation.showPossibleOwners();
+					break;
+				case 4:
 					ownersMenu.toggleMenu();
 					break;
 				}

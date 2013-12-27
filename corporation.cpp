@@ -7,7 +7,7 @@ Corporation::Corporation(){
 	loadOwners("owners.csv");
 	loadCondominiums("condominiums.csv");
 	loadReports("reports.csv");
-
+	fillPossibleOwners();
 	if(reports.size()==0){
 		time_t now = time(0);
 		tm *ltm = localtime(&now);
@@ -121,6 +121,7 @@ void Corporation::addOwner() {
 	contractType = subMenu.showMenu();
 	Owner owner(name,(contractType- 1));
 	addOwner(owner);
+	addToPossibleOwners(owner);
 	saveOwners();
 }
 
@@ -212,7 +213,6 @@ void Corporation::loadOwners(string filename){
 			contractType = atoi(ownersInfo[2].c_str());
 			Owner otemp(id,name,contractType);
 			owners.push_back(otemp);
-
 			ownersInfo.clear();
 		}
 		lineNumber++;
@@ -275,7 +275,13 @@ void Corporation::loadMeetings(int id) {
 			} while (iss);
 			int date = atoi(maintenanceInfo[0].c_str());
 			maintenanceInfo.erase(maintenanceInfo.begin());
-			Meeting m1(date,maintenanceInfo);
+			string subject = maintenanceInfo[0].c_str();
+			maintenanceInfo.erase(maintenanceInfo.begin());
+			vector<int> ids;
+			for(unsigned int i=0;i<maintenanceInfo.size();i++){
+				ids.push_back(atoi(maintenanceInfo[i].c_str()));
+			}
+			Meeting m1(date,ids,subject);
 			condominiums[searchCondominiumId(id)].addMeeting(m1);
 			maintenanceInfo.clear();
 		}
@@ -591,6 +597,7 @@ void Corporation::manageOwners(int id){
 			string name = Menu::promptString("New Name: ");
 			owners[id].setName(name);
 			saveOwners();
+			addToPossibleOwners(owners[id]);
 			showMenu.toggleMenu();
 			break;
 		}
@@ -602,6 +609,7 @@ void Corporation::manageOwners(int id){
 			int type = subMenu.showMenu();
 			owners[id].setType(type-1);
 			saveOwners();
+			addToPossibleOwners(owners[id]);
 			showMenu.toggleMenu();
 			break;
 		}
@@ -823,8 +831,8 @@ void Corporation::showOwner() {
 		int i= 0;
 		Menu showMenu("Owners Management");
 		showMenu.addMenuItem("Choose this owner to manage");
-		showMenu.addMenuItem("Go to the NEXT worker");
-		showMenu.addMenuItem("Go to the PREVIOUS worker");
+		showMenu.addMenuItem("Go to the NEXT owner");
+		showMenu.addMenuItem("Go to the PREVIOUS owner");
 		showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
 
 		while(showMenu.isActive()) {
@@ -840,6 +848,32 @@ void Corporation::showOwner() {
 				i = (i-1) % owners.size();
 				break;
 			default:
+				showMenu.toggleMenu();
+				break;
+			}
+		}
+	}
+}
+
+void Corporation::showPossibleOwners() {
+	if(possibleOwners.size()==0){
+		cout << "There are no past/new owners that have no properties in this corporation" << endl << endl;
+	}else {
+		Menu showMenu("Owners Management");
+		showMenu.addMenuItem("Go to the NEXT owner");
+		showMenu.addMenuItem("Go BACK to the PREVIOUS Menu");
+
+		while(showMenu.isActive()) {
+			HashOwners::const_iterator it=possibleOwners.begin();
+			cout << "Name: " << it->getName() << " - Type of contract:" << it->printType() << endl;
+			switch(showMenu.showMenu()) {
+			case 1:
+				it++;
+				if(it==possibleOwners.end()){
+					it = possibleOwners.begin();
+				}
+				break;
+			case 2:
 				showMenu.toggleMenu();
 				break;
 			}
@@ -873,6 +907,40 @@ void Corporation::condEvents(int date) {
 				showMenu.toggleMenu();
 				break;
 			}
+		}
+	}
+}
+
+void Corporation::addToPossibleOwners(Owner o1) {
+	HashOwners::const_iterator it = possibleOwners.find(o1);
+	if(it == possibleOwners.end()){
+		possibleOwners.insert(o1);
+	} else {
+		possibleOwners.erase(*it);
+		possibleOwners.insert(o1);
+	}
+}
+
+void Corporation::fillPossibleOwners() {
+	if(owners.size()==0){
+		return;
+	}
+	possibleOwners.clear();
+
+	for(unsigned int i=0;i<owners.size();i++){
+		bool temCasa=false;
+		for(unsigned int j=0;j<condominiums.size();j++) {
+			vector<Property*> atual=condominiums[j].getProperties();
+			for(unsigned int z=0;z<atual.size();z++) {
+				if(atual[z]->getOwnerId() == owners[i].getId()) {
+					temCasa=true;
+				}
+			}
+		}
+		if(temCasa==true){
+			temCasa=false;
+		} else {
+			possibleOwners.insert(owners[i]);
 		}
 	}
 }

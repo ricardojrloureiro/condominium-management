@@ -64,7 +64,7 @@ void Condominium::addProperty(Property* p1){
 		break;
 	}
 
-	Equity e1(p1->getFloor(),p1->getArea(),p1->getAddress(),baseCost);
+	Equity e1(p1->getFloor(),p1->getArea(),p1->getAddress(),baseCost,p1->getOwnerId());
 	priorProperties.push(e1);
 }
 
@@ -229,6 +229,7 @@ void Condominium::manageCond(vector <Worker*> workers, vector<Owner*> owners,int
 	showMenu.addMenuItem("Manage the existing maintenance tasks");
 	showMenu.addMenuItem("Manage the condominium fixed values");
 	showMenu.addMenuItem("Confirm meeting's attendances");
+	showMenu.addMenuItem("Check past Meetings");
 	showMenu.addMenuItem("Go BACK to the previous Menu");
 
 	while(showMenu.isActive()) {
@@ -282,10 +283,16 @@ void Condominium::manageCond(vector <Worker*> workers, vector<Owner*> owners,int
 				cout << "There are no meetings yet. Please schedule one first." << endl << endl;
 			}
 			else {
-				confirmAttendance(date);
+				confirmAttendance(date,owners);
 			}
 		}
-		break;
+		case 9:
+			if(meetings.size() == 0){
+				cout << "There are no past meetings for this condominium" << endl;
+			} else {
+				checkLastMeetings(owners);
+			}
+			break;
 		default:
 			showMenu.toggleMenu();
 			break;
@@ -442,17 +449,19 @@ void Condominium::saveMeetings() {
 	ssfilename << "meetingCond" << id << ".csv";
 	string filename = ssfilename.str();
 	ofstream file(filename.c_str());
-	file << "Date" << "," << "Attending Properties" << endl;
+	file << "Date" << "," << "Subject Discussed" << "," << "Attending Owners Id"<< endl;
 
 	for(unsigned int i=0;i<meetings.size();i++){
-		file << meetings[i].getDate() ;
+		file << meetings[i].getDate() <<"," <<meetings[i].getSubject() ;
 		for(unsigned int j=0;j<meetings[i].getAttendance().size();j++){
-			file << "," << meetings[i].getAttendance()[j];
+			file << ",";
+			if(meetings[i].getAttendance()[j]!=0){
+				file << meetings[i].getAttendance()[j];
+			}
 		}
 		if(i < (meetings.size() -1))
 			file << endl;
 	}
-
 	file.close();
 }
 /* remove functions */
@@ -676,7 +685,6 @@ void Condominium::condShowPrior() {
 }
 
 void Condominium::arrangeMeeting(int currentDate) {
-	condShowPrior();
 	if(meetings.size()!=0){
 		if(meetings[meetings.size()-1].getDate() >= currentDate){
 			cout << "There is already a meeting scheduled for this cond, ";
@@ -704,55 +712,178 @@ void Condominium::arrangeMeeting(int currentDate) {
 			correctMonth = true;
 		}
 	}
-	cout << "The meeting has been scheduled" << endl << endl;
+	cout << "Which subject would you like to see discussed?:"; string subject; getline(cin,subject);
+
+	cout << "\nThe meeting has been scheduled" << endl << endl;
 
 	while(!priorProperties.empty()){
 		priorProperties.pop();
 	}
+	for(unsigned int i=0;i<properties.size();i++) {
+		vector<float> baseCost;
+		baseCost.push_back(areaMultiplier);
+		baseCost.push_back(floorMultiplier);
+		switch (properties[i]->returnType()) {
+		case 1:
+			baseCost.push_back(baseApartmentCost);
+			break;
+		case 2:
+			baseCost.push_back(baseOfficeCost);
+			break;
+		case 3:
+			baseCost.push_back(baseStoreCost);
+			break;
+		default:
+			break;
+		}
+
+		Equity e1(properties[i]->getFloor(),properties[i]->getArea(),properties[i]->getAddress(),baseCost,properties[i]->getOwnerId());
+		priorProperties.push(e1);
+	}
 
 	int date = year*100+month;
-	Meeting m1(date);
+	Meeting m1(date,subject);
 	meetings.push_back(m1);
 	saveMeetings();
 }
 
-void Condominium::confirmAttendance(int currentDate) {
+void Condominium::confirmAttendance(int currentDate,vector<Owner *> owners) {
 	if(meetings.size()!=0){
 		if(meetings[meetings.size()-1].getDate() >= currentDate){
-			vector<string> atual = meetings[meetings.size()-1].getAttendance();
+			vector<int> atual = meetings[meetings.size()-1].getAttendance();
 			bool found = true;
 			while(found==true && !priorProperties.empty()){
-				string top = priorProperties.top().getAddress();
+				int top = priorProperties.top().getId();
 				if(existeEm(atual,top) == true){
 					priorProperties.pop();
-				} else found = false;
+				} else {
+					found = false;
+				}
 			}
-		}}
+		}
+		else {
+			cout << "There are no meetings arranged, please schedule one first" << endl << endl;
+			return;
+		}
+	}
+	vector<int> atual = meetings[meetings.size()-1].getAttendance();
+	for(unsigned int i=0;i<atual.size();i++){
+		if(atual[i]==0){
+			atual.erase(atual.begin()+i);
+		}
+	}
+	meetings[meetings.size()-1].setAttendance(atual);
 	stringstream title;
 	int option;
-	while(!priorProperties.empty() && option != 3){
-		title << "The next property that needs confirmation is " << priorProperties.top().getAddress() << endl;
+	while(option != 4){
+		if(!priorProperties.empty()){
+			title << "The next owner that needs confirmation is " << getOwner(owners,priorProperties.top().getId())->getName() << " - " << priorProperties.top().getAddress() << endl;
+		} else {
+			title << "There are no more owners to confirm their presence." << endl;
+		}
 		Menu manage(title.str());
 		manage.addMenuItem("Confirm presence");
 		manage.addMenuItem("Reject presence");
+		manage.addMenuItem("Edit preview confirmations");
 		manage.addMenuItem("Go back");
 		option=manage.showMenu();
 		switch (option) {
 		case 1:{
-			meetings[meetings.size()-1].addAttendance(priorProperties.top().getAddress());
-			priorProperties.pop();
+			if(!priorProperties.empty()){
+				meetings[meetings.size()-1].addAttendance(priorProperties.top().getId());
+				priorProperties.pop();
+			}
 		}
 		break;
 		case 2:
-			priorProperties.pop();
+			if(!priorProperties.empty()){
+				priorProperties.pop();
+			}
 			break;
-		case 3:
+		case 3:{
+			if(meetings[meetings.size()-1].getAttendance().size() != 0) {
+				int option2=0;
+				int i=0;
+				while(option2!=4 && meetings[meetings.size()-1].getAttendance().size() != 0) {
+					string title;
+					title = getOwner(owners,meetings[meetings.size()-1].getAttendance()[i])->getName();
+					Menu editConf(title);
+					editConf.addMenuItem("Remove this confirmation");
+					editConf.addMenuItem("Next Confirmation");
+					editConf.addMenuItem("Previews Confirmation");
+					editConf.addMenuItem("Go Back");
+					option2=editConf.showMenu();
+					switch (option2) {
+					case 1:
+						meetings[meetings.size()-1].removeAttendance(meetings[meetings.size()-1].getAttendance()[i]);
+						break;
+					case 2:
+						i = (i+1) % meetings[meetings.size()-1].getAttendance().size();
+						break;
+					case 3:
+						i = (i-1) % meetings[meetings.size()-1].getAttendance().size();
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		}
+		break;
+		case 4:
 			manage.toggleMenu();
 			break;
+		}
+		vector<int> atual = meetings[meetings.size()-1].getAttendance();
+		bool found = true;
+		while(found==true && !priorProperties.empty()){
+			int top = priorProperties.top().getId();
+			if(existeEm(atual,top) == true){
+				priorProperties.pop();
+			} else {
+				found = false;
+			}
 		}
 		title.str("");
 	}
 	saveMeetings();
 }
 
+void Condominium::checkLastMeetings(vector<Owner*> owners) {
+	int option=0;
+	int i=0;
+	while(option!=3){
+		stringstream title;
+		vector<int> attendance = meetings[i].getAttendance();
+		unsigned int j=0;
+		title << "Year:" << meetings[i].getDate() /100 << " - Month:" << meetings[i].getDate()%100 << "|| Subject discussed: " << meetings[i].getSubject() <<endl << "Attendance: ";
+		for(unsigned int x=0;x<attendance.size();x++){
+			if(attendance[x]==0){
+				attendance.erase(attendance.begin()+x);
+			}
+		}
+		while(j<attendance.size()) {
+			title << getOwner(owners,attendance[j])->getName();
+			if(j+1<attendance.size()){
+				title << ",";
+			}
+			j++;
+		}
+		Menu meeting(title.str());
+		meeting.addMenuItem("Go to the next");
+		meeting.addMenuItem("Go to the previous");
+		meeting.addMenuItem("Go Back to the PREVIOUS menu");
+		option = meeting.showMenu();
+		switch (option) {
+		case 1:
+			i = (i+1) % meetings.size();
+			break;
+		case 2:
+			i = (i-1) % meetings.size();
+			break;
+		default:
+			break;
+		}
+	}
+}
 

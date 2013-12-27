@@ -292,12 +292,14 @@ class Equity {
 	float area;
 	string address;
 	vector<float>baseCost;
+	int ownerId;
 public:
-	Equity(int floor,float area, string address,vector<float>base): floor(floor),area(area),address(address),baseCost(base){}
+	Equity(int floor,float area, string address,vector<float>base,int Id): floor(floor),area(area),address(address),baseCost(base), ownerId(Id){}
 	float getArea()const {return area;}
 	int getFloor()const {return floor;}
 	string getAddress()const {return address;}
 	vector<float> getBases() const {return baseCost;}
+	int getId()const {return ownerId;}
 	bool operator <(const Equity &e1) const{
 		vector<float> atual = e1.getBases();
 		float cost1,cost2;

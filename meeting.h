@@ -10,16 +10,19 @@ using namespace std;
 
 class Meeting {
 	int date;
-	vector<string> attendingProperties;
+	vector<int> ownersId;
+	string subject;
 public:
 	Meeting() {date=0;}
-	Meeting(int date): date(date) {}
-	Meeting(int date,vector<string> prop):date(date),attendingProperties(prop) {}
-	void addAttendance(string);
-	void removeAttendance(string);
+	Meeting(int date,string subject): date(date),subject(subject){}
+	Meeting(int date, vector<int> prop,string subject):date(date),ownersId(prop), subject(subject) {}
+	void addAttendance(int);
+	void removeAttendance(int);
 	int getDate();
 	void setDate(int);
-	vector<string> getAttendance() {return attendingProperties;}
+	vector<int> getAttendance() {return ownersId;}
+	void setAttendance(vector<int> i){ownersId=i;}
+	string getSubject() {return subject;}
 
 };
 

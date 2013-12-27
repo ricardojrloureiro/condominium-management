@@ -35,10 +35,12 @@ class Condominium {
 
 public:
 
+	void checkLastMeetings(vector<Owner*>);
+
 	bool operator ==(Condominium c2){
 		return id == c2.getId();
 	}
-
+	vector<Property*> getProperties() {return properties;}
 	/**
 	 * Do:
 	 * Creates a condominium with a sequence id.
@@ -307,20 +309,29 @@ public:
 
 	void condShowPrior();
 	void arrangeMeeting(int);
-	void confirmAttendance(int);
+	void confirmAttendance(int,vector<Owner*>);
 	void addMeeting(Meeting m1) {
 		meetings.push_back(m1);
 	}
 	template<class T>
 	bool existeEm(vector<T>v,T v1) {
-		for(typename vector<T>::iterator it = v.begin(); it != v.end(); ++it){
+		for(typename vector<T>::iterator it = v.begin(); it != v.end(); it++){
 			if((*it)==v1) {
 				return true;
 			}
 		}
 		return false;
 	}
+	Owner* getOwner(vector<Owner*>owners, int id) {
+		for(unsigned int i=0;i<owners.size();i++) {
+			if(owners[i]->getId() == id) {
+				return owners[i];
+			}
+		}
+	}
+
 };
+
 
 
 #endif /* CONDOMINIUM_H_ */
