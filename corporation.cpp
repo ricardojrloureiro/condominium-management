@@ -2,11 +2,12 @@
 
 // constructor
 
-Corporation::Corporation(){
+Corporation::Corporation(): specializedCompanies(SpecializedCompany()){
 	loadWorkers("workers.csv");
 	loadOwners("owners.csv");
 	loadCondominiums("condominiums.csv");
 	loadReports("reports.csv");
+	loadSpecializedCompanies("specializedCompanies.csv");
 	fillPossibleOwners();
 	if(reports.size()==0){
 		time_t now = time(0);
@@ -19,8 +20,6 @@ Corporation::Corporation(){
 		date = getLastDate();
 		incDate();
 	}
-	SpecializedCompany emptyCompany();
-	BST<SpecializedCompany> specializedCompanies(emptyCompany);
 }
 
 void Corporation::incDate() {
@@ -326,6 +325,40 @@ void Corporation::loadReports(string filename) {
 	}
 	file.close();
 }
+
+void Corporation::loadSpecializedCompanies(string filename) {
+	ifstream file;
+	string line;
+	string name;
+	float price;
+	vector <string> companiesInfo;
+	file.open(filename.c_str());
+	int lineNumber = 0;
+	while (file.good())
+	{
+		getline(file,line);
+		if (lineNumber > 0) {
+			istringstream iss(line);
+			do
+			{
+				string sub;
+				getline(iss, sub , ',');
+				companiesInfo.push_back(sub);
+			} while (iss);
+
+			name = companiesInfo[0];
+			price = atof(companiesInfo[1].c_str());
+			SpecializedCompany tempCompany(name,price);
+			if(price>0) {
+				specializedCompanies.insert(tempCompany);
+			}
+			companiesInfo.clear();
+		}
+		lineNumber++;
+	}
+	file.close();
+}
+
 
 vector < vector <string> > Corporation::loadMaintenanceReport(int date) {
 	stringstream ssfilename;
@@ -728,6 +761,21 @@ void Corporation::saveReports(string filename) {
 	file.close();
 }
 
+void Corporation::saveSpecializedCompanies(string filename) {
+	ofstream file(filename.c_str());
+	file << "name,price" << endl;
+
+	BSTItrIn<SpecializedCompany> itr(specializedCompanies);
+	while ( ! itr.isAtEnd() ) {
+		file << itr.retrieve().getName() << "," << itr.retrieve().getPrice();
+		if(!itr.isAtEnd())
+			file << endl;
+		itr.retrieve().saveMaintenanceReport();
+		itr.advance();
+	}
+	file.close();
+}
+
 void Corporation::fastForward() {
 	vector <int> fixedCosts;
 	vector <float> profitlosses;
@@ -945,4 +993,41 @@ void Corporation::fillPossibleOwners() {
 			possibleOwners.insert(owners[i]);
 		}
 	}
+}
+
+void Corporation::manageSpecializedCompanies() {
+	Menu companiesMenu("Manage Specialized Companies");
+	companiesMenu.addMenuItem("Add new company");
+	companiesMenu.addMenuItem("List all companies");
+	companiesMenu.addMenuItem("Go Back");
+	while(companiesMenu.isActive()) {
+		switch(companiesMenu.showMenu()) {
+		case 1:
+			this->addSpecializedCompany();
+			break;
+		case 2:
+			this->listSpecializedCompanies();
+			break;
+		default:
+			companiesMenu.toggleMenu();
+			break;
+		}
+	}
+}
+
+void Corporation::listSpecializedCompanies() {
+	BSTItrIn<SpecializedCompany> itr(specializedCompanies);
+	while ( ! itr.isAtEnd() ) {
+		cout << itr.retrieve();
+		itr.advance();
+		cout << endl;
+	}
+}
+
+void Corporation::addSpecializedCompany() {
+	string name = Menu::promptString("Specialized Company Name: ");
+	float price = Menu::promptFloat("Price Per Service: ");
+	SpecializedCompany newCompany(name, price);
+	specializedCompanies.insert(newCompany);
+	saveSpecializedCompanies("specializedCompanies.csv");
 }

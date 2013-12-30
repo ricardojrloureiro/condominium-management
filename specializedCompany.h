@@ -10,24 +10,18 @@
 #include "menu.h"
 using namespace std;
 
-class SpecializedCompany	 {
+class SpecializedCompany {
 	struct MaintenanceReport {
+		int date;
 		string name;
 		int condominiumid;
 		float cost;
 	};
-	struct PropertiesReport {
-		string address;
-		int condominiumid;
-		int ownerid;
-		float amountPaid;
-	};
 
-	float hourlyRate;
 	vector<MaintenanceReport> maintenance;
-	vector<PropertiesReport> properties;
 
-	float totalProfitLoss;
+	string name;
+	float price;
 
 public:
 
@@ -37,10 +31,18 @@ public:
 	 */
 	SpecializedCompany();
 
-	SpecializedCompany(int, int, vector< vector <string> >, vector< vector <string> >);
+	SpecializedCompany(string, int, vector< vector <string> >);
+	SpecializedCompany(string, int);
+	bool operator< (const SpecializedCompany & c) const;
+
+	float getPrice() const;
+	string getName() const;
+
+	friend ostream & operator<<(ostream & o, const SpecializedCompany & d);
 
 
-
+	void saveMaintenanceReport();
 };
+
 
 #endif /* SPECIALIZEDCOMPANY_H_ */

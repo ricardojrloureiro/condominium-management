@@ -340,6 +340,12 @@ public:
 
 	void fillPossibleOwners();
 
+	void addSpecializedCompany();
+	void manageSpecializedCompanies();
+	void listSpecializedCompanies();
+	void saveSpecializedCompanies(string);
+	void loadSpecializedCompanies(string);
+
 };
 
 #endif /* CORPORATION_H_ */

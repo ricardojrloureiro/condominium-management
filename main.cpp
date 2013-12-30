@@ -20,6 +20,7 @@ int main() {
 	mainMenu.addMenuItem("Manage Owners");
 	mainMenu.addMenuItem("Finance Reports");
 	mainMenu.addMenuItem("Condominium Events");
+	mainMenu.addMenuItem("Manage Specialized Companies");
 	mainMenu.addMenuItem("Quit");
 
 	Menu condominiumsMenu("Condominiums");
@@ -112,8 +113,10 @@ int main() {
 			corporation.condEvents(corporation.getDate());
 			break;
 		case 6:
-			mainMenu.toggleMenu();
+			corporation.manageSpecializedCompanies();
 			break;
+		case 7:
+			mainMenu.toggleMenu();
 
 		}
 	}

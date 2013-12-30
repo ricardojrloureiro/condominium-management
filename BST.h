@@ -292,7 +292,7 @@ void BST<Comparable>::printTree( BinaryNode<Comparable> *t ) const
   if( t != NULL )
     {
       printTree( t->left );
-      cout << t->element << "\n";
+      cout << t->element << endl;
       printTree( t->right );
     }
 }
