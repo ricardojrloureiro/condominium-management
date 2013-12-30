@@ -17,6 +17,8 @@
 #include "owner.h"
 #include "report.h"
 #include "meeting.h"
+#include "BST.h"
+#include "specializedCompany.h"
 
 using namespace std;
 struct ownerHash
@@ -37,6 +39,7 @@ class Corporation {
 	vector <Owner> owners;
 	vector <Report> reports;
 	HashOwners possibleOwners;
+	BST<SpecializedCompany> specializedCompanies;
 	int date; // mmaaaa
 public:
 	void showPossibleOwners();

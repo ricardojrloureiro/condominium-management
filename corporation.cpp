@@ -19,6 +19,8 @@ Corporation::Corporation(){
 		date = getLastDate();
 		incDate();
 	}
+	SpecializedCompany emptyCompany();
+	BST<SpecializedCompany> specializedCompanies(emptyCompany);
 }
 
 void Corporation::incDate() {

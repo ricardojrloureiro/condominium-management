@@ -328,6 +328,7 @@ public:
 				return owners[i];
 			}
 		}
+		return 0;
 	}
 
 };
